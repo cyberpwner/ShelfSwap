@@ -1,4 +1,4 @@
-import { Dialect } from "sequelize";
+import { Dialect } from 'sequelize';
 
 export type DBConfig = {
   username: string;

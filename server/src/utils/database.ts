@@ -1,26 +1,22 @@
-import { Sequelize } from "sequelize";
-import dotenv from "dotenv";
+import { Sequelize } from 'sequelize';
+import dotenv from 'dotenv';
 dotenv.config();
-import config from "config";
-import { AppConfig } from "../types/config.js";
+import config from 'config';
+
+import { AppConfig } from '../types/config.js';
 
 console.log(`Environment: ${process.env.NODE_ENV}`);
 
 // Load the database configuration
-const dbConfig = config.get<AppConfig["database"]>("database");
-const serverConfig = config.get<AppConfig["server"]>("server");
+const dbConfig = config.get<AppConfig['database']>('database');
+const serverConfig = config.get<AppConfig['server']>('server');
 
-console.log("DB:", dbConfig);
-console.log("SERVER:", serverConfig);
+console.log('DB:', dbConfig);
+console.log('SERVER:', serverConfig);
 
 // Ensure all required configuration values are defined
-if (
-  !dbConfig.username ||
-  !dbConfig.password ||
-  !dbConfig.database ||
-  !dbConfig.host
-) {
-  throw new Error("Missing database configuration");
+if (!dbConfig.username || !dbConfig.password || !dbConfig.database || !dbConfig.host) {
+  throw new Error('Missing database configuration');
 }
 
 // Create the Sequelize instance

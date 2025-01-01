@@ -1,21 +1,22 @@
-import sequelize from "../utils/database.js";
-import { Router } from "express";
+import { Router } from 'express';
+
+import sequelize from '../utils/database.js';
 
 const router = Router();
 
-router.get("/healthcheck", async (req, res) => {
+router.get('/healthcheck', async (_, res) => {
   try {
     await sequelize.authenticate();
-    res.status(200).json({ status: "OK" });
+    res.status(200).json({ status: 'OK' });
   } catch (error) {
-    let errorMsg = "An unkown error occurred";
+    let errorMsg = 'An unkown error occurred';
 
     if (error instanceof Error) {
       errorMsg = error.message;
     }
 
     res.status(500).json({
-      status: "Database connection failed",
+      status: 'Database connection failed',
       error: errorMsg,
     });
   }
