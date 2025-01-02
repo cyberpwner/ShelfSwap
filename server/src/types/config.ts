@@ -1,18 +1,18 @@
 import { Dialect } from 'sequelize';
 
-export type DBConfig = {
+export interface DBConfig {
   username: string;
   password: string;
   database: string;
   host: string;
   dialect: Dialect;
-};
+}
 
-export type ServerConfig = {
+export interface ServerConfig {
   port: number;
-};
+}
 
-export type AppConfig = {
+export interface AppConfig {
   database: DBConfig;
   server: ServerConfig;
-};
+}

@@ -1,16 +1,15 @@
-import dotenv from "dotenv";
-import { AppConfig } from "../src/types/config";
-import { Dialect } from "sequelize";
+import dotenv from 'dotenv';
+import { AppConfig } from '../src/types/config';
 
 dotenv.config();
 
 const developmentConfig: AppConfig = {
   database: {
-    username: "test",
-    password: "test",
-    database: "test",
-    host: "test",
-    dialect: "mariadb",
+    username: 'test',
+    password: 'test',
+    database: 'test',
+    host: 'test',
+    dialect: 'mariadb',
   },
   server: {
     port: 5000,
