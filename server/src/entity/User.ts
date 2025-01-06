@@ -1,7 +1,8 @@
-import { BaseEntity, Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { BaseEntity, Column, CreateDateColumn, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { UserRole } from '../types/userTypes.d.js';
 import { Book } from './Book';
 import { Order } from './Order.js';
+import { Address } from './Address.js';
 
 // note to future self or other devs:
 // class properties should follow camelCase naming, typeorm will automatically convert them to snake_case in the DB.
@@ -59,6 +60,9 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Order, (order) => order.buyer)
   purchases: Order[];
+
+  @OneToOne(() => Address, (address) => address.user)
+  address: Address;
 
   @CreateDateColumn()
   createdAt: Date;
