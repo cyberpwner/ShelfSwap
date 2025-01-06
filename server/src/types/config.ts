@@ -1,11 +1,11 @@
-import { Dialect } from 'sequelize';
+import { DatabaseType } from 'typeorm';
 
 export interface DBConfig {
   username: string;
   password: string;
   database: string;
   host: string;
-  dialect: Dialect;
+  dialect: DatabaseType;
 }
 
 export interface ServerConfig {

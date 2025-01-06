@@ -9,7 +9,8 @@
     "start:dev": "NODE_ENV=development nodemon",
     "build": "tsc",
     "lint": "eslint src/**/*.ts",
-    "lint:fix": "eslint src/**/*.ts --fix"
+    "lint:fix": "eslint src/**/*.ts --fix",
+    "typeorm": "tsx ./node_modules/typeorm/cli.js"
   },
   "keywords": [],
   "author": "",
@@ -19,7 +20,11 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
-    "mariadb": "^2.5.6"
+    "mariadb": "^2.5.6",
+    "mysql": "^2.18.1",
+    "reflect-metadata": "^0.2.2",
+    "typeorm": "^0.3.20",
+    "typeorm-naming-strategies": "^4.1.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
