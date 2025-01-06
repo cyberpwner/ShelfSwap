@@ -1,8 +1,9 @@
-import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, Unique } from 'typeorm';
+import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, Unique } from 'typeorm';
 import { Book } from './Book';
 import { User } from './User';
 import { OrderStatus } from '../types/orderTypes.d.js';
 import { Review } from './Review';
+import { Payment } from './Payment';
 
 @Entity('Order')
 @Unique(['book', 'seller', 'buyer'])
@@ -49,4 +50,7 @@ export class Order extends BaseEntity {
 
   @OneToMany(() => Review, (review) => review.order)
   reviews: Review[];
+
+  @OneToOne(() => Payment, (payment) => payment.order)
+  payment: Payment;
 }

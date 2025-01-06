@@ -40,6 +40,8 @@ export class Book extends BaseEntity {
 
   @Column({
     type: 'numeric',
+    precision: 10,
+    scale: 2,
   })
   price: number;
 
