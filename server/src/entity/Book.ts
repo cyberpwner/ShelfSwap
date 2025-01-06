@@ -54,8 +54,10 @@ export class Book extends BaseEntity {
   })
   isSold: boolean;
 
-  // TODO: give all foreign keys in the DB the CASCADe option on update (and delete, maybe?)
-  @ManyToOne(() => User, (user) => user.books)
+  // TODO: give all foreign keys in the DB the CASCADE option on update (and on delete, maybe?)
+  @ManyToOne(() => User, (user) => user.books, {
+    nullable: false,
+  })
   @JoinColumn({
     name: 'user_id',
   })

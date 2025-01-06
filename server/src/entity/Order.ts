@@ -1,7 +1,8 @@
-import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Unique } from 'typeorm';
+import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, Unique } from 'typeorm';
 import { Book } from './Book';
 import { User } from './User';
 import { OrderStatus } from '../types/orderTypes.d.js';
+import { Review } from './Review';
 
 @Entity('Order')
 @Unique(['book', 'seller', 'buyer'])
@@ -9,19 +10,25 @@ export class Order extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Book, (book) => book.orders)
+  @ManyToOne(() => Book, (book) => book.orders, {
+    nullable: false,
+  })
   @JoinColumn({
     name: 'book_id',
   })
   book: Book;
 
-  @ManyToOne(() => User, (user) => user.sales)
+  @ManyToOne(() => User, (user) => user.sales, {
+    nullable: false,
+  })
   @JoinColumn({
     name: 'seller_id',
   })
   seller: User;
 
-  @ManyToOne(() => User, (user) => user.purchases)
+  @ManyToOne(() => User, (user) => user.purchases, {
+    nullable: false,
+  })
   @JoinColumn({
     name: 'buyer_id',
   })
@@ -39,4 +46,7 @@ export class Order extends BaseEntity {
     nullable: true, // mariadb (and many others) allows a unique attribute to be null in multiple rows of a table.
   })
   trackingNumber: string;
+
+  @OneToMany(() => Review, (review) => review.order)
+  reviews: Review[];
 }
