@@ -10,3 +10,11 @@ export enum OrderStatus {
   REFUNDED = 'refunded',
   CANCELLED = 'cancelled',
 }
+
+export interface IOrder {
+  status: OrderStatus;
+  trackingNumber?: string;
+  bookId: number;
+  sellerId: number;
+  buyerId: number;
+}

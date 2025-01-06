@@ -11,3 +11,10 @@ export enum ReviewRating {
   FOUR,
   FIVE,
 }
+
+export interface IReview {
+  type: ReviewType;
+  rating: ReviewRating;
+  comment?: string;
+  orderId: number;
+}

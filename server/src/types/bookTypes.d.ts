@@ -24,3 +24,13 @@ export enum BookCondition {
   GOOD = 'good',
   ACCEPTABLE = 'acceptable',
 }
+
+export interface IBook {
+  title: string;
+  author: string;
+  description?: string;
+  price: number;
+  isSold: boolean;
+  condition: BookCondition;
+  userId: number;
+}
