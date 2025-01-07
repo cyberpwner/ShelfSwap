@@ -59,16 +59,24 @@ export class Book extends BaseEntity {
   // TODO: give all foreign keys in the DB the CASCADE option on update (and on delete, maybe?)
   @ManyToOne(() => User, (user) => user.books, {
     nullable: false,
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
   })
   @JoinColumn({
     name: 'user_id',
   })
   user: User;
 
-  @ManyToMany(() => Category, (category) => category.books)
+  @ManyToMany(() => Category, (category) => category.books, {
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+  })
   categories: Category[];
 
-  @OneToMany(() => Order, (order) => order.book)
+  @OneToMany(() => Order, (order) => order.book, {
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+  })
   orders: Order[];
 
   @CreateDateColumn()

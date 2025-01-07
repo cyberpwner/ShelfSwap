@@ -13,6 +13,8 @@ export class Order extends BaseEntity {
 
   @ManyToOne(() => Book, (book) => book.orders, {
     nullable: false,
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
   })
   @JoinColumn({
     name: 'book_id',
@@ -21,6 +23,8 @@ export class Order extends BaseEntity {
 
   @ManyToOne(() => User, (user) => user.sales, {
     nullable: false,
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
   })
   @JoinColumn({
     name: 'seller_id',
@@ -29,6 +33,8 @@ export class Order extends BaseEntity {
 
   @ManyToOne(() => User, (user) => user.purchases, {
     nullable: false,
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
   })
   @JoinColumn({
     name: 'buyer_id',
@@ -48,9 +54,15 @@ export class Order extends BaseEntity {
   })
   trackingNumber: string;
 
-  @OneToMany(() => Review, (review) => review.order)
+  @OneToMany(() => Review, (review) => review.order, {
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+  })
   reviews: Review[];
 
-  @OneToOne(() => Payment, (payment) => payment.order)
+  @OneToOne(() => Payment, (payment) => payment.order, {
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+  })
   payment: Payment;
 }

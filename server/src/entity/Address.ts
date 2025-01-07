@@ -28,6 +28,8 @@ export class Address extends BaseEntity {
 
   @OneToOne(() => User, (user) => user.address, {
     nullable: false,
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
   })
   @JoinColumn({
     name: 'user_id',

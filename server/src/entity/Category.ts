@@ -13,7 +13,10 @@ export class Category extends BaseEntity {
   })
   name: string;
 
-  @ManyToMany(() => Book, (book) => book.categories)
+  @ManyToMany(() => Book, (book) => book.categories, {
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+  })
   @JoinTable({ name: 'Book_Category' })
   books: Book[];
 

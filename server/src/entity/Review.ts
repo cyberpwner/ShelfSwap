@@ -29,6 +29,8 @@ export class Review extends BaseEntity {
 
   @ManyToOne(() => Order, (order) => order.reviews, {
     nullable: false,
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
   })
   @JoinColumn({
     name: 'order_id',

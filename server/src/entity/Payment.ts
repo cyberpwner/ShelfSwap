@@ -23,6 +23,8 @@ export class Payment extends BaseEntity {
 
   @OneToOne(() => Order, (order) => order.payment, {
     nullable: false,
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
   })
   @JoinColumn({
     name: 'order_id',

@@ -52,16 +52,28 @@ export class User extends BaseEntity {
   })
   profilePicUrl: string;
 
-  @OneToMany(() => Book, (book) => book.user)
+  @OneToMany(() => Book, (book) => book.user, {
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+  })
   books: Book[];
 
-  @OneToMany(() => Order, (order) => order.seller)
+  @OneToMany(() => Order, (order) => order.seller, {
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+  })
   sales: Order[];
 
-  @OneToMany(() => Order, (order) => order.buyer)
+  @OneToMany(() => Order, (order) => order.buyer, {
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+  })
   purchases: Order[];
 
-  @OneToOne(() => Address, (address) => address.user)
+  @OneToOne(() => Address, (address) => address.user, {
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+  })
   address: Address;
 
   @CreateDateColumn()
