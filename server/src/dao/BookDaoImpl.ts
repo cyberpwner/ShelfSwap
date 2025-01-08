@@ -10,12 +10,13 @@ export class BookDao implements BaseDao<Book> {
     return Book.findOne({ where: { id } });
   }
 
-  async create(book: Book): Promise<Book | null> {
+  async create(book: Book): Promise<Book> {
+    // no duplicate check because the only unique column in Book is the id and that can't be duplicated since it's auto-generated and is a PK.
     return book.save();
   }
 
   async update(id: number, book: Partial<Book>): Promise<Book | null> {
-    const existingBook = await Book.findOne({ where: { id } });
+    const existingBook = await Book.findOneBy({ id });
 
     if (!existingBook) return null;
 
@@ -23,12 +24,11 @@ export class BookDao implements BaseDao<Book> {
     return existingBook.save();
   }
 
-  async delete(id: number): Promise<boolean> {
+  async delete(id: number): Promise<Book | null> {
     const existingBook = await Book.findOneBy({ id });
 
-    if (!existingBook) return false;
+    if (!existingBook) return null;
 
-    await Book.remove(existingBook);
-    return true;
+    return Book.remove(existingBook);
   }
 }

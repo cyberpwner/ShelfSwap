@@ -10,12 +10,18 @@ export class AddressDao implements BaseDao<Address> {
     return Address.findOne({ where: { id } });
   }
 
-  async create(address: Address): Promise<Address | null> {
+  async create(address: Address): Promise<Address> {
+    const foundAddress = Address.findOneBy({ user: address.user });
+
+    if (foundAddress != null) {
+      throw new Error('address already exists');
+    }
+
     return address.save();
   }
 
   async update(id: number, address: Partial<Address>): Promise<Address | null> {
-    const existingAddress = await Address.findOne({ where: { id } });
+    const existingAddress = await Address.findOneBy({ id });
 
     if (!existingAddress) return null;
 
@@ -23,12 +29,11 @@ export class AddressDao implements BaseDao<Address> {
     return existingAddress.save();
   }
 
-  async delete(id: number): Promise<boolean> {
+  async delete(id: number): Promise<Address | null> {
     const existingAddress = await Address.findOneBy({ id });
 
-    if (!existingAddress) return false;
+    if (!existingAddress) return null;
 
-    await Address.remove(existingAddress);
-    return true;
+    return Address.remove(existingAddress);
   }
 }

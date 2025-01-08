@@ -10,12 +10,18 @@ export class CategoryDao implements BaseDao<Category> {
     return Category.findOne({ where: { id } });
   }
 
-  async create(category: Category): Promise<Category | null> {
+  async create(category: Category): Promise<Category> {
+    const foundCategory = await Category.findOneBy({ name: category.name });
+
+    if (foundCategory != null) {
+      throw new Error('category already exists');
+    }
+
     return category.save();
   }
 
   async update(id: number, category: Partial<Category>): Promise<Category | null> {
-    const existingCategory = await Category.findOne({ where: { id } });
+    const existingCategory = await Category.findOneBy({ id });
 
     if (!existingCategory) return null;
 
@@ -23,12 +29,11 @@ export class CategoryDao implements BaseDao<Category> {
     return existingCategory.save();
   }
 
-  async delete(id: number): Promise<boolean> {
+  async delete(id: number): Promise<Category | null> {
     const existingCategory = await Category.findOneBy({ id });
 
-    if (!existingCategory) return false;
+    if (!existingCategory) return null;
 
-    await Category.remove(existingCategory);
-    return true;
+    return Category.remove(existingCategory);
   }
 }

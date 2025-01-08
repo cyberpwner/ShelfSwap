@@ -10,12 +10,18 @@ export class PaymentDao implements BaseDao<Payment> {
     return Payment.findOne({ where: { id } });
   }
 
-  async create(payment: Payment): Promise<Payment | null> {
+  async create(payment: Payment): Promise<Payment> {
+    const foundPayment = await Payment.findOneBy({ order: payment.order });
+
+    if (foundPayment != null) {
+      throw new Error('payment already exists');
+    }
+
     return payment.save();
   }
 
   async update(id: number, payment: Partial<Payment>): Promise<Payment | null> {
-    const existingPayment = await Payment.findOne({ where: { id } });
+    const existingPayment = await Payment.findOneBy({ id });
 
     if (!existingPayment) return null;
 
@@ -23,12 +29,11 @@ export class PaymentDao implements BaseDao<Payment> {
     return existingPayment.save();
   }
 
-  async delete(id: number): Promise<boolean> {
+  async delete(id: number): Promise<Payment | null> {
     const existingPayment = await Payment.findOneBy({ id });
 
-    if (!existingPayment) return false;
+    if (!existingPayment) return null;
 
-    await Payment.remove(existingPayment);
-    return true;
+    return Payment.remove(existingPayment);
   }
 }

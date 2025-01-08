@@ -10,12 +10,18 @@ export class ReviewDao implements BaseDao<Review> {
     return Review.findOne({ where: { id } });
   }
 
-  async create(review: Review): Promise<Review | null> {
+  async create(review: Review): Promise<Review> {
+    const foundReview = await Review.findOneBy({ order: review.order, type: review.type });
+
+    if (foundReview != null) {
+      throw new Error('review already exists');
+    }
+
     return review.save();
   }
 
   async update(id: number, review: Partial<Review>): Promise<Review | null> {
-    const existingReview = await Review.findOne({ where: { id } });
+    const existingReview = await Review.findOneBy({ id });
 
     if (!existingReview) return null;
 
@@ -23,12 +29,11 @@ export class ReviewDao implements BaseDao<Review> {
     return existingReview.save();
   }
 
-  async delete(id: number): Promise<boolean> {
+  async delete(id: number): Promise<Review | null> {
     const existingReview = await Review.findOneBy({ id });
 
-    if (!existingReview) return false;
+    if (!existingReview) return null;
 
-    await Review.remove(existingReview);
-    return true;
+    return Review.remove(existingReview);
   }
 }

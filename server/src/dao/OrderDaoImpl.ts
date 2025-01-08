@@ -1,5 +1,6 @@
 import { Order } from '../entity/Order';
 import { User } from '../entity/User';
+import { isDuplicateOrder } from '../utils/orderUtils';
 import { BaseDao } from './BaseDao';
 
 export class OrderDao implements BaseDao<Order> {
@@ -11,12 +12,18 @@ export class OrderDao implements BaseDao<Order> {
     return Order.findOne({ where: { id } });
   }
 
-  async create(order: Order): Promise<Order | null> {
+  async create(order: Order): Promise<Order> {
+    const isDuplicate = await isDuplicateOrder(order);
+
+    if (isDuplicate) {
+      throw new Error('order already exists');
+    }
+
     return order.save();
   }
 
   async update(id: number, order: Partial<Order>): Promise<Order | null> {
-    const existingOrder = await Order.findOne({ where: { id } });
+    const existingOrder = await Order.findOneBy({ id });
 
     if (!existingOrder) return null;
 
@@ -24,20 +31,19 @@ export class OrderDao implements BaseDao<Order> {
     return existingOrder.save();
   }
 
-  async delete(id: number): Promise<boolean> {
+  async delete(id: number): Promise<Order | null> {
     const existingOrder = await Order.findOneBy({ id });
 
-    if (!existingOrder) return false;
+    if (!existingOrder) return null;
 
-    await Order.remove(existingOrder);
-    return true;
+    return Order.remove(existingOrder);
   }
 
   async findOrdersByBuyer(username: string): Promise<Order[]> {
     const buyer = await User.findOneBy({ username });
 
     if (!buyer) {
-      throw new Error('User not found');
+      throw new Error('Order not found');
     }
 
     return Order.find({ where: { buyer }, relations: ['book', 'buyer'] });
@@ -47,7 +53,7 @@ export class OrderDao implements BaseDao<Order> {
     const seller = await User.findOne({ where: { username } });
 
     if (!seller) {
-      throw new Error('User not found');
+      throw new Error('Order not found');
     }
 
     return Order.find({ where: { book: { user: seller } }, relations: ['book', 'buyer'] });
