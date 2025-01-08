@@ -1,5 +1,4 @@
 export enum OrderStatus {
-  PAID = 'paid',
   TO_BE_SENT = 'to be sent',
   SENT = 'sent',
   IN_TRANSIT = 'in transit',
