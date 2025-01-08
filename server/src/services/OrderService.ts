@@ -1,4 +1,4 @@
-import { OrderDao } from '../dao/OrderDao';
+import { OrderDao } from '../dao/OrderDaoImpl';
 import { Order } from '../entity/Order';
 
 export class OrderService {

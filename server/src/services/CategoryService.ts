@@ -1,4 +1,4 @@
-import { CategoryDao } from '../dao/CategoryDao';
+import { CategoryDao } from '../dao/CategoryDaoImpl';
 import { Category } from '../entity/Category';
 
 export class CategoryService {

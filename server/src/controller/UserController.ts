@@ -5,19 +5,17 @@ import { User } from '../entity/User';
 export class UserController {
   private userService = new UserService();
 
-  getAllUsersHandler: RequestHandler = async (req, res) => {
+  getAllUsers: RequestHandler = async (req, res) => {
     try {
       const users = await this.userService.getAllUsers();
-      // omit users sensitive data
-      const publicUsers = users.map((user) => ({ ...user, password: undefined }));
 
-      res.status(200).json(publicUsers);
+      res.status(200).json(users);
     } catch (error) {
       res.status(500).json({ message: 'Failed to fetch users', error: error instanceof Error ? error.message : error });
     }
   };
 
-  getUserByIdHandler: RequestHandler = async (req, res) => {
+  getUserById: RequestHandler = async (req, res) => {
     try {
       const id = parseInt(req.params.id, 10);
       const user = await this.userService.getUserById(id);
@@ -27,14 +25,13 @@ export class UserController {
         return;
       }
 
-      // TODO: Make sure to omit sensitive data returned from  the DB (password...)
-      res.status(200).json({ ...user, password: undefined });
+      res.status(200).json(user);
     } catch (error) {
       res.status(500).json({ message: 'Failed to fetch user', error: error instanceof Error ? error.message : error });
     }
   };
 
-  createUserHandler: RequestHandler = async (req, res) => {
+  createUser: RequestHandler = async (req, res) => {
     try {
       const user = new User();
       Object.assign(user, req.body);
@@ -46,36 +43,45 @@ export class UserController {
         return;
       }
 
-      res.status(200).json({ ...user, password: undefined });
+      res.status(200).json(createdUser);
     } catch (error) {
       res.status(500).json({ message: 'Failed to create user', error: error instanceof Error ? error.message : error });
     }
   };
 
-  updateUserHandler: RequestHandler = async (req, res) => {
-    const id = parseInt(req.params.id, 10);
-    const user = req.body;
+  updateUser: RequestHandler = async (req, res) => {
+    try {
+      const id = parseInt(req.params.id, 10);
+      const user = new User();
+      Object.assign(user, req.body);
 
-    const updatedUser = await this.userService.updateUser(id, user);
+      const updatedUser = await this.userService.updateUser(id, user);
 
-    if (updatedUser == null) {
-      res.status(404).json({ message: 'User not found' });
-      return;
+      if (updatedUser == null) {
+        res.status(404).json({ message: 'User not found' });
+        return;
+      }
+
+      res.status(200).json(updatedUser);
+    } catch (error) {
+      res.status(500).json({ message: 'Failed to update user', error: error instanceof Error ? error.message : error });
     }
-
-    res.status(200).json({ ...updatedUser, password: undefined });
   };
 
-  deleteUserHandler: RequestHandler = async (req, res) => {
-    const id = parseInt(req.params.id, 10);
+  deleteUser: RequestHandler = async (req, res) => {
+    try {
+      const id = parseInt(req.params.id, 10);
 
-    const isDeleted = await this.userService.deleteUser(id);
+      const deletedUser = await this.userService.deleteUser(id);
 
-    if (!isDeleted) {
-      res.status(404).json({ message: 'User not found' });
-      return;
+      if (deletedUser == null) {
+        res.status(404).json({ message: 'User not found' });
+        return;
+      }
+
+      res.status(200).json(deletedUser);
+    } catch (error) {
+      res.status(500).json({ message: 'Failed to delete user', error: error instanceof Error ? error.message : error });
     }
-
-    res.status(200).json({ message: 'User deleted successfully' });
   };
 }

@@ -3,7 +3,7 @@ import { BaseDao } from './BaseDao';
 
 export class BookDao implements BaseDao<Book> {
   async findAll(): Promise<Book[]> {
-    return Book.find();
+    return Book.find({ relations: ['user'] });
   }
 
   async findById(id: number): Promise<Book | null> {

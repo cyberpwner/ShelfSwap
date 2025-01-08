@@ -4,6 +4,7 @@ import healthcheckRoute from './healthCheckRoute.js';
 import userRoutes from './userRoutes.js';
 import { AppDataSource } from '../utils/dataSource.js';
 import bookRoutes from './bookRoutes.js';
+import orderRoutes from './orderRoutes.js';
 
 const router = Router();
 
@@ -23,5 +24,6 @@ try {
 router.use('/healthcheck', healthcheckRoute);
 router.use('/users', userRoutes);
 router.use('/books', bookRoutes);
+router.use('/orders', orderRoutes);
 
 export default router;

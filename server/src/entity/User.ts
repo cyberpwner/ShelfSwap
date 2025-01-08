@@ -58,12 +58,6 @@ export class User extends BaseEntity {
   })
   books: Book[];
 
-  @OneToMany(() => Order, (order) => order.seller, {
-    onUpdate: 'CASCADE',
-    onDelete: 'CASCADE',
-  })
-  sales: Order[];
-
   @OneToMany(() => Order, (order) => order.buyer, {
     onUpdate: 'CASCADE',
     onDelete: 'CASCADE',

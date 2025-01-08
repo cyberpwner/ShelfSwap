@@ -1,4 +1,4 @@
-import { ReviewDao } from '../dao/ReviewDao';
+import { ReviewDao } from '../dao/ReviewDaoImpl';
 import { Review } from '../entity/Review';
 
 export class ReviewService {

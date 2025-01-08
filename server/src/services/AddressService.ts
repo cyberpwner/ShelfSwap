@@ -1,4 +1,4 @@
-import { AddressDao } from '../dao/AddressDao';
+import { AddressDao } from '../dao/AddressDaoImpl';
 import { Address } from '../entity/Address';
 
 export class AddressService {

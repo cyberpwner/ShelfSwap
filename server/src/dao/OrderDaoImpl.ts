@@ -1,9 +1,10 @@
 import { Order } from '../entity/Order';
+import { User } from '../entity/User';
 import { BaseDao } from './BaseDao';
 
 export class OrderDao implements BaseDao<Order> {
   async findAll(): Promise<Order[]> {
-    return Order.find();
+    return Order.find({ relations: ['book', 'buyer'] });
   }
 
   async findById(id: number): Promise<Order | null> {
@@ -30,5 +31,25 @@ export class OrderDao implements BaseDao<Order> {
 
     await Order.remove(existingOrder);
     return true;
+  }
+
+  async findOrdersByBuyer(username: string): Promise<Order[]> {
+    const buyer = await User.findOneBy({ username });
+
+    if (!buyer) {
+      throw new Error('User not found');
+    }
+
+    return Order.find({ where: { buyer }, relations: ['book', 'buyer'] });
+  }
+
+  async findOrdersBySeller(username: string): Promise<Order[]> {
+    const seller = await User.findOne({ where: { username } });
+
+    if (!seller) {
+      throw new Error('User not found');
+    }
+
+    return Order.find({ where: { book: { user: seller } }, relations: ['book', 'buyer'] });
   }
 }

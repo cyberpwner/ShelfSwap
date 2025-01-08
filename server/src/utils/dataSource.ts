@@ -14,7 +14,7 @@ export const AppDataSource = new DataSource({
   username: dbConfig.username,
   password: dbConfig.password,
   database: dbConfig.database,
-  logging: false,
+  logging: true,
   entities: ['src/entity/**/*.ts'],
   migrations: ['src/migration/**/*.ts'],
   // typeorm will make table and column names snake_case even if the attribute is declared in camelCase in the entity class

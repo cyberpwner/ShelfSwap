@@ -1,4 +1,4 @@
-import { BookDao } from '../dao/BookDao';
+import { BookDao } from '../dao/BookDaoImpl';
 import { Book } from '../entity/Book';
 
 export class BookService {

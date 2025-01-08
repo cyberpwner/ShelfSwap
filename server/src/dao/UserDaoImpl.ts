@@ -1,4 +1,5 @@
 import { User } from '../entity/User';
+import { isDuplicatedUser } from '../utils/userUtils';
 import { BaseDao } from './BaseDao';
 
 export class UserDao implements BaseDao<User> {
@@ -10,12 +11,18 @@ export class UserDao implements BaseDao<User> {
     return User.findOne({ where: { id } });
   }
 
-  async create(user: User): Promise<User | null> {
+  async create(user: User): Promise<User> {
+    const isDuplicate = await isDuplicatedUser(user);
+
+    if (isDuplicate) {
+      throw new Error('username or email is already taken');
+    }
+
     return user.save();
   }
 
   async update(id: number, user: Partial<User>): Promise<User | null> {
-    const existingUser = await User.findOne({ where: { id } });
+    const existingUser = await User.findOneBy({ id });
 
     if (!existingUser) return null;
 
@@ -23,12 +30,11 @@ export class UserDao implements BaseDao<User> {
     return existingUser.save();
   }
 
-  async delete(id: number): Promise<boolean> {
+  async delete(id: number): Promise<User | null> {
     const existingUser = await User.findOneBy({ id });
 
-    if (!existingUser) return false;
+    if (!existingUser) return null;
 
-    await User.remove(existingUser);
-    return true;
+    return User.remove(existingUser);
   }
 }
