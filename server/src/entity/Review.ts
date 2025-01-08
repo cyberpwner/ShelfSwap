@@ -3,7 +3,7 @@ import { ReviewRating, ReviewType } from '../types/reviewTypes.d.js';
 import { Order } from './Order';
 
 @Entity('Review')
-@Unique(['order', 'type']) // each order can (and should) have only two reviews, one from buyer and another frmo seller
+@Unique(['order', 'type']) // each order can (and should) have only two reviews, one from buyer and another from seller
 export class Review extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;

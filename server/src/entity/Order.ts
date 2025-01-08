@@ -6,7 +6,7 @@ import { Review } from './Review';
 import { Payment } from './Payment';
 
 @Entity('Order')
-@Unique(['book', 'seller', 'buyer'])
+@Unique(['book', 'buyer'])
 export class Order extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
@@ -20,16 +20,6 @@ export class Order extends BaseEntity {
     name: 'book_id',
   })
   book: Book;
-
-  @ManyToOne(() => User, (user) => user.sales, {
-    nullable: false,
-    onUpdate: 'CASCADE',
-    onDelete: 'CASCADE',
-  })
-  @JoinColumn({
-    name: 'seller_id',
-  })
-  seller: User;
 
   @ManyToOne(() => User, (user) => user.purchases, {
     nullable: false,
