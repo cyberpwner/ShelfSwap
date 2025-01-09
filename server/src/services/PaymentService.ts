@@ -1,8 +1,8 @@
-import { PaymentDao } from '../dao/PaymentDaoImpl';
+import { PaymentDao } from '../dao/PaymentDao';
 import { Payment } from '../entity/Payment';
 
 export class PaymentService {
-  private paymentDao: PaymentDao;
+  private readonly paymentDao: PaymentDao;
 
   constructor() {
     this.paymentDao = new PaymentDao();
@@ -24,7 +24,7 @@ export class PaymentService {
     return this.paymentDao.update(id, payment);
   }
 
-  async deletePayment(id: number): Promise<boolean> {
+  async deletePayment(id: number): Promise<Payment | null> {
     return this.paymentDao.delete(id);
   }
 }

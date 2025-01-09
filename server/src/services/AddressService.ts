@@ -1,8 +1,8 @@
-import { AddressDao } from '../dao/AddressDaoImpl';
+import { AddressDao } from '../dao/AddressDao';
 import { Address } from '../entity/Address';
 
 export class AddressService {
-  private addressDao: AddressDao;
+  private readonly addressDao: AddressDao;
 
   constructor() {
     this.addressDao = new AddressDao();
@@ -24,7 +24,7 @@ export class AddressService {
     return this.addressDao.update(id, address);
   }
 
-  async deleteAddress(id: number): Promise<boolean> {
+  async deleteAddress(id: number): Promise<Address | null> {
     return this.addressDao.delete(id);
   }
 }

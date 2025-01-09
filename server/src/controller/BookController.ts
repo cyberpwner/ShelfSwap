@@ -3,7 +3,7 @@ import { BookService } from '../services/BookService';
 import { Book } from '../entity/Book';
 
 export class BookController {
-  private bookService = new BookService();
+  private readonly bookService = new BookService();
 
   getAllBooksHandler: RequestHandler = async (req, res) => {
     try {

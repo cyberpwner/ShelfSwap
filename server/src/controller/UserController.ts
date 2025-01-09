@@ -3,7 +3,7 @@ import { UserService } from '../services/UserService';
 import { User } from '../entity/User';
 
 export class UserController {
-  private userService = new UserService();
+  private readonly userService = new UserService();
 
   getAllUsers: RequestHandler = async (req, res) => {
     try {

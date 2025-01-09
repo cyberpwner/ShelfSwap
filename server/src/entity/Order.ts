@@ -12,7 +12,6 @@ export class Order extends BaseEntity {
   id: number;
 
   @ManyToOne(() => Book, (book) => book.orders, {
-    nullable: false,
     onUpdate: 'CASCADE',
     onDelete: 'CASCADE',
   })
@@ -22,7 +21,6 @@ export class Order extends BaseEntity {
   book: Book;
 
   @ManyToOne(() => User, (user) => user.purchases, {
-    nullable: false,
     onUpdate: 'CASCADE',
     onDelete: 'CASCADE',
   })

@@ -1,8 +1,8 @@
-import { ReviewDao } from '../dao/ReviewDaoImpl';
+import { ReviewDao } from '../dao/ReviewDao';
 import { Review } from '../entity/Review';
 
 export class ReviewService {
-  private reviewDao: ReviewDao;
+  private readonly reviewDao: ReviewDao;
 
   constructor() {
     this.reviewDao = new ReviewDao();
@@ -24,7 +24,7 @@ export class ReviewService {
     return this.reviewDao.update(id, review);
   }
 
-  async deleteReview(id: number): Promise<boolean> {
+  async deleteReview(id: number): Promise<Review | null> {
     return this.reviewDao.delete(id);
   }
 }

@@ -1,9 +1,9 @@
-import { UserDao } from '../dao/UserDaoImpl';
+import { UserDao } from '../dao/UserDao';
 import { UserDto } from '../dto/UserDto';
 import { User } from '../entity/User';
 
 export class UserService {
-  private userDao: UserDao;
+  private readonly userDao: UserDao;
 
   constructor() {
     this.userDao = new UserDao();

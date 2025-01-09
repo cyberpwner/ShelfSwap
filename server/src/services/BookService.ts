@@ -1,8 +1,8 @@
-import { BookDao } from '../dao/BookDaoImpl';
+import { BookDao } from '../dao/BookDao';
 import { Book } from '../entity/Book';
 
 export class BookService {
-  private bookDao: BookDao;
+  private readonly bookDao: BookDao;
 
   constructor() {
     this.bookDao = new BookDao();
@@ -24,7 +24,7 @@ export class BookService {
     return this.bookDao.update(id, book);
   }
 
-  async deleteBook(id: number): Promise<boolean> {
+  async deleteBook(id: number): Promise<Book | null> {
     return this.bookDao.delete(id);
   }
 }

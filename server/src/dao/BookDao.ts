@@ -7,7 +7,7 @@ export class BookDao implements BaseDao<Book> {
   }
 
   async findById(id: number): Promise<Book | null> {
-    return Book.findOne({ where: { id } });
+    return Book.findOne({ where: { id }, relations: ['user'] });
   }
 
   async create(book: Book): Promise<Book> {
@@ -30,5 +30,9 @@ export class BookDao implements BaseDao<Book> {
     if (!existingBook) return null;
 
     return Book.remove(existingBook);
+  }
+
+  async findWithUserById(id: number): Promise<Book | null> {
+    return Book.findOne({ where: { id }, relations: ['user'] });
   }
 }
