@@ -1,6 +1,5 @@
 import { BaseEntity, Column, CreateDateColumn, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { UserRole } from '../types/userTypes.d.js';
-import { Book } from './Book';
 import { Order } from './Order.js';
 import { Address } from './Address.js';
 
@@ -51,12 +50,6 @@ export class User extends BaseEntity {
     nullable: true,
   })
   profilePicUrl: string;
-
-  @OneToMany(() => Book, (book) => book.user, {
-    onUpdate: 'CASCADE',
-    onDelete: 'CASCADE',
-  })
-  books: Book[];
 
   @OneToMany(() => Order, (order) => order.buyer, {
     onUpdate: 'CASCADE',

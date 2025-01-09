@@ -1,9 +1,9 @@
-import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Unique } from 'typeorm';
+import { BaseEntity, Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn, Unique } from 'typeorm';
 import { ReviewRating, ReviewType } from '../types/reviewTypes.d.js';
 import { Order } from './Order';
 
 @Entity('Review')
-@Unique(['order', 'type']) // each order can (and should) have only two reviews, one from buyer and another from seller
+@Unique(['order'])
 export class Review extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
@@ -27,10 +27,10 @@ export class Review extends BaseEntity {
   })
   comment: string;
 
-  @ManyToOne(() => Order, (order) => order.reviews, {
-    nullable: false,
+  @OneToOne(() => Order, (order) => order.review, {
     onUpdate: 'CASCADE',
     onDelete: 'CASCADE',
+    nullable: false,
   })
   @JoinColumn({
     name: 'order_id',

@@ -1,19 +1,7 @@
-import {
-  BaseEntity,
-  Column,
-  CreateDateColumn,
-  Entity,
-  JoinColumn,
-  ManyToMany,
-  ManyToOne,
-  OneToMany,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
-import { User } from './User';
+import { BaseEntity, Column, CreateDateColumn, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { Category } from './Category';
-import { Order } from './Order';
-import { BookCondition } from '../types/bookTypes.d.js';
+import { Author } from './Author';
+import { OrderItem } from './OrderItem';
 
 @Entity('Book')
 export class Book extends BaseEntity {
@@ -22,15 +10,16 @@ export class Book extends BaseEntity {
 
   @Column({
     type: 'varchar',
-    length: 100,
+    length: 13,
+    unique: true,
   })
-  title: string;
+  isbn: string;
 
   @Column({
     type: 'varchar',
     length: 100,
   })
-  author: string;
+  title: string;
 
   @Column({
     type: 'varchar',
@@ -46,27 +35,11 @@ export class Book extends BaseEntity {
   })
   price: number;
 
-  @Column({
-    type: 'enum',
-    enum: BookCondition,
-  })
-  condition: BookCondition;
-
-  @Column({
-    type: 'boolean',
-  })
-  isSold: boolean;
-
-  // TODO: give all foreign keys in the DB the CASCADE option on update (and on delete, maybe?)
-  @ManyToOne(() => User, (user) => user.books, {
-    nullable: false,
+  @ManyToMany(() => Author, (author) => author.books, {
     onUpdate: 'CASCADE',
     onDelete: 'CASCADE',
   })
-  @JoinColumn({
-    name: 'user_id',
-  })
-  user: User;
+  authors: Author[];
 
   @ManyToMany(() => Category, (category) => category.books, {
     onUpdate: 'CASCADE',
@@ -74,11 +47,11 @@ export class Book extends BaseEntity {
   })
   categories: Category[];
 
-  @OneToMany(() => Order, (order) => order.book, {
+  @OneToMany(() => OrderItem, (item) => item.book, {
     onUpdate: 'CASCADE',
     onDelete: 'CASCADE',
   })
-  orders: Order[];
+  orderItems: OrderItem[];
 
   @CreateDateColumn()
   createdAt: Date;

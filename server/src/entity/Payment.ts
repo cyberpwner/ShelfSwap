@@ -3,7 +3,7 @@ import { PaymentMethod } from '../types/paymentTypes.d.js';
 import { Order } from './Order';
 
 @Entity('Payment')
-@Unique(['order']) // an order can only be paid once. And since the payment is only stored if was successful order_id can and should be unique.
+@Unique(['order']) // an order can only be paid once. And since the payment is only stored if it was successful order_id can and should be unique.
 export class Payment extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
@@ -22,9 +22,9 @@ export class Payment extends BaseEntity {
   amount: number;
 
   @OneToOne(() => Order, (order) => order.payment, {
-    nullable: false,
     onUpdate: 'CASCADE',
     onDelete: 'CASCADE',
+    nullable: false,
   })
   @JoinColumn({
     name: 'order_id',
