@@ -1,5 +1,5 @@
 import { BaseEntity, Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn, Unique } from 'typeorm';
-import { ReviewRating, ReviewType } from '../types/reviewTypes.d.js';
+import { ReviewRating } from '../types/reviewTypes.d.js';
 import { Order } from './Order';
 
 @Entity('Review')
@@ -7,12 +7,6 @@ import { Order } from './Order';
 export class Review extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
-
-  @Column({
-    type: 'enum',
-    enum: ReviewType,
-  })
-  type: ReviewType;
 
   @Column({
     type: 'enum',
