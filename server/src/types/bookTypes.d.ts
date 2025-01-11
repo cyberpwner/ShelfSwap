@@ -17,20 +17,10 @@ export enum BookCategory {
   CHILDREN = 'children',
 }
 
-export enum BookCondition {
-  NEW = 'new',
-  LIKE_NEW = 'like new',
-  VERY_GOOD = 'very good',
-  GOOD = 'good',
-  ACCEPTABLE = 'acceptable',
-}
-
 export interface IBook {
   title: string;
   author: string;
   description?: string;
   price: number;
-  isSold: boolean;
-  condition: BookCondition;
   userId: number;
 }
