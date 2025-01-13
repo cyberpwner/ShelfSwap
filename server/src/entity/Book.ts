@@ -2,6 +2,7 @@ import { BaseEntity, Column, CreateDateColumn, Entity, ManyToMany, OneToMany, Pr
 import { Category } from './Category';
 import { Author } from './Author';
 import { OrderItem } from './OrderItem';
+import { Review } from './Review';
 
 @Entity('Book')
 export class Book extends BaseEntity {
@@ -34,6 +35,12 @@ export class Book extends BaseEntity {
     scale: 2,
   })
   price: number;
+
+  @OneToMany(() => Review, (review) => review.book, {
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+  })
+  reviews: Review[];
 
   @ManyToMany(() => Author, (author) => author.books, {
     onUpdate: 'CASCADE',

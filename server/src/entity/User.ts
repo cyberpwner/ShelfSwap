@@ -2,6 +2,7 @@ import { BaseEntity, Column, CreateDateColumn, Entity, OneToMany, OneToOne, Prim
 import { UserRole } from '../types/userTypes.d.js';
 import { Order } from './Order.js';
 import { Address } from './Address.js';
+import { Review } from './Review.js';
 
 // note to future self or other devs:
 // class properties should follow camelCase naming, typeorm will automatically convert them to snake_case in the DB.
@@ -51,11 +52,17 @@ export class User extends BaseEntity {
   })
   profilePicUrl: string;
 
-  @OneToMany(() => Order, (order) => order.buyer, {
+  @OneToMany(() => Order, (order) => order.user, {
     onUpdate: 'CASCADE',
     onDelete: 'CASCADE',
   })
   purchases: Order[];
+
+  @OneToMany(() => Review, (review) => review.user, {
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+  })
+  reviews: Review[];
 
   @OneToOne(() => Address, (address) => address.user, {
     onUpdate: 'CASCADE',

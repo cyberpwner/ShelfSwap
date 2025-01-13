@@ -1,9 +1,10 @@
-import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn, Unique, UpdateDateColumn } from 'typeorm';
+import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Unique, UpdateDateColumn } from 'typeorm';
 import { ReviewRating } from '../types/reviewTypes.d.js';
-import { Order } from './Order';
+import { Book } from './Book.js';
+import { User } from './User.js';
 
 @Entity('Review')
-@Unique(['order'])
+@Unique(['book', 'user'])
 export class Review extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
@@ -21,15 +22,23 @@ export class Review extends BaseEntity {
   })
   comment: string;
 
-  @OneToOne(() => Order, (order) => order.review, {
+  @ManyToOne(() => Book, (book) => book.reviews, {
     onUpdate: 'CASCADE',
     onDelete: 'CASCADE',
-    nullable: false,
   })
   @JoinColumn({
-    name: 'order_id',
+    name: 'book_id',
   })
-  order: Order;
+  book: Book;
+
+  @ManyToOne(() => User, (user) => user.reviews, {
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({
+    name: 'user_id',
+  })
+  user: User;
 
   @CreateDateColumn()
   created_at: Date;

@@ -12,7 +12,6 @@ import {
 } from 'typeorm';
 import { User } from './User';
 import { OrderStatus } from '../types/orderTypes.d.js';
-import { Review } from './Review';
 import { Payment } from './Payment';
 import { OrderItem } from './OrderItem';
 
@@ -27,9 +26,9 @@ export class Order extends BaseEntity {
     nullable: false,
   })
   @JoinColumn({
-    name: 'buyer_id',
+    name: 'user_id',
   })
-  buyer: User;
+  user: User;
 
   @Column({
     type: 'enum',
@@ -49,12 +48,6 @@ export class Order extends BaseEntity {
     onDelete: 'CASCADE',
   })
   items: OrderItem[];
-
-  @OneToOne(() => Review, (review) => review.order, {
-    onUpdate: 'CASCADE',
-    onDelete: 'CASCADE',
-  })
-  review: Review;
 
   @OneToOne(() => Payment, (payment) => payment.order, {
     onUpdate: 'CASCADE',
