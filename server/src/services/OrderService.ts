@@ -1,7 +1,4 @@
-import { BookDao } from '../dao/BookDao';
 import { OrderDao } from '../dao/OrderDao';
-import { UserDao } from '../dao/UserDao';
-import { CreateOrderDto } from '../dto/CreateOrderDto';
 import { OrderDto } from '../dto/OrderDto';
 import { Order } from '../entity/Order';
 
@@ -28,35 +25,18 @@ export class OrderService {
     return new OrderDto(order);
   }
 
-  async createOrder(createOrderDto: CreateOrderDto): Promise<OrderDto> {
-    const bookDao = new BookDao();
-    const userDao = new UserDao();
+  // TODO: use transactions to create an order.
+  // Only if all operations needed are successful (insert order to table, insert all order items) commit the transaction.
 
-    const book = await bookDao.findWithUserById(createOrderDto.book);
+  // 1. start transaction
+  // 2. insert order.
+  // 3. insert all order items.
+  // 4. if something fails rollback transaction.
+  // 5. if all succeeds commit transaction
 
-    if (!book) {
-      throw new Error('Book not found!');
-    }
+  // async createOrder(): Promise<OrderDto> {
 
-    const buyer = await userDao.findById(createOrderDto.buyer);
-
-    if (!buyer) {
-      throw new Error('Buyer not found!');
-    }
-
-    // user can't buy book from themselves (buyer === seller)
-    if (buyer.id === book.user.id) {
-      throw new Error('Book cannot be bought by its seller');
-    }
-
-    const order = new Order();
-    order.book = book;
-    order.buyer = buyer;
-    order.status = createOrderDto.status;
-
-    const createdOrder = await this.orderDao.create(order);
-    return new OrderDto(createdOrder);
-  }
+  // }
 
   async updateOrder(id: number, order: Partial<Order>): Promise<OrderDto | null> {
     const updatedOrder = await this.orderDao.update(id, order);
@@ -77,11 +57,7 @@ export class OrderService {
   async getOrdersByBuyer(username: string): Promise<OrderDto[]> {
     const orders = await this.orderDao.findOrdersByBuyer(username);
 
-    return orders.map((order) => new OrderDto(order));
-  }
-
-  async getOrdersBySeller(username: string): Promise<OrderDto[]> {
-    const orders = await this.orderDao.findOrdersBySeller(username);
+    if (orders.length === 0) return [];
 
     return orders.map((order) => new OrderDto(order));
   }

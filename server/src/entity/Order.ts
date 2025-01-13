@@ -1,4 +1,15 @@
-import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BaseEntity,
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { User } from './User';
 import { OrderStatus } from '../types/orderTypes.d.js';
 import { Review } from './Review';
@@ -29,7 +40,7 @@ export class Order extends BaseEntity {
   @Column({
     type: 'varchar',
     unique: true,
-    nullable: true, // mariadb (and many others) allows a unique attribute to be null in multiple rows of a table.
+    nullable: true, // mariadb, among many others, allows a unique attribute to be null in multiple rows of a table.
   })
   trackingNumber: string;
 
@@ -50,4 +61,10 @@ export class Order extends BaseEntity {
     onDelete: 'CASCADE',
   })
   payment: Payment;
+
+  @CreateDateColumn()
+  created_at: Date;
+
+  @UpdateDateColumn()
+  updated_at: Date;
 }

@@ -3,11 +3,11 @@ import { BaseDao } from './BaseDao';
 
 export class BookDao implements BaseDao<Book> {
   async findAll(): Promise<Book[]> {
-    return Book.find({ relations: ['user'] });
+    return Book.find();
   }
 
   async findById(id: number): Promise<Book | null> {
-    return Book.findOne({ where: { id }, relations: ['user'] });
+    return Book.findOne({ where: { id } });
   }
 
   async create(book: Book): Promise<Book> {
@@ -30,9 +30,5 @@ export class BookDao implements BaseDao<Book> {
     if (!existingBook) return null;
 
     return Book.remove(existingBook);
-  }
-
-  async findWithUserById(id: number): Promise<Book | null> {
-    return Book.findOne({ where: { id }, relations: ['user'] });
   }
 }

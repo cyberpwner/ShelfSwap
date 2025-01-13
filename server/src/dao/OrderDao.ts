@@ -1,5 +1,4 @@
 import { Order } from '../entity/Order';
-import { User } from '../entity/User';
 import { getErrorMsg, InformativeError } from '../utils/errorUtils';
 import { isDuplicateOrder } from '../utils/orderUtils';
 import { BaseDao } from './BaseDao';
@@ -7,7 +6,7 @@ import { BaseDao } from './BaseDao';
 export class OrderDao implements BaseDao<Order>, InformativeError {
   async findAll(): Promise<Order[]> {
     try {
-      return Order.find({ relations: ['book', 'buyer'] });
+      return Order.find({ relations: ['buyer'] });
     } catch (error) {
       throw new Error(this._getErrorInfo(error));
     }
@@ -15,7 +14,7 @@ export class OrderDao implements BaseDao<Order>, InformativeError {
 
   async findById(id: number): Promise<Order | null> {
     try {
-      return Order.findOne({ where: { id }, relations: ['book', 'buyer'] });
+      return Order.findOne({ where: { id }, relations: ['buyer'] });
     } catch (error) {
       throw new Error(this._getErrorInfo(error));
     }
@@ -37,7 +36,7 @@ export class OrderDao implements BaseDao<Order>, InformativeError {
 
   async update(id: number, order: Partial<Order>): Promise<Order | null> {
     try {
-      const existingOrder = await Order.findOne({ where: { id }, relations: ['book', 'buyer'] });
+      const existingOrder = await Order.findOne({ where: { id }, relations: ['buyer'] });
 
       if (!existingOrder) return null;
 
@@ -50,7 +49,7 @@ export class OrderDao implements BaseDao<Order>, InformativeError {
 
   async delete(id: number): Promise<Order | null> {
     try {
-      const existingOrder = await Order.findOne({ where: { id }, relations: ['book', 'buyer'] });
+      const existingOrder = await Order.findOne({ where: { id }, relations: ['buyer'] });
 
       if (!existingOrder) return null;
 
@@ -62,26 +61,7 @@ export class OrderDao implements BaseDao<Order>, InformativeError {
 
   async findOrdersByBuyer(username: string): Promise<Order[]> {
     try {
-      const buyer = await User.findOneBy({ username });
-      if (!buyer) {
-        throw new Error('Buyer not found');
-      }
-
-      return await Order.find({ where: { buyer: { username: buyer.username } }, relations: ['book', 'book.user', 'buyer'] });
-    } catch (error) {
-      throw new Error(this._getErrorInfo(error));
-    }
-  }
-
-  async findOrdersBySeller(username: string): Promise<Order[]> {
-    try {
-      const seller = await User.findOneBy({ username });
-
-      if (!seller) {
-        throw new Error('Seller not found');
-      }
-
-      return Order.find({ where: { book: { user: seller } }, relations: ['book', 'book.user', 'buyer'] });
+      return Order.find({ where: { buyer: { username } }, relations: ['buyer', 'items'] });
     } catch (error) {
       throw new Error(this._getErrorInfo(error));
     }

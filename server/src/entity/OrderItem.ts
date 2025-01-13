@@ -45,5 +45,5 @@ export class OrderItem extends BaseEntity {
   createdAt: Date;
 
   @UpdateDateColumn()
-  updateAt: Date;
+  updatedAt: Date;
 }

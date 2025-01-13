@@ -14,7 +14,7 @@ export class AddressDao implements BaseDao<Address> {
     const foundAddress = Address.findOneBy({ user: address.user });
 
     if (foundAddress != null) {
-      throw new Error('address already exists');
+      throw new Error('address for user already exists');
     }
 
     return address.save();
