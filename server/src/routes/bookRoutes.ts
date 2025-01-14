@@ -4,14 +4,14 @@ import { BookController } from '../controller/BookController';
 const router = express.Router();
 const bookController = new BookController();
 
-router.get('/', bookController.getAllBooksHandler);
+router.get('/', bookController.getAllBooks);
 
-router.get('/:id', bookController.getBookByIdHandler);
+router.get('/:id', bookController.getBookById);
 
-router.post('/', bookController.createBookHandler);
+router.post('/', bookController.createBook);
 
-router.put('/:id', bookController.updateBookHandler);
+router.put('/:id', bookController.updateBook);
 
-router.delete('/:id', bookController.deleteBookHandler);
+router.delete('/:id', bookController.deleteBook);
 
 export default router;

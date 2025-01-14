@@ -5,7 +5,7 @@ import { Book } from '../entity/Book';
 export class BookController {
   private readonly bookService = new BookService();
 
-  getAllBooksHandler: RequestHandler = async (req, res) => {
+  getAllBooks: RequestHandler = async (req, res) => {
     try {
       const books = await this.bookService.getAllBooks();
 
@@ -15,7 +15,7 @@ export class BookController {
     }
   };
 
-  getBookByIdHandler: RequestHandler = async (req, res) => {
+  getBookById: RequestHandler = async (req, res) => {
     try {
       const id = parseInt(req.params.id, 10);
       const book = await this.bookService.getBookById(id);
@@ -31,12 +31,14 @@ export class BookController {
     }
   };
 
-  createBookHandler: RequestHandler = async (req, res) => {
+  createBook: RequestHandler = async (req, res) => {
     try {
       const book = new Book();
-      Object.assign(book, req.body);
+      Object.assign(book, req.body.book);
 
-      const createdBook = await this.bookService.createBook(book);
+      const authorNames: string[] = req.body.authors;
+
+      const createdBook = await this.bookService.createBook(book, authorNames);
 
       if (createdBook == null) {
         res.status(400).json({ message: 'Book could not be created' });
@@ -49,7 +51,7 @@ export class BookController {
     }
   };
 
-  updateBookHandler: RequestHandler = async (req, res) => {
+  updateBook: RequestHandler = async (req, res) => {
     const id = parseInt(req.params.id, 10);
     const book = req.body;
 
@@ -63,7 +65,7 @@ export class BookController {
     res.status(200).json(updatedBook);
   };
 
-  deleteBookHandler: RequestHandler = async (req, res) => {
+  deleteBook: RequestHandler = async (req, res) => {
     const id = parseInt(req.params.id, 10);
 
     const isDeleted = await this.bookService.deleteBook(id);
