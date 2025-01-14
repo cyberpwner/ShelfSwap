@@ -11,7 +11,7 @@ export class ReviewDao implements BaseDao<Review> {
   }
 
   async create(review: Review): Promise<Review> {
-    const foundReview = await Review.findOneBy({ order: review.order });
+    const foundReview = await Review.findOneBy({ user: review.user, book: review.book });
 
     if (foundReview != null) {
       throw new Error('review already exists');

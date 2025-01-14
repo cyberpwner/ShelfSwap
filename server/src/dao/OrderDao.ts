@@ -22,9 +22,12 @@ export class OrderDao implements BaseDao<Order>, InformativeError {
     }
   }
 
-  async create(entity: Order): Promise<Order> {
-    console.log(entity);
-    throw new Error('Method not implemented.');
+  async create(order: Order): Promise<Order> {
+    try {
+      return Order.save(order);
+    } catch (error) {
+      throw new Error(this._getErrorInfo(error));
+    }
   }
 
   async createOrderWithItems(order: Order, items: OrderItem[]): Promise<Order> {
@@ -34,6 +37,7 @@ export class OrderDao implements BaseDao<Order>, InformativeError {
         throw new Error('order already exists');
       }
 
+      // TODO: an order should be created only if the payment is done, thus I need to implement that.
       const createdOrderWithItems = await AppDataSource.manager.transaction(async (transactionalEntityManager) => {
         // 1. create and save order
         const newOrder = transactionalEntityManager.create(Order, order);

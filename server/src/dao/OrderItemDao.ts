@@ -19,9 +19,12 @@ export class OrderItemDao implements BaseDao<OrderItem>, InformativeError {
     }
   }
 
-  async create(entity: OrderItem): Promise<OrderItem> {
-    console.log(entity);
-    throw new Error('Method not implemented.');
+  async create(item: OrderItem): Promise<OrderItem> {
+    try {
+      return OrderItem.save(item);
+    } catch (error) {
+      throw new Error(this._getErrorInfo(error));
+    }
   }
 
   async update(id: number, orderItem: Partial<OrderItem>): Promise<OrderItem | null> {
