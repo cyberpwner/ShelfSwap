@@ -1,8 +1,10 @@
 import { OrderDao } from '../dao/OrderDao';
 import { OrderDto } from '../dto/OrderDto';
 import { Order } from '../entity/Order';
+import { OrderItem } from '../entity/OrderItem';
+import { getErrorMsg, InformativeError } from '../utils/errorUtils';
 
-export class OrderService {
+export class OrderService implements InformativeError {
   private readonly orderDao: OrderDao;
 
   constructor() {
@@ -34,9 +36,15 @@ export class OrderService {
   // 4. if something fails rollback transaction.
   // 5. if all succeeds commit transaction
 
-  // async createOrder(): Promise<OrderDto> {
+  async placeOrder(order: Order, items: OrderItem[]): Promise<OrderDto> {
+    try {
+      const orderWithItems = await this.orderDao.createOrderWithItems(order, items);
 
-  // }
+      return new OrderDto(orderWithItems);
+    } catch (error) {
+      throw new Error(this._getErrorInfo(error));
+    }
+  }
 
   async updateOrder(id: number, order: Partial<Order>): Promise<OrderDto | null> {
     const updatedOrder = await this.orderDao.update(id, order);
@@ -54,11 +62,15 @@ export class OrderService {
     return new OrderDto(deletedOrder);
   }
 
-  async getOrdersByBuyer(username: string): Promise<OrderDto[]> {
-    const orders = await this.orderDao.findOrdersByBuyer(username);
+  async getOrdersByUser(username: string): Promise<OrderDto[]> {
+    const orders = await this.orderDao.findOrdersByUser(username);
 
     if (orders.length === 0) return [];
 
     return orders.map((order) => new OrderDto(order));
+  }
+
+  _getErrorInfo(error: unknown) {
+    return `Class: ${this.constructor.name} - Error: ${getErrorMsg(error)}`;
   }
 }

@@ -8,7 +8,7 @@ export class CategoryService {
     this.categoryDao = new CategoryDao();
   }
 
-  async getAllCategorys(): Promise<Category[]> {
+  async getAllCategories(): Promise<Category[]> {
     return this.categoryDao.findAll();
   }
 

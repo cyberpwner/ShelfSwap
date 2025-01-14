@@ -5,9 +5,13 @@ const router = express.Router();
 const orderController = new OrderController();
 
 router.post('/', orderController.createOrder);
+
 router.get('/:id', orderController.getOrderById);
-router.get('/buyer/:username', orderController.getOrdersByBuyer);
-router.get('/seller/:username', orderController.getOrdersBySeller);
+
+router.get('/filter/:username', orderController.getOrdersByUser);
+
+router.put('/:id', orderController.updateOrder);
+
 router.delete('/:id', orderController.deleteOrder);
 
 export default router;

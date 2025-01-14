@@ -1,12 +1,17 @@
 import { RequestHandler } from 'express';
 import { OrderService } from '../services/OrderService';
-import { CreateOrderDto } from '../dto/CreateOrderDto';
 import { getErrorMsg, InformativeError } from '../utils/errorUtils';
+import { Order } from '../entity/Order';
+import { OrderItem } from '../entity/OrderItem';
 
 export class OrderController implements InformativeError {
-  private orderService = new OrderService();
+  private readonly orderService: OrderService;
 
-  getOrdersByBuyer: RequestHandler = async (req, res, next) => {
+  constructor() {
+    this.orderService = new OrderService();
+  }
+
+  getOrdersByUser: RequestHandler = async (req, res, next) => {
     try {
       const { username } = req.params;
 
@@ -15,23 +20,9 @@ export class OrderController implements InformativeError {
         return;
       }
 
-      const orders = await this.orderService.getOrdersByBuyer(username);
+      const orders = await this.orderService.getOrdersByUser(username);
 
       res.status(200).json(orders);
-      next();
-    } catch (error) {
-      console.log(this._getErrorInfo(error));
-      res.status(500).json({ message: 'Failed to fetch orders' });
-    }
-  };
-
-  getOrdersBySeller: RequestHandler = async (req, res, next) => {
-    try {
-      const { username } = req.params;
-
-      const sales = await this.orderService.getOrdersBySeller(username);
-
-      res.status(200).json(sales);
       next();
     } catch (error) {
       console.log(this._getErrorInfo(error));
@@ -58,10 +49,17 @@ export class OrderController implements InformativeError {
 
   createOrder: RequestHandler = async (req, res) => {
     try {
-      const order = new CreateOrderDto();
-      Object.assign(order, req.body);
+      const order = new Order();
+      Object.assign(order, req.body.order);
 
-      const createdOrder = await this.orderService.createOrder(order);
+      const items: OrderItem[] = req.body.items.map((item: OrderItem) => {
+        const orderItem = new OrderItem();
+        Object.assign(orderItem, item);
+
+        return orderItem;
+      });
+
+      const createdOrder = await this.orderService.placeOrder(order, items);
 
       res.status(200).json(createdOrder);
     } catch (error) {
@@ -73,7 +71,8 @@ export class OrderController implements InformativeError {
   updateOrder: RequestHandler = async (req, res) => {
     try {
       const id = parseInt(req.params.id, 10);
-      const order = req.body;
+      const order = new Order();
+      Object.assign(order, req.body);
 
       const updatedOrder = await this.orderService.updateOrder(id, order);
 
