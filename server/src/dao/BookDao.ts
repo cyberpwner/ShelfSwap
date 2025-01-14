@@ -1,15 +1,17 @@
 import { Author } from '../entity/Author';
 import { Book } from '../entity/Book';
+import { Category } from '../entity/Category';
+import { BookCategory } from '../types/categoryTypes';
 import { AppDataSource } from '../utils/dataSource';
 import { BaseDao } from './BaseDao';
 
 export class BookDao implements BaseDao<Book> {
   async findAll(): Promise<Book[]> {
-    return Book.find();
+    return Book.find({ relations: ['authors', 'categories', 'reviews'] });
   }
 
   async findById(id: number): Promise<Book | null> {
-    return Book.findOne({ where: { id } });
+    return Book.findOne({ where: { id }, relations: ['authors', 'categories', 'reviews'] });
   }
 
   async create(book: Book): Promise<Book> {
@@ -17,7 +19,7 @@ export class BookDao implements BaseDao<Book> {
     return book.save();
   }
 
-  async createBookWithAuthors(book: Book, authorNames: string[]): Promise<Book> {
+  async createBook(book: Book, authorNames: string[], categoryNames: BookCategory[]): Promise<Book> {
     const createdBook = await AppDataSource.manager.transaction(async (transactionalEntityManager) => {
       // fetch authors from DB or create them if they don't exist
       const authors = await Promise.all(
@@ -33,9 +35,23 @@ export class BookDao implements BaseDao<Book> {
         }),
       );
 
+      const categories = await Promise.all(
+        categoryNames.map(async (name) => {
+          let category = await transactionalEntityManager.findOne(Category, { where: { name } });
+
+          if (!category) {
+            category = transactionalEntityManager.create(Category, { name });
+            await transactionalEntityManager.save(category);
+          }
+
+          return category;
+        }),
+      );
+
       const newBook = transactionalEntityManager.create(Book, {
         ...book,
         authors,
+        categories,
       });
 
       return transactionalEntityManager.save(newBook);

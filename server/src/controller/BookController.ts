@@ -1,6 +1,7 @@
 import { RequestHandler } from 'express';
 import { BookService } from '../services/BookService';
 import { Book } from '../entity/Book';
+import { BookCategory } from '../types/categoryTypes';
 
 export class BookController {
   private readonly bookService = new BookService();
@@ -37,8 +38,9 @@ export class BookController {
       Object.assign(book, req.body.book);
 
       const authorNames: string[] = req.body.authors;
+      const categoryNames: BookCategory[] = req.body.categories;
 
-      const createdBook = await this.bookService.createBook(book, authorNames);
+      const createdBook = await this.bookService.createBook(book, authorNames, categoryNames);
 
       if (createdBook == null) {
         res.status(400).json({ message: 'Book could not be created' });
@@ -68,13 +70,13 @@ export class BookController {
   deleteBook: RequestHandler = async (req, res) => {
     const id = parseInt(req.params.id, 10);
 
-    const isDeleted = await this.bookService.deleteBook(id);
+    const deletedBook = await this.bookService.deleteBook(id);
 
-    if (!isDeleted) {
+    if (!deletedBook) {
       res.status(404).json({ message: 'Book not found' });
       return;
     }
 
-    res.status(200).json({ message: 'Book deleted successfully' });
+    res.status(200).json({ deletedBook });
   };
 }

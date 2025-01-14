@@ -1,5 +1,6 @@
 import { BaseEntity, Column, CreateDateColumn, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { Book } from './Book';
+import { BookCategory } from '../types/categoryTypes.d.js';
 
 @Entity('Category')
 export class Category extends BaseEntity {
@@ -7,11 +8,11 @@ export class Category extends BaseEntity {
   id: number;
 
   @Column({
-    type: 'varchar',
+    type: 'enum',
     unique: true,
-    length: 50,
+    enum: BookCategory,
   })
-  name: string;
+  name: BookCategory;
 
   @ManyToMany(() => Book, (book) => book.categories, {
     onUpdate: 'CASCADE',

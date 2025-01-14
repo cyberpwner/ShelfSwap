@@ -1,6 +1,7 @@
 import { BookDao } from '../dao/BookDao';
 import { BookDto } from '../dto/BookDto';
 import { Book } from '../entity/Book';
+import { BookCategory } from '../types/categoryTypes';
 
 export class BookService {
   private readonly bookDao: BookDao;
@@ -25,8 +26,8 @@ export class BookService {
     return new BookDto(book);
   }
 
-  async createBook(book: Book, authorNames: string[]): Promise<BookDto | null> {
-    const createdBook = await this.bookDao.createBookWithAuthors(book, authorNames);
+  async createBook(book: Book, authorNames: string[], categoryNames: BookCategory[]): Promise<BookDto | null> {
+    const createdBook = await this.bookDao.createBook(book, authorNames, categoryNames);
 
     if (!createdBook) return null;
 

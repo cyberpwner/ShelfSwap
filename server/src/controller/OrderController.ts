@@ -99,7 +99,7 @@ export class OrderController implements InformativeError {
         return;
       }
 
-      res.status(200).json({ message: 'Order deleted successfully' });
+      res.status(200).json({ deletedOrder });
     } catch (error) {
       console.log(this._getErrorInfo(error));
       res.status(500).json({});
