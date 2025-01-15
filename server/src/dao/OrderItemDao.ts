@@ -1,8 +1,11 @@
 import { OrderItem } from '../entity/OrderItem';
 import { BaseDao } from './BaseDao';
 import { getErrorMsg, InformativeError } from '../utils/errorUtils';
+import { EntityManager } from 'typeorm';
 
 export class OrderItemDao implements BaseDao<OrderItem>, InformativeError {
+  private transactionalManager: EntityManager;
+
   async findAll(): Promise<OrderItem[]> {
     try {
       return OrderItem.find({ relations: ['order', 'book'] });
@@ -20,8 +23,13 @@ export class OrderItemDao implements BaseDao<OrderItem>, InformativeError {
   }
 
   async create(item: OrderItem): Promise<OrderItem> {
+    if (this.transactionalManager == null) {
+      throw new Error('transactionalManager is not defined, order items should always be created within a transaction to ensure atomicity');
+    }
+
     try {
-      return OrderItem.save(item);
+      const newItem = this.transactionalManager.create(OrderItem, item);
+      return this.transactionalManager.save(newItem);
     } catch (error) {
       throw new Error(this._getErrorInfo(error));
     }
@@ -58,6 +66,10 @@ export class OrderItemDao implements BaseDao<OrderItem>, InformativeError {
     } catch (error) {
       throw new Error(this._getErrorInfo(error));
     }
+  }
+
+  setTransactionalManager(manager: EntityManager) {
+    this.transactionalManager = manager;
   }
 
   _getErrorInfo(error: unknown): string {

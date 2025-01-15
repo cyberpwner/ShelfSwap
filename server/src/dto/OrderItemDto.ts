@@ -12,6 +12,7 @@ export class OrderItemDto {
   constructor(orderItem: Partial<OrderItem>) {
     this.quantity = orderItem.quantity!;
     this.priceAtPurchase = orderItem.priceAtPurchase!;
+    console.log('Order from OrderItemDto: ', orderItem.order);
     this.order = new OrderDto(orderItem.order!);
     this.book = new BookDto(orderItem.book!);
   }

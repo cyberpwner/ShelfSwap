@@ -11,6 +11,7 @@ export class OrderDto {
   items?: OrderItemDto[];
 
   constructor(order: Partial<Order>) {
+    console.log('order from constructor: ', order);
     this.status = order.status!;
     this.trackingNumber = order?.trackingNumber;
     this.user = new UserDto(order.user!);
