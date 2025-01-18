@@ -1,12 +1,15 @@
 import { ReviewDao } from '../dao/ReviewDao';
 import { ReviewDto } from '../dto/ReviewDto';
 import { Review } from '../entity/Review';
+import { MapperService } from './MapperService';
 
 export class ReviewService {
   private readonly reviewDao: ReviewDao;
+  private readonly mapperService: MapperService;
 
   constructor() {
     this.reviewDao = new ReviewDao();
+    this.mapperService = new MapperService();
   }
 
   async getAllReviews(): Promise<ReviewDto[]> {
@@ -14,7 +17,7 @@ export class ReviewService {
 
     if (reviews.length === 0) return [];
 
-    return reviews.map((review) => new ReviewDto(review));
+    return reviews.map((review) => this.mapperService.mapReviewToDto(review));
   }
 
   async getReviewById(id: number): Promise<ReviewDto | null> {
@@ -22,7 +25,7 @@ export class ReviewService {
 
     if (!review) return null;
 
-    return new ReviewDto(review);
+    return this.mapperService.mapReviewToDto(review);
   }
 
   async createReview(review: Review): Promise<ReviewDto | null> {
@@ -30,7 +33,7 @@ export class ReviewService {
 
     if (!createdReview) return null;
 
-    return new ReviewDto(createdReview);
+    return this.mapperService.mapReviewToDto(createdReview);
   }
 
   async updateReview(id: number, review: Partial<Review>): Promise<ReviewDto | null> {
@@ -38,7 +41,7 @@ export class ReviewService {
 
     if (!updatedReview) return null;
 
-    return new ReviewDto(updatedReview);
+    return this.mapperService.mapReviewToDto(updatedReview);
   }
 
   async deleteReview(id: number): Promise<ReviewDto | null> {
@@ -46,6 +49,6 @@ export class ReviewService {
 
     if (!deletedReview) return null;
 
-    return new ReviewDto(deletedReview);
+    return this.mapperService.mapReviewToDto(deletedReview);
   }
 }

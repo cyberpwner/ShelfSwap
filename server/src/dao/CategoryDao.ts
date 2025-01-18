@@ -1,13 +1,18 @@
 import { Category } from '../entity/Category';
+import { BookCategory } from '../types/categoryTypes';
 import { BaseDao } from './BaseDao';
 
 export class CategoryDao implements BaseDao<Category> {
   async findAll(): Promise<Category[]> {
-    return Category.find();
+    return Category.find({ relations: ['books'] });
   }
 
   async findById(id: number): Promise<Category | null> {
-    return Category.findOne({ where: { id } });
+    return Category.findOne({ where: { id }, relations: ['books'] });
+  }
+
+  async findByName(name: BookCategory): Promise<Category | null> {
+    return await Category.findOne({ where: { name }, relations: ['books'] });
   }
 
   async create(category: Category): Promise<Category> {

@@ -1,12 +1,15 @@
 import { PaymentDao } from '../dao/PaymentDao';
 import { PaymentDto } from '../dto/PaymentDto';
 import { Payment } from '../entity/Payment';
+import { MapperService } from './MapperService';
 
 export class PaymentService {
   private readonly paymentDao: PaymentDao;
+  private readonly mapperService: MapperService;
 
   constructor() {
     this.paymentDao = new PaymentDao();
+    this.mapperService = new MapperService();
   }
 
   async getAllPayments(): Promise<PaymentDto[]> {
@@ -14,7 +17,7 @@ export class PaymentService {
 
     if (payments.length === 0) return [];
 
-    return payments.map((payment) => new PaymentDto(payment));
+    return payments.map((payment) => this.mapperService.mapPaymentToDto(payment));
   }
 
   async getPaymentById(id: number): Promise<PaymentDto | null> {
@@ -22,7 +25,7 @@ export class PaymentService {
 
     if (!payment) return null;
 
-    return new PaymentDto(payment);
+    return this.mapperService.mapPaymentToDto(payment);
   }
 
   async createPayment(payment: Payment): Promise<PaymentDto | null> {
@@ -30,7 +33,7 @@ export class PaymentService {
 
     if (!createdPayment) return null;
 
-    return new PaymentDto(createdPayment);
+    return this.mapperService.mapPaymentToDto(createdPayment);
   }
 
   async updatePayment(id: number, payment: Partial<Payment>): Promise<PaymentDto | null> {
@@ -38,7 +41,7 @@ export class PaymentService {
 
     if (!updatedPayment) return null;
 
-    return new PaymentDto(updatedPayment);
+    return this.mapperService.mapPaymentToDto(updatedPayment);
   }
 
   async deletePayment(id: number): Promise<PaymentDto | null> {
@@ -46,6 +49,6 @@ export class PaymentService {
 
     if (!deletedPayment) return null;
 
-    return new PaymentDto(deletedPayment);
+    return this.mapperService.mapPaymentToDto(deletedPayment);
   }
 }

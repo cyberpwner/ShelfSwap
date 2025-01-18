@@ -1,11 +1,11 @@
+import { EntityManager } from 'typeorm';
 import { Order } from '../entity/Order';
-import { OrderItem } from '../entity/OrderItem';
-import { AppDataSource } from '../utils/dataSource';
 import { getErrorMsg, InformativeError } from '../utils/errorUtils';
-import { isDuplicateOrder } from '../utils/orderUtils';
 import { BaseDao } from './BaseDao';
 
 export class OrderDao implements BaseDao<Order>, InformativeError {
+  private transactionalManager: EntityManager;
+
   async findAll(): Promise<Order[]> {
     try {
       return Order.find({ relations: ['user'] });
@@ -23,50 +23,13 @@ export class OrderDao implements BaseDao<Order>, InformativeError {
   }
 
   async create(order: Order): Promise<Order> {
-    try {
-      return Order.save(order);
-    } catch (error) {
-      throw new Error(this._getErrorInfo(error));
+    if (this.transactionalManager == null) {
+      throw new Error('transactionalManager is not defined, orders should always be created within a transaction to ensure atomicity');
     }
-  }
 
-  async createOrderWithItems(order: Order, items: OrderItem[]): Promise<Order> {
     try {
-      const isDuplicate = await isDuplicateOrder(order);
-      if (isDuplicate) {
-        throw new Error('order already exists');
-      }
-
-      // TODO: an order should be created only if the payment is done, thus I need to implement that.
-      const createdOrderWithItems = await AppDataSource.manager.transaction(async (transactionalEntityManager) => {
-        // 1. create and save order
-        const newOrder = transactionalEntityManager.create(Order, order);
-        await transactionalEntityManager.save(newOrder);
-
-        // 2. create and save order items
-        const newItems = items.map((item) => {
-          return transactionalEntityManager.create(OrderItem, {
-            ...item,
-            order: newOrder, // linking the item to the order created above
-          });
-        });
-
-        await transactionalEntityManager.save(newItems);
-
-        // 3. TODO: Update Inventory
-        // Add logic here to deduct the purchased quantity from the book's inventory.
-
-        return {
-          order: newOrder,
-          items: newItems,
-        };
-      });
-
-      const createdOrder = new Order();
-      Object.assign(createdOrder, createdOrderWithItems.order);
-      createdOrder.items = createdOrderWithItems.items;
-
-      return createdOrder;
+      const newOrder = this.transactionalManager.create(Order, order);
+      return this.transactionalManager.save(newOrder);
     } catch (error) {
       throw new Error(this._getErrorInfo(error));
     }
@@ -99,10 +62,18 @@ export class OrderDao implements BaseDao<Order>, InformativeError {
 
   async findOrdersByUser(username: string): Promise<Order[]> {
     try {
-      return Order.find({ where: { user: { username } }, relations: ['user', 'items'] });
+      return Order.find({ where: { user: { username } }, relations: ['user', 'items', 'items.book', 'items.order'] });
     } catch (error) {
       throw new Error(this._getErrorInfo(error));
     }
+  }
+
+  async isDuplicate(order: Order): Promise<boolean> {
+    return Order.findOne({ where: { id: order.id } }) != null;
+  }
+
+  setTransactionalManager(manager: EntityManager) {
+    this.transactionalManager = manager;
   }
 
   _getErrorInfo(error: unknown) {

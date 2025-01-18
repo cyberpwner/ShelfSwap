@@ -1,12 +1,15 @@
 import { UserDao } from '../dao/UserDao';
 import { UserDto } from '../dto/UserDto';
 import { User } from '../entity/User';
+import { MapperService } from './MapperService';
 
 export class UserService {
   private readonly userDao: UserDao;
+  private readonly mapperService: MapperService;
 
   constructor() {
     this.userDao = new UserDao();
+    this.mapperService = new MapperService();
   }
 
   async getAllUsers(): Promise<UserDto[]> {
@@ -15,7 +18,7 @@ export class UserService {
     if (users.length === 0) return [];
 
     // sanitize users (remove sensitive data before sending to -> controller -> frontend)
-    return users.map((user) => new UserDto(user));
+    return users.map((user) => this.mapperService.mapUserToDto(user));
   }
 
   async getUserById(id: number): Promise<UserDto | null> {
@@ -23,13 +26,13 @@ export class UserService {
 
     if (!user) return null;
 
-    return new UserDto(user);
+    return this.mapperService.mapUserToDto(user);
   }
 
   async createUser(user: User): Promise<UserDto> {
     const createdUser = await this.userDao.create(user);
 
-    return new UserDto(createdUser);
+    return this.mapperService.mapUserToDto(createdUser);
   }
 
   async updateUser(id: number, user: Partial<User>): Promise<UserDto | null> {
@@ -37,7 +40,7 @@ export class UserService {
 
     if (!updatedUser) return null;
 
-    return new UserDto(updatedUser);
+    return this.mapperService.mapUserToDto(updatedUser);
   }
 
   async deleteUser(id: number): Promise<UserDto | null> {
@@ -45,6 +48,6 @@ export class UserService {
 
     if (!removedUser) return null;
 
-    return new UserDto(removedUser);
+    return this.mapperService.mapUserToDto(removedUser);
   }
 }

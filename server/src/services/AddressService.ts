@@ -1,12 +1,15 @@
 import { AddressDao } from '../dao/AddressDao';
 import { AddressDto } from '../dto/AddressDto';
 import { Address } from '../entity/Address';
+import { MapperService } from './MapperService';
 
 export class AddressService {
   private readonly addressDao: AddressDao;
+  private readonly mapperService: MapperService;
 
   constructor() {
     this.addressDao = new AddressDao();
+    this.mapperService = new MapperService();
   }
 
   async getAllAddresses(): Promise<AddressDto[]> {
@@ -14,7 +17,7 @@ export class AddressService {
 
     if (addresses.length === 0) return [];
 
-    return addresses.map((address) => new AddressDto(address));
+    return addresses.map((address) => this.mapperService.mapAddressToDto(address));
   }
 
   async getAddressById(id: number): Promise<AddressDto | null> {
@@ -22,7 +25,7 @@ export class AddressService {
 
     if (!address) return null;
 
-    return new AddressDto(address);
+    return this.mapperService.mapAddressToDto(address);
   }
 
   async createAddress(address: Address): Promise<AddressDto | null> {
@@ -30,7 +33,7 @@ export class AddressService {
 
     if (!createdAddress) return null;
 
-    return new AddressDto(createdAddress);
+    return this.mapperService.mapAddressToDto(createdAddress);
   }
 
   async updateAddress(id: number, address: Partial<Address>): Promise<AddressDto | null> {
@@ -38,7 +41,7 @@ export class AddressService {
 
     if (!updatedAddress) return null;
 
-    return new AddressDto(updatedAddress);
+    return this.mapperService.mapAddressToDto(updatedAddress);
   }
 
   async deleteAddress(id: number): Promise<AddressDto | null> {
@@ -46,6 +49,6 @@ export class AddressService {
 
     if (!deletedAddress) return null;
 
-    return new AddressDto(deletedAddress);
+    return this.mapperService.mapAddressToDto(deletedAddress);
   }
 }

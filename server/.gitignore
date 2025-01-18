@@ -1,2 +1,4 @@
 .notes
 config/local.ts
+.vscode
+build

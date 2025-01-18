@@ -4,7 +4,7 @@ import { CategoryController } from '../controller/CategoryController';
 const router = express.Router();
 const categoryController = new CategoryController();
 
-router.get('/', categoryController.getAllCategories);
+router.get('/', categoryController.getCategoryByName, categoryController.getAllCategories);
 
 router.get('/:id', categoryController.getCategoryById);
 

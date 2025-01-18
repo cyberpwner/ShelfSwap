@@ -1,12 +1,15 @@
 import { AuthorDao } from '../dao/AuthorDao';
 import { AuthorDto } from '../dto/AuthorDto';
 import { Author } from '../entity/Author';
+import { MapperService } from './MapperService';
 
 export class AuthorService {
   private readonly authorDao: AuthorDao;
+  private readonly mapperService: MapperService;
 
   constructor() {
     this.authorDao = new AuthorDao();
+    this.mapperService = new MapperService();
   }
 
   async getAllAuthors(): Promise<AuthorDto[]> {
@@ -14,7 +17,7 @@ export class AuthorService {
 
     if (authors.length === 0) return [];
 
-    return authors.map((author) => new AuthorDto(author));
+    return authors.map((author) => this.mapperService.mapAuthorToDto(author));
   }
 
   async getAuthorById(id: number): Promise<AuthorDto | null> {
@@ -22,7 +25,7 @@ export class AuthorService {
 
     if (!author) return null;
 
-    return new AuthorDto(author);
+    return this.mapperService.mapAuthorToDto(author);
   }
 
   async createAuthor(author: Author): Promise<AuthorDto | null> {
@@ -30,7 +33,7 @@ export class AuthorService {
 
     if (!createdAuthor) return null;
 
-    return new AuthorDto(createdAuthor);
+    return this.mapperService.mapAuthorToDto(createdAuthor);
   }
 
   async updateAuthor(id: number, author: Partial<Author>): Promise<AuthorDto | null> {
@@ -38,7 +41,7 @@ export class AuthorService {
 
     if (!updatedAuthor) return null;
 
-    return new AuthorDto(updatedAuthor);
+    return this.mapperService.mapAuthorToDto(updatedAuthor);
   }
 
   async deleteAuthor(id: number): Promise<AuthorDto | null> {
@@ -46,6 +49,6 @@ export class AuthorService {
 
     if (!deletedAuthor) return null;
 
-    return new AuthorDto(deletedAuthor);
+    return this.mapperService.mapAuthorToDto(deletedAuthor);
   }
 }

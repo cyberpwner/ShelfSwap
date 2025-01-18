@@ -2,12 +2,15 @@ import { BookDao } from '../dao/BookDao';
 import { BookDto } from '../dto/BookDto';
 import { Book } from '../entity/Book';
 import { BookCategory } from '../types/categoryTypes';
+import { MapperService } from './MapperService';
 
 export class BookService {
   private readonly bookDao: BookDao;
+  private readonly mapperService: MapperService;
 
   constructor() {
     this.bookDao = new BookDao();
+    this.mapperService = new MapperService();
   }
 
   async getAllBooks(): Promise<BookDto[]> {
@@ -15,7 +18,7 @@ export class BookService {
 
     if (books.length === 0) return [];
 
-    return books.map((book) => new BookDto(book));
+    return books.map((book) => this.mapperService.mapBookToDto(book));
   }
 
   async getBookById(id: number): Promise<BookDto | null> {
@@ -23,7 +26,7 @@ export class BookService {
 
     if (!book) return null;
 
-    return new BookDto(book);
+    return this.mapperService.mapBookToDto(book);
   }
 
   async createBook(book: Book, authorNames: string[], categoryNames: BookCategory[]): Promise<BookDto | null> {
@@ -31,7 +34,7 @@ export class BookService {
 
     if (!createdBook) return null;
 
-    return new BookDto(createdBook);
+    return this.mapperService.mapBookToDto(createdBook);
   }
 
   async updateBook(id: number, book: Partial<Book>): Promise<BookDto | null> {
@@ -39,7 +42,7 @@ export class BookService {
 
     if (!updatedBook) return null;
 
-    return new BookDto(updatedBook);
+    return this.mapperService.mapBookToDto(updatedBook);
   }
 
   async deleteBook(id: number): Promise<BookDto | null> {
@@ -47,6 +50,6 @@ export class BookService {
 
     if (!deletedBook) return null;
 
-    return new BookDto(deletedBook);
+    return this.mapperService.mapBookToDto(deletedBook);
   }
 }

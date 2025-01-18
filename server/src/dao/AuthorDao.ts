@@ -3,11 +3,11 @@ import { BaseDao } from './BaseDao';
 
 export class AuthorDao implements BaseDao<Author> {
   async findAll(): Promise<Author[]> {
-    return Author.find();
+    return Author.find({ relations: ['books'] });
   }
 
   async findById(id: number): Promise<Author | null> {
-    return Author.findOne({ where: { id } });
+    return Author.findOne({ where: { id }, relations: ['books'] });
   }
 
   async create(author: Author): Promise<Author> {

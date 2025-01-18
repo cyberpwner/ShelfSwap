@@ -1,14 +1,21 @@
 import { OrderDao } from '../dao/OrderDao';
+import { OrderItemDao } from '../dao/OrderItemDao';
 import { OrderDto } from '../dto/OrderDto';
 import { Order } from '../entity/Order';
 import { OrderItem } from '../entity/OrderItem';
+import { AppDataSource } from '../utils/dataSource';
 import { getErrorMsg, InformativeError } from '../utils/errorUtils';
+import { MapperService } from './MapperService';
 
 export class OrderService implements InformativeError {
   private readonly orderDao: OrderDao;
+  private readonly orderItemDao: OrderItemDao;
+  private readonly mapperService: MapperService;
 
   constructor() {
     this.orderDao = new OrderDao();
+    this.orderItemDao = new OrderItemDao();
+    this.mapperService = new MapperService();
   }
 
   async getAllOrders(): Promise<OrderDto[]> {
@@ -16,7 +23,7 @@ export class OrderService implements InformativeError {
 
     if (orders.length === 0) return [];
 
-    return orders.map((order) => new OrderDto(order));
+    return orders.map((order) => this.mapperService.mapOrderToDto(order));
   }
 
   async getOrderById(id: number): Promise<OrderDto | null> {
@@ -24,7 +31,7 @@ export class OrderService implements InformativeError {
 
     if (!order) return null;
 
-    return new OrderDto(order);
+    return this.mapperService.mapOrderToDto(order);
   }
 
   // TODO: use transactions to create an order.
@@ -38,9 +45,32 @@ export class OrderService implements InformativeError {
 
   async placeOrder(order: Order, items: OrderItem[]): Promise<OrderDto> {
     try {
-      const orderWithItems = await this.orderDao.createOrderWithItems(order, items);
+      // TODO: an order should be created only if the payment is done, thus I need to implement that.
+      const createdOrder = await AppDataSource.manager.transaction(async (transactionalEntityManager) => {
+        // 0. pass transactionalEntityManager to orderDao and orderItemDao
+        this.orderDao.setTransactionalManager(transactionalEntityManager);
+        this.orderItemDao.setTransactionalManager(transactionalEntityManager);
 
-      return new OrderDto(orderWithItems);
+        // 1. create and save order
+        const newOrder = await this.orderDao.create(order);
+
+        // 2. create and save order items
+        const newItems = await Promise.all(
+          items.map(async (item) => {
+            Object.assign(item, { order: newOrder }); // link item to the order created above
+            return await this.orderItemDao.create(item);
+          }),
+        );
+
+        // 3. TODO: Update Inventory
+        // Add logic here to deduct the purchased quantity from the book's inventory.
+
+        // 4. link the order to the items and return it
+        Object.assign(newOrder, { items: newItems });
+        return newOrder;
+      });
+
+      return this.mapperService.mapOrderToDto(createdOrder);
     } catch (error) {
       throw new Error(this._getErrorInfo(error));
     }
@@ -51,7 +81,7 @@ export class OrderService implements InformativeError {
 
     if (!updatedOrder) return null;
 
-    return new OrderDto(updatedOrder);
+    return this.mapperService.mapOrderToDto(updatedOrder);
   }
 
   async deleteOrder(id: number): Promise<OrderDto | null> {
@@ -59,15 +89,20 @@ export class OrderService implements InformativeError {
 
     if (!deletedOrder) return null;
 
-    return new OrderDto(deletedOrder);
+    return this.mapperService.mapOrderToDto(deletedOrder);
   }
 
   async getOrdersByUser(username: string): Promise<OrderDto[]> {
-    const orders = await this.orderDao.findOrdersByUser(username);
+    try {
+      const orders = await this.orderDao.findOrdersByUser(username);
 
-    if (orders.length === 0) return [];
+      if (orders.length === 0) return [];
 
-    return orders.map((order) => new OrderDto(order));
+      const sanitizedOrders = orders.map((order) => this.mapperService.mapOrderToDto(order));
+      return sanitizedOrders;
+    } catch (error) {
+      throw new Error(this._getErrorInfo(error));
+    }
   }
 
   _getErrorInfo(error: unknown) {

@@ -1,12 +1,15 @@
 import { OrderItemDao } from '../dao/OrderItemDao';
 import { OrderItemDto } from '../dto/OrderItemDto';
 import { OrderItem } from '../entity/OrderItem';
+import { MapperService } from './MapperService';
 
 export class OrderItemService {
   private readonly orderItemDao: OrderItemDao;
+  private readonly mapperService: MapperService;
 
   constructor() {
     this.orderItemDao = new OrderItemDao();
+    this.mapperService = new MapperService();
   }
 
   async getOrderItemById(id: number): Promise<OrderItemDto | null> {
@@ -14,7 +17,7 @@ export class OrderItemService {
 
     if (!item) return null;
 
-    return new OrderItemDto(item);
+    return this.mapperService.mapOrderItemToDto(item);
   }
 
   async updateOrderItem(id: number, orderItem: Partial<OrderItem>): Promise<OrderItemDto | null> {
@@ -22,7 +25,7 @@ export class OrderItemService {
 
     if (!updatedItem) return null;
 
-    return new OrderItemDto(updatedItem);
+    return this.mapperService.mapOrderItemToDto(updatedItem);
   }
 
   async deleteOrderItem(id: number): Promise<OrderItemDto | null> {
@@ -30,7 +33,7 @@ export class OrderItemService {
 
     if (!deletedItem) return null;
 
-    return new OrderItemDto(deletedItem);
+    return this.mapperService.mapOrderItemToDto(deletedItem);
   }
 
   async getItemsByOrder(orderId: number): Promise<OrderItemDto[]> {
@@ -38,6 +41,6 @@ export class OrderItemService {
 
     if (items.length === 0) return [];
 
-    return items.map((item) => new OrderItemDto(item));
+    return items.map((item) => this.mapperService.mapOrderItemToDto(item));
   }
 }

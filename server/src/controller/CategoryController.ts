@@ -1,6 +1,7 @@
 import { RequestHandler } from 'express';
 import { CategoryService } from '../services/CategoryService';
 import { Category } from '../entity/Category';
+import { BookCategory } from '../types/categoryTypes';
 
 export class CategoryController {
   private readonly categoryService: CategoryService;
@@ -30,6 +31,34 @@ export class CategoryController {
       }
 
       res.status(200).json(category);
+    } catch (error) {
+      res.status(500).json({ message: 'Failed to fetch category', error: error instanceof Error ? error.message : error });
+    }
+  };
+
+  getCategoryByName: RequestHandler = async (req, res, next) => {
+    try {
+      const name: BookCategory = req.query?.name as BookCategory;
+
+      // if no name is passed in the query go to the next handler (getAllcategories)
+      if (!name || name.trim() === '') {
+        next();
+        return;
+      }
+
+      const category = await this.categoryService.getCategoryByName(name);
+
+      if (category == null) {
+        res.status(404).json({ message: 'Category not found' });
+        next('route');
+        return;
+      }
+
+      res.status(200).json(category);
+
+      // if a category is provided and is found skip the next handler (getAllCategories)
+      next('route');
+      return;
     } catch (error) {
       res.status(500).json({ message: 'Failed to fetch category', error: error instanceof Error ? error.message : error });
     }
