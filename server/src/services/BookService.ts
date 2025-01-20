@@ -29,6 +29,14 @@ export class BookService {
     return this.mapperService.mapBookToDto(book);
   }
 
+  async searchByTitleOrAuthor(q: string): Promise<BookDto[]> {
+    const books = await this.bookDao.searchByTitleOrAuthor(q);
+
+    if (books.length === 0) return [];
+
+    return books.map((book) => this.mapperService.mapBookToDto(book));
+  }
+
   async createBook(book: Book, authorNames: string[], categoryNames: BookCategory[]): Promise<BookDto | null> {
     const createdBook = await this.bookDao.createBook(book, authorNames, categoryNames);
 

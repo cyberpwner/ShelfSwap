@@ -14,6 +14,14 @@ export class BookDao implements BaseDao<Book> {
     return Book.findOne({ where: { id }, relations: ['authors', 'categories', 'reviews'] });
   }
 
+  async searchByTitleOrAuthor(q: string): Promise<Book[]> {
+    return Book.createQueryBuilder('Book')
+      .innerJoinAndSelect('Book.authors', 'Author')
+      .where('Book.title like :searchQuery', { searchQuery: `%${q}%` })
+      .orWhere('Author.name like :searchQuery', { searchQuery: `%${q}%` })
+      .getMany();
+  }
+
   async create(book: Book): Promise<Book> {
     // no duplicate check because the only unique column in Book is the id and that can't be duplicated since it's auto-generated and is a PK.
     return book.save();

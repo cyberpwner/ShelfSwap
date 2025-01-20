@@ -2,8 +2,9 @@ import { RequestHandler } from 'express';
 import { BookService } from '../services/BookService';
 import { Book } from '../entity/Book';
 import { BookCategory } from '../types/categoryTypes';
+import { getErrorMsg, InformativeError } from '../utils/errorUtils';
 
-export class BookController {
+export class BookController implements InformativeError {
   private readonly bookService = new BookService();
 
   getAllBooks: RequestHandler = async (req, res) => {
@@ -12,7 +13,7 @@ export class BookController {
 
       res.status(200).json(books);
     } catch (error) {
-      res.status(500).json({ message: 'Failed to fetch books', error: error instanceof Error ? error.message : error });
+      res.status(500).json({ message: 'Failed to fetch books', error: this._getErrorInfo(error) });
     }
   };
 
@@ -28,7 +29,31 @@ export class BookController {
 
       res.status(200).json(book);
     } catch (error) {
-      res.status(500).json({ message: 'Failed to fetch book', error: error instanceof Error ? error.message : error });
+      res.status(500).json({ message: 'Failed to fetch book', error: this._getErrorInfo(error) });
+    }
+  };
+
+  searchByTitleOrAuthor: RequestHandler = async (req, res) => {
+    const q = req.query.q as string;
+
+    if (!q || String(q).trim() === '') {
+      res.status(400).json({ message: "Query parameter 'q' is required" });
+      return;
+    }
+
+    console.log(`Query: '${q}'`);
+
+    try {
+      const searchResults = await this.bookService.searchByTitleOrAuthor(String(q));
+
+      if (!searchResults) {
+        res.status(404).json({ message: 'Not found' });
+        return;
+      }
+
+      res.status(200).json(searchResults);
+    } catch (error) {
+      res.status(500).json({ message: 'Failed to find book', error: this._getErrorInfo(error) });
     }
   };
 
@@ -49,7 +74,7 @@ export class BookController {
 
       res.status(200).json(createdBook);
     } catch (error) {
-      res.status(500).json({ message: 'Failed to create book', error: error instanceof Error ? error.message : error });
+      res.status(500).json({ message: 'Failed to create book', error: this._getErrorInfo(error) });
     }
   };
 
@@ -79,4 +104,8 @@ export class BookController {
 
     res.status(200).json({ deletedBook });
   };
+
+  _getErrorInfo(error: unknown) {
+    return `Class: ${this.constructor.name} - Error: ${getErrorMsg(error)}`;
+  }
 }
