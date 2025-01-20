@@ -2,6 +2,14 @@ import { z } from 'zod';
 import { validateISBN } from '../utils/bookUtils';
 import { BookCategory } from '../types/categoryTypes.d.js';
 
+export const searchQuerySchema = z.object({
+  q: z
+    .string()
+    .nonempty()
+    .max(255)
+    .transform((val) => val.trim()),
+});
+
 export const isbnSchema = z
   .string()
   .max(13)
@@ -28,4 +36,9 @@ export const createBookSchema = z.object({
   categories: z.array(categorySchema.shape.name).nonempty(),
 });
 
+export const updateBookSchema = bookSchema
+  .partial()
+  .refine((obj) => Object.keys(obj).length > 0, { message: 'A least one book field must be introduced' });
+
 export type CreateBookDto = z.infer<typeof createBookSchema>;
+export type UpdateBookDto = z.infer<typeof updateBookSchema>;

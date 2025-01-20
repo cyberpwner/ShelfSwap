@@ -1,6 +1,9 @@
 import { RequestHandler } from 'express';
 import { UserService } from '../services/UserService';
 import { User } from '../entity/User';
+import { TypedRequestBody } from '../types/expressTypes';
+import { CreateUserDto } from '../schemas/userSchemas';
+import { UpdateBookDto } from '../schemas/bookSchemas';
 
 export class UserController {
   private readonly userService = new UserService();
@@ -31,7 +34,7 @@ export class UserController {
     }
   };
 
-  createUser: RequestHandler = async (req, res) => {
+  createUser: RequestHandler = async (req: TypedRequestBody<CreateUserDto>, res) => {
     try {
       const user = new User();
       Object.assign(user, req.body);
@@ -49,7 +52,7 @@ export class UserController {
     }
   };
 
-  updateUser: RequestHandler = async (req, res) => {
+  updateUser: RequestHandler = async (req: TypedRequestBody<UpdateBookDto>, res) => {
     try {
       const id = parseInt(req.params.id, 10);
       const user = new User();

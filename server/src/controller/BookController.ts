@@ -3,6 +3,8 @@ import { BookService } from '../services/BookService';
 import { Book } from '../entity/Book';
 import { BookCategory } from '../types/categoryTypes';
 import { getErrorMsg, InformativeError } from '../utils/errorUtils';
+import { TypedRequestBody } from '../types/expressTypes';
+import { CreateBookDto, UpdateBookDto } from '../schemas/bookSchemas';
 
 export class BookController implements InformativeError {
   private readonly bookService = new BookService();
@@ -34,14 +36,12 @@ export class BookController implements InformativeError {
   };
 
   searchByTitleOrAuthor: RequestHandler = async (req, res) => {
-    const q = req.query.q as string;
+    const q = req.query.q;
 
     if (!q || String(q).trim() === '') {
       res.status(400).json({ message: "Query parameter 'q' is required" });
       return;
     }
-
-    console.log(`Query: '${q}'`);
 
     try {
       const searchResults = await this.bookService.searchByTitleOrAuthor(String(q));
@@ -57,7 +57,7 @@ export class BookController implements InformativeError {
     }
   };
 
-  createBook: RequestHandler = async (req, res) => {
+  createBook: RequestHandler = async (req: TypedRequestBody<CreateBookDto>, res) => {
     try {
       const book = new Book();
       Object.assign(book, req.body.book);
@@ -78,7 +78,7 @@ export class BookController implements InformativeError {
     }
   };
 
-  updateBook: RequestHandler = async (req, res) => {
+  updateBook: RequestHandler = async (req: TypedRequestBody<UpdateBookDto>, res) => {
     const id = parseInt(req.params.id, 10);
     const book = req.body;
 
