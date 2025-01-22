@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { ReviewRating } from '../types/review.types';
+import { ReviewRating } from '../types/review.types.d';
 import { idSchema } from './common.schemas';
 
 export const reviewSchema = z.object({

@@ -1,17 +1,16 @@
-import { RequestHandler, Response } from 'express';
-import { TypedRequestBody } from '../types/express.types';
+import { RequestHandler } from 'express';
+import { TypedRequestBody } from '../types/express.types.d';
 import { CreatePaymentDto, paymentSchema, UpdatePaymentDto, updatePaymentSchema } from '../schemas/payment.schemas';
-import { z } from 'zod';
-import { ResponseError } from '../utils/error.utils';
+import { ValidationErrorHandler } from '../utils/error.utils';
 
-export class PaymentValidation implements ResponseError {
+export class PaymentValidation {
   validateCreatePayment: RequestHandler = (req: TypedRequestBody<CreatePaymentDto>, res, next) => {
     try {
       req.body = paymentSchema.parse(req.body);
 
       next();
     } catch (error) {
-      this.handleErrorResponse(error, res);
+      ValidationErrorHandler.handleZodError(error, res);
     }
   };
 
@@ -21,16 +20,7 @@ export class PaymentValidation implements ResponseError {
 
       next();
     } catch (error) {
-      this.handleErrorResponse(error, res);
+      ValidationErrorHandler.handleZodError(error, res);
     }
   };
-
-  handleErrorResponse(error: unknown, res: Response): void {
-    if (error instanceof z.ZodError) {
-      res.status(400).json({ issues: error.issues.map((issue) => issue.message) });
-      return;
-    }
-
-    res.status(500).json({ message: 'Internal server error.' });
-  }
 }
