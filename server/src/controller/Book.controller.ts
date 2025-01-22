@@ -5,7 +5,7 @@ import { BookCategory } from '../types/category.types.d';
 import { getErrorMsg, InformativeError } from '../utils/error.utils';
 import { TypedRequestBody } from '../types/express.types.d';
 import { CreateBookDto, UpdateBookDto } from '../schemas/book.schemas';
-
+import sanitize from 'sanitize-html';
 export class BookController implements InformativeError {
   private readonly bookService = new BookService();
 
@@ -43,8 +43,13 @@ export class BookController implements InformativeError {
       return;
     }
 
+    // sanitize the query before using it
+
+    const decodedQuery = decodeURIComponent(String(q));
+    const sanitizedQuery = sanitize(decodedQuery);
+
     try {
-      const searchResults = await this.bookService.searchByTitleOrAuthor(String(q));
+      const searchResults = await this.bookService.searchByTitleOrAuthor(sanitizedQuery);
 
       if (!searchResults) {
         res.status(404).json({ message: 'Not found' });
