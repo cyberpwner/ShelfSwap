@@ -1,5 +1,5 @@
 import { Category } from '../entity/Category';
-import { BookCategory } from '../types/category.types';
+import { BookCategory } from '../types/category.types.d';
 import { BaseDao } from './Base.dao';
 
 export class CategoryDao implements BaseDao<Category> {

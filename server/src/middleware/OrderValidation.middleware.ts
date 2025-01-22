@@ -1,13 +1,14 @@
 import { RequestHandler, Response } from 'express';
-import { z } from 'zod';
-import { CreateBookDto, createBookSchema, searchQuerySchema, UpdateBookDto, updateBookSchema } from '../schemas/book.schemas';
 import { TypedRequestBody } from '../types/express.types.d';
+import { CreateOrderDto, createOrderSchema, UpdateOrderDto, updateOrderSchema } from '../schemas/order.schemas';
+import { z } from 'zod';
 import { ResponseError } from '../utils/error.utils';
+import { userSchema } from '../schemas/user.schemas';
 
-export class BookValidation implements ResponseError {
-  validateSearch: RequestHandler = (req, res, next) => {
+export class OrderValidation implements ResponseError {
+  validateCreateOrder: RequestHandler = (req: TypedRequestBody<CreateOrderDto>, res, next) => {
     try {
-      req.query = searchQuerySchema.parse(req.query);
+      req.body = createOrderSchema.parse(req.body);
 
       next();
     } catch (error) {
@@ -15,9 +16,9 @@ export class BookValidation implements ResponseError {
     }
   };
 
-  validateCreateBook: RequestHandler = (req: TypedRequestBody<CreateBookDto>, res, next) => {
+  validateUpdateOrder: RequestHandler = (req: TypedRequestBody<UpdateOrderDto>, res, next) => {
     try {
-      req.body = createBookSchema.parse(req.body);
+      req.body = updateOrderSchema.parse(req.body);
 
       next();
     } catch (error) {
@@ -25,9 +26,9 @@ export class BookValidation implements ResponseError {
     }
   };
 
-  validateUpdateBook: RequestHandler = (req: TypedRequestBody<UpdateBookDto>, res, next) => {
+  validateGetbyUser: RequestHandler = (req, res, next) => {
     try {
-      req.body = updateBookSchema.parse(req.body);
+      req.params.username = userSchema.shape.username.parse(req.params.username);
 
       next();
     } catch (error) {

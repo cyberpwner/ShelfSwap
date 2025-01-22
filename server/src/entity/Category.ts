@@ -1,6 +1,6 @@
 import { BaseEntity, Column, CreateDateColumn, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { Book } from './Book';
-import { BookCategory } from '../types/category.types.js';
+import { BookCategory } from '../types/category.types.d';
 
 @Entity('Category')
 export class Category extends BaseEntity {

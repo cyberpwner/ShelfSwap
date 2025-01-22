@@ -1,4 +1,4 @@
-import { ReviewRating } from '../types/review.types';
+import { ReviewRating } from '../types/review.types.d';
 import { BookDto } from './Book.dto';
 
 export class ReviewDto {

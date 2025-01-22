@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { validateISBN } from '../utils/book.utils';
-import { BookCategory } from '../types/category.types.js';
+import { BookCategory } from '../types/category.types.d';
 
 export const searchQuerySchema = z.object({
   q: z

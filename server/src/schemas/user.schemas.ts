@@ -1,10 +1,10 @@
 import { z } from 'zod';
-import { UserRole } from '../types/user.types.js';
+import { UserRole } from '../types/user.types.d';
 
 // at least 1 big letter, 1 small letter, 1 digit, 1 special character. Min: 8, Max: 50
 const passwordRegex = new RegExp(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,50}$/);
 
-export const createUserSchema = z.object({
+export const userSchema = z.object({
   username: z.string().trim().min(3).max(50),
   email: z.string().email().trim().nonempty().max(100),
   password: z.string().trim().regex(passwordRegex, {
@@ -15,9 +15,18 @@ export const createUserSchema = z.object({
   profilePicUrl: z.string().url().nonempty().max(2048).optional(),
 });
 
+export const createUserSchema = userSchema
+  .extend({
+    passwordConfirmation: userSchema.shape.password,
+  })
+  .refine(({ password, passwordConfirmation }) => password === passwordConfirmation, {
+    message: 'Passwords do not match',
+    path: ['passwordConfirmation'],
+  });
+
 export type CreateUserDto = z.infer<typeof createUserSchema>;
 
-export const updateUserSchema = createUserSchema
+export const updateUserSchema = userSchema
   .partial()
   .refine((obj) => Object.keys(obj).length > 0, { message: 'At least one user field must be introduced' });
 

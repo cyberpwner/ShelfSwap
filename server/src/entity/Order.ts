@@ -11,7 +11,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { User } from './User';
-import { OrderStatus } from '../types/order.types.js';
+import { OrderStatus } from '../types/order.types.d';
 import { Payment } from './Payment';
 import { OrderItem } from './OrderItem';
 
@@ -37,9 +37,9 @@ export class Order extends BaseEntity {
   status: OrderStatus;
 
   @Column({
-    type: 'varchar',
+    type: 'uuid',
     unique: true,
-    nullable: true, // mariadb, among many others, allows a unique attribute to be null in multiple rows of a table.
+    nullable: true, // mariadb, among many others, allows a unique attribute to be null in multiple rows of a table..
   })
   trackingNumber: string;
 

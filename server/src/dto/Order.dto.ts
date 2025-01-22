@@ -1,4 +1,4 @@
-import { OrderStatus } from '../types/order.types';
+import { OrderStatus } from '../types/order.types.d';
 import { OrderItemDto } from './OrderItem.dto';
 import { UserDto } from './User.dto';
 

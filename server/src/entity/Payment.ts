@@ -1,5 +1,5 @@
 import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn, Unique, UpdateDateColumn } from 'typeorm';
-import { PaymentMethod } from '../types/payment.types.js';
+import { PaymentMethod } from '../types/payment.types.d';
 import { Order } from './Order';
 
 @Entity('Payment')

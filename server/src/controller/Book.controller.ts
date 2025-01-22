@@ -1,9 +1,9 @@
 import { RequestHandler } from 'express';
 import { BookService } from '../services/Book.service';
 import { Book } from '../entity/Book';
-import { BookCategory } from '../types/category.types';
+import { BookCategory } from '../types/category.types.d';
 import { getErrorMsg, InformativeError } from '../utils/error.utils';
-import { TypedRequestBody } from '../types/express.types';
+import { TypedRequestBody } from '../types/express.types.d';
 import { CreateBookDto, UpdateBookDto } from '../schemas/book.schemas';
 
 export class BookController implements InformativeError {
