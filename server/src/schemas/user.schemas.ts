@@ -6,13 +6,13 @@ const passwordRegex = new RegExp(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?
 
 export const userSchema = z.object({
   username: z.string().trim().min(3).max(50),
-  email: z.string().email().trim().nonempty().max(100),
+  email: z.string().trim().email().nonempty().max(100),
   password: z.string().trim().regex(passwordRegex, {
     message: 'Password must have at least 1 big letter, 1 small letter, 1 digit, 1 special character. Min length: 8. Max length: 50',
   }),
   role: z.nativeEnum(UserRole),
-  bio: z.string().nonempty().max(150).optional(),
-  profilePicUrl: z.string().url().nonempty().max(2048).optional(),
+  bio: z.string().trim().nonempty().max(150).optional(),
+  profilePicUrl: z.string().trim().url().nonempty().max(2048).optional(),
 });
 
 export const createUserSchema = userSchema

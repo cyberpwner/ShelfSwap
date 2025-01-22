@@ -1,13 +1,13 @@
 import { RequestHandler, Response } from 'express';
-import { CreateUserDto, createUserSchema, UpdateUserDto, updateUserSchema } from '../schemas/user.schemas';
-import { z } from 'zod';
-import { TypedRequestBody } from '../types/express.types.d';
 import { ResponseError } from '../utils/error.utils';
+import { TypedRequestBody } from '../types/express.types';
+import { addressSchema, CreateAddressDto, UpdateAddressDto, updateAddressSchema } from '../schemas/address.schemas';
+import { z } from 'zod';
 
-export class UserValidation implements ResponseError {
-  validateCreateUser: RequestHandler = (req: TypedRequestBody<CreateUserDto>, res, next) => {
+export class AddressValidation implements ResponseError {
+  validateCreateAddress: RequestHandler = (req: TypedRequestBody<CreateAddressDto>, res, next) => {
     try {
-      req.body = createUserSchema.parse(req.body);
+      req.body = addressSchema.parse(req.body);
 
       next();
     } catch (error) {
@@ -15,9 +15,9 @@ export class UserValidation implements ResponseError {
     }
   };
 
-  validateUpdateUser: RequestHandler = (req: TypedRequestBody<UpdateUserDto>, res, next) => {
+  validateUpdateAddress: RequestHandler = (req: TypedRequestBody<UpdateAddressDto>, res, next) => {
     try {
-      req.body = updateUserSchema.parse(req.body);
+      req.body = updateAddressSchema.parse(req.body);
 
       next();
     } catch (error) {

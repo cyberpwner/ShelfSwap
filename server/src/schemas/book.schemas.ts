@@ -1,29 +1,23 @@
 import { z } from 'zod';
 import { validateISBN } from '../utils/book.utils';
 import { BookCategory } from '../types/category.types.d';
+import { authorSchema } from './author.schemas';
 
 export const searchQuerySchema = z.object({
-  q: z
-    .string()
-    .nonempty()
-    .max(255)
-    .transform((val) => val.trim()),
+  q: z.string().trim().nonempty().max(255),
 });
 
 export const isbnSchema = z
   .string()
+  .trim()
   .max(13)
   .refine((value) => validateISBN(value));
 
 export const bookSchema = z.object({
   isbn: isbnSchema,
-  title: z.string().nonempty().max(100),
-  description: z.string().nonempty().max(255).optional(),
+  title: z.string().trim().nonempty().max(100),
+  description: z.string().trim().nonempty().max(255).optional(),
   price: z.number().gt(0).lt(1000),
-});
-
-export const authorSchema = z.object({
-  name: z.string().nonempty().max(100),
 });
 
 export const categorySchema = z.object({
@@ -38,7 +32,9 @@ export const createBookSchema = z.object({
 
 export const updateBookSchema = bookSchema
   .partial()
-  .refine((obj) => Object.keys(obj).length > 0, { message: 'A least one book field must be introduced' });
+  .refine((obj) => Object.keys(obj).length > 0, {
+    message: 'At least one book field must be introduced in order to update it',
+  });
 
 export type CreateBookDto = z.infer<typeof createBookSchema>;
 export type UpdateBookDto = z.infer<typeof updateBookSchema>;

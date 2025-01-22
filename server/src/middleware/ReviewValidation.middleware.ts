@@ -1,13 +1,13 @@
 import { RequestHandler, Response } from 'express';
-import { CreateUserDto, createUserSchema, UpdateUserDto, updateUserSchema } from '../schemas/user.schemas';
+import { TypedRequestBody } from '../types/express.types';
+import { CreateReviewDto, reviewSchema, UpdateReviewDto, updateReviewSchema } from '../schemas/review.schemas';
 import { z } from 'zod';
-import { TypedRequestBody } from '../types/express.types.d';
 import { ResponseError } from '../utils/error.utils';
 
-export class UserValidation implements ResponseError {
-  validateCreateUser: RequestHandler = (req: TypedRequestBody<CreateUserDto>, res, next) => {
+export class ReviewValidation implements ResponseError {
+  validateCreateReview: RequestHandler = (req: TypedRequestBody<CreateReviewDto>, res, next) => {
     try {
-      req.body = createUserSchema.parse(req.body);
+      req.body = reviewSchema.parse(req.body);
 
       next();
     } catch (error) {
@@ -15,9 +15,9 @@ export class UserValidation implements ResponseError {
     }
   };
 
-  validateUpdateUser: RequestHandler = (req: TypedRequestBody<UpdateUserDto>, res, next) => {
+  validateUpdateReview: RequestHandler = (req: TypedRequestBody<UpdateReviewDto>, res, next) => {
     try {
-      req.body = updateUserSchema.parse(req.body);
+      req.body = updateReviewSchema.parse(req.body);
 
       next();
     } catch (error) {

@@ -1,13 +1,13 @@
 import { RequestHandler, Response } from 'express';
-import { CreateUserDto, createUserSchema, UpdateUserDto, updateUserSchema } from '../schemas/user.schemas';
+import { TypedRequestBody } from '../types/express.types';
+import { CreatePaymentDto, paymentSchema, UpdatePaymentDto, updatePaymentSchema } from '../schemas/payment.schemas';
 import { z } from 'zod';
-import { TypedRequestBody } from '../types/express.types.d';
 import { ResponseError } from '../utils/error.utils';
 
-export class UserValidation implements ResponseError {
-  validateCreateUser: RequestHandler = (req: TypedRequestBody<CreateUserDto>, res, next) => {
+export class PaymentValidation implements ResponseError {
+  validateCreatePayment: RequestHandler = (req: TypedRequestBody<CreatePaymentDto>, res, next) => {
     try {
-      req.body = createUserSchema.parse(req.body);
+      req.body = paymentSchema.parse(req.body);
 
       next();
     } catch (error) {
@@ -15,9 +15,9 @@ export class UserValidation implements ResponseError {
     }
   };
 
-  validateUpdateUser: RequestHandler = (req: TypedRequestBody<UpdateUserDto>, res, next) => {
+  validateUpdatePayment: RequestHandler = (req: TypedRequestBody<UpdatePaymentDto>, res, next) => {
     try {
-      req.body = updateUserSchema.parse(req.body);
+      req.body = updatePaymentSchema.parse(req.body);
 
       next();
     } catch (error) {

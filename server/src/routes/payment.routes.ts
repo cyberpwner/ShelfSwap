@@ -1,17 +1,25 @@
 import express from 'express';
 import { PaymentController } from '../controller/Payment.controller';
+import { PaymentValidation } from '../middleware/PaymentValidation.middleware';
+import { CommonValidation } from '../middleware/CommonValidation.middleware';
 
 const router = express.Router();
 const paymentController = new PaymentController();
+const paymentValidation = new PaymentValidation();
 
 router.get('/', paymentController.getAllPayments);
 
-router.get('/:id', paymentController.getPaymentById);
+router.get('/:id', CommonValidation.validateId, paymentController.getPaymentById);
 
-router.post('/', paymentController.createPayment);
+router.post('/', paymentValidation.validateCreatePayment, paymentController.createPayment);
 
-router.put('/:id', paymentController.updatePayment);
+router.put(
+  '/:id',
+  CommonValidation.validateId,
+  paymentValidation.validateUpdatePayment,
+  paymentController.updatePayment,
+);
 
-router.delete('/:id', paymentController.deletePayment);
+router.delete('/:id', CommonValidation.validateId, paymentController.deletePayment);
 
 export default router;
