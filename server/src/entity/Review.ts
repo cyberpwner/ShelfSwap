@@ -1,5 +1,5 @@
 import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Unique, UpdateDateColumn } from 'typeorm';
-import { ReviewRating } from '../types/reviewTypes.d.js';
+import { ReviewRating } from '../types/review.types.js';
 import { Book } from './Book.js';
 import { User } from './User.js';
 

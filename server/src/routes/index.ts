@@ -1,16 +1,16 @@
 import { Router } from 'express';
 
 import { AppDataSource } from '../utils/dataSource.js';
-import healthcheckRoute from './healthCheckRoute.js';
-import userRoutes from './userRoutes.js';
-import bookRoutes from './bookRoutes.js';
-import orderRoutes from './orderRoutes.js';
-import orderItemRoutes from './orderItemRoutes.js';
-import categoryRoutes from './categoryRoutes.js';
-import authorRoutes from './authorRoutes.js';
-import addressRoutes from './addressRoutes.js';
-import paymentRoutes from './paymentRoutes.js';
-import reviewRoutes from './reviewRoutes.js';
+import healthcheckRoute from './healthCheck.routes.js';
+import userRoutes from './user.routes.js';
+import bookRoutes from './book.routes.js';
+import orderRoutes from './order.routes.js';
+import orderItemRoutes from './orderItem.routes.js';
+import categoryRoutes from './category.routes.js';
+import authorRoutes from './author.routes.js';
+import addressRoutes from './address.routes.js';
+import paymentRoutes from './payment.routes.js';
+import reviewRoutes from './review.routes.js';
 
 const router = Router();
 

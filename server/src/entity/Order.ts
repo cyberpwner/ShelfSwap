@@ -11,7 +11,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { User } from './User';
-import { OrderStatus } from '../types/orderTypes.d.js';
+import { OrderStatus } from '../types/order.types.js';
 import { Payment } from './Payment';
 import { OrderItem } from './OrderItem';
 
