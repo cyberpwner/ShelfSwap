@@ -10,6 +10,10 @@ export class UserDao implements BaseDao<User> {
     return User.findOne({ where: { id } });
   }
 
+  async findByEmail(email: string): Promise<User | null> {
+    return User.findOneBy({ email });
+  }
+
   async create(user: User): Promise<User> {
     return user.save();
   }

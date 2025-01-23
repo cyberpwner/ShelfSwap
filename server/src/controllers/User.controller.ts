@@ -2,8 +2,9 @@ import { RequestHandler } from 'express';
 import { UserService } from '../services/User.service';
 import { User } from '../entities/User';
 import { TypedRequestBody } from '../types/express.types.d';
-import { CreateUserDto } from '../schemas/user.schemas';
+import { CreateUserDto, LoginUserDto } from '../schemas/user.schemas';
 import { UpdateBookDto } from '../schemas/book.schemas';
+import { HttpStatusCode } from '../types/http.types.d';
 
 export class UserController {
   private readonly userService = new UserService();
@@ -12,9 +13,11 @@ export class UserController {
     try {
       const users = await this.userService.getAllUsers();
 
-      res.status(200).json(users);
+      res.status(HttpStatusCode.OK).json(users);
     } catch (error) {
-      res.status(500).json({ message: 'Failed to fetch users', error: error instanceof Error ? error.message : error });
+      res
+        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+        .json({ message: 'Failed to fetch users', error: error instanceof Error ? error.message : error });
     }
   };
 
@@ -24,31 +27,54 @@ export class UserController {
       const user = await this.userService.getUserById(id);
 
       if (user == null) {
-        res.status(404).json({ message: 'User not found' });
+        res.status(HttpStatusCode.NOT_FOUND).json({ message: 'User not found' });
         return;
       }
 
-      res.status(200).json(user);
+      res.status(HttpStatusCode.OK).json(user);
     } catch (error) {
-      res.status(500).json({ message: 'Failed to fetch user', error: error instanceof Error ? error.message : error });
+      res
+        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+        .json({ message: 'Failed to fetch user', error: error instanceof Error ? error.message : error });
     }
   };
 
-  createUser: RequestHandler = async (req: TypedRequestBody<CreateUserDto>, res) => {
+  register: RequestHandler = async (req: TypedRequestBody<CreateUserDto>, res) => {
     try {
       const user = new User();
       Object.assign(user, req.body);
 
-      const createdUser = await this.userService.createUser(user);
+      const createdUser = await this.userService.register(user);
 
       if (createdUser == null) {
-        res.status(400).json({ message: 'User could not be created' });
+        res.status(HttpStatusCode.BAD_REQUEST).json({ message: 'User could not be created' });
         return;
       }
 
-      res.status(200).json(createdUser);
+      res.status(HttpStatusCode.CREATED).json(createdUser);
     } catch (error) {
-      res.status(500).json({ message: 'Failed to create user', error: error instanceof Error ? error.message : error });
+      res
+        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+        .json({ message: 'Failed to register user', error: error instanceof Error ? error.message : error });
+    }
+  };
+
+  loginUser: RequestHandler = async (req: TypedRequestBody<LoginUserDto>, res) => {
+    try {
+      const { email, password } = req.body;
+      const user = await this.userService.login({ email, password });
+
+      if (!user) {
+        res.status(HttpStatusCode.UNAUTHORIZED).json({ message: 'Invalid credentials' });
+        return;
+      }
+
+      // TODO: Generate JWT token here
+      res.status(HttpStatusCode.OK).json({ message: 'Logged in successfully' });
+    } catch (error) {
+      res
+        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+        .json({ message: 'Failed to login user', error: error instanceof Error ? error.message : error });
     }
   };
 
@@ -61,13 +87,15 @@ export class UserController {
       const updatedUser = await this.userService.updateUser(id, user);
 
       if (updatedUser == null) {
-        res.status(404).json({ message: 'User not found' });
+        res.status(HttpStatusCode.NOT_FOUND).json({ message: 'User not found' });
         return;
       }
 
-      res.status(200).json(updatedUser);
+      res.status(HttpStatusCode.OK).json(updatedUser);
     } catch (error) {
-      res.status(500).json({ message: 'Failed to update user', error: error instanceof Error ? error.message : error });
+      res
+        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+        .json({ message: 'Failed to update user', error: error instanceof Error ? error.message : error });
     }
   };
 
@@ -78,13 +106,15 @@ export class UserController {
       const deletedUser = await this.userService.deleteUser(id);
 
       if (deletedUser == null) {
-        res.status(404).json({ message: 'User not found' });
+        res.status(HttpStatusCode.NOT_FOUND).json({ message: 'User not found' });
         return;
       }
 
-      res.status(200).json(deletedUser);
+      res.status(HttpStatusCode.OK).json(deletedUser);
     } catch (error) {
-      res.status(500).json({ message: 'Failed to delete user', error: error instanceof Error ? error.message : error });
+      res
+        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+        .json({ message: 'Failed to delete user', error: error instanceof Error ? error.message : error });
     }
   };
 }

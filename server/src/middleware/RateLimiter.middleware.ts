@@ -1,5 +1,6 @@
 import { RequestHandler } from 'express';
 import rateLimit from 'express-rate-limit';
+import { HttpStatusCode } from '../types/http.types.d';
 
 export class RateLimiter {
   rateLimiter: RequestHandler = rateLimit({
@@ -10,5 +11,6 @@ export class RateLimiter {
       return req.ip || '';
     },
     message: 'Too many requests. Please try again later.',
+    statusCode: HttpStatusCode.TOO_MANY_REQUESTS,
   });
 }

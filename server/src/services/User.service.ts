@@ -30,7 +30,7 @@ export class UserService {
     return this.mapperService.mapUserToDto(user);
   }
 
-  async createUser(user: User): Promise<UserDto> {
+  async register(user: User): Promise<UserDto> {
     const isExisting = await isExistingUserByEmailOrUsername(user);
 
     if (isExisting) throw new Error('User already exists');
@@ -41,6 +41,16 @@ export class UserService {
     const createdUser = await this.userDao.create(user);
 
     return this.mapperService.mapUserToDto(createdUser);
+  }
+
+  async login({ email, password }: Pick<User, 'email' | 'password'>): Promise<User | null> {
+    const existingUser = await this.userDao.findByEmail(email);
+
+    if (!existingUser || !(await existingUser.validatePassword(password))) {
+      return null;
+    }
+
+    return existingUser;
   }
 
   async updateUser(id: string, user: Partial<User>): Promise<UserDto | null> {

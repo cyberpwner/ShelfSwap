@@ -3,6 +3,7 @@ import { OrderService } from '../services/Order.service';
 import { getErrorMsg, InformativeError } from '../utils/error.utils';
 import { Order } from '../entities/Order';
 import { OrderItem } from '../entities/OrderItem';
+import { HttpStatusCode } from '../types/http.types.d';
 
 export class OrderController implements InformativeError {
   private readonly orderService: OrderService;
@@ -16,17 +17,17 @@ export class OrderController implements InformativeError {
       const { username } = req.params;
 
       if (!username || username.trim().length === 0) {
-        res.status(400).json({ message: "username can't be empty" });
+        res.status(HttpStatusCode.BAD_REQUEST).json({ message: "username can't be empty" });
         return;
       }
 
       const orders = await this.orderService.getOrdersByUser(username);
 
-      res.status(200).json(orders);
+      res.status(HttpStatusCode.OK).json(orders);
       next();
     } catch (error) {
       console.log(this._getErrorInfo(error));
-      res.status(500).json({ message: 'Failed to fetch orders' });
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ message: 'Failed to fetch orders' });
     }
   };
 
@@ -36,14 +37,14 @@ export class OrderController implements InformativeError {
       const order = await this.orderService.getOrderById(id);
 
       if (!order) {
-        res.status(404).json({ message: 'Order not found' });
+        res.status(HttpStatusCode.NOT_FOUND).json({ message: 'Order not found' });
         return;
       }
 
-      res.status(200).json(order);
+      res.status(HttpStatusCode.OK).json(order);
     } catch (error) {
       console.log(this._getErrorInfo(error));
-      res.status(500).json({ message: 'Failed to fetch order' });
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ message: 'Failed to fetch order' });
     }
   };
 
@@ -61,10 +62,10 @@ export class OrderController implements InformativeError {
 
       const createdOrder = await this.orderService.placeOrder(order, items);
 
-      res.status(200).json(createdOrder);
+      res.status(HttpStatusCode.OK).json(createdOrder);
     } catch (error) {
       console.log(this._getErrorInfo(error));
-      res.status(500).json({ message: 'Failed to create order' });
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ message: 'Failed to create order' });
     }
   };
 
@@ -77,14 +78,14 @@ export class OrderController implements InformativeError {
       const updatedOrder = await this.orderService.updateOrder(id, order);
 
       if (!updatedOrder) {
-        res.status(404).json({ message: 'Order not found' });
+        res.status(HttpStatusCode.NOT_FOUND).json({ message: 'Order not found' });
         return;
       }
 
-      res.status(200).json(updatedOrder);
+      res.status(HttpStatusCode.OK).json(updatedOrder);
     } catch (error) {
       console.log(this._getErrorInfo(error));
-      res.status(500).json({ message: 'Failed to update order' });
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ message: 'Failed to update order' });
     }
   };
 
@@ -95,14 +96,14 @@ export class OrderController implements InformativeError {
       const deletedOrder = await this.orderService.deleteOrder(id);
 
       if (!deletedOrder) {
-        res.status(404).json({ message: 'Order not found' });
+        res.status(HttpStatusCode.NOT_FOUND).json({ message: 'Order not found' });
         return;
       }
 
-      res.status(200).json({ deletedOrder });
+      res.status(HttpStatusCode.OK).json({ deletedOrder });
     } catch (error) {
       console.log(this._getErrorInfo(error));
-      res.status(500).json({});
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({});
     }
   };
 

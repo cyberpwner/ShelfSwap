@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-import { AppConfig } from '../src/types/config';
+import { AppConfig } from '../src/types/config.types.d';
 
 dotenv.config();
 

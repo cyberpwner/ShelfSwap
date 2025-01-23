@@ -11,9 +11,11 @@ router.get('/', userController.getAllUsers);
 
 router.get('/:id', CommonValidation.validateId, userController.getUserById);
 
-router.post('/register', userValidation.validateCreateUser, userController.createUser);
+router.post('/login', userValidation.validateLogin, userController.loginUser);
 
-router.put('/:id', CommonValidation.validateId, userValidation.validateUpdateUser, userController.updateUser);
+router.post('/register', userValidation.validateRegister, userController.register);
+
+router.put('/:id', CommonValidation.validateId, userValidation.validateUpdate, userController.updateUser);
 
 router.delete('/:id', CommonValidation.validateId, userController.deleteUser);
 
