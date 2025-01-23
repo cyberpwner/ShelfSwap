@@ -20,7 +20,7 @@ export class PaymentService {
     return payments.map((payment) => this.mapperService.mapPaymentToDto(payment));
   }
 
-  async getPaymentById(id: number): Promise<PaymentDto | null> {
+  async getPaymentById(id: string): Promise<PaymentDto | null> {
     const payment = await this.paymentDao.findById(id);
 
     if (!payment) return null;
@@ -36,7 +36,7 @@ export class PaymentService {
     return this.mapperService.mapPaymentToDto(createdPayment);
   }
 
-  async updatePayment(id: number, payment: Partial<Payment>): Promise<PaymentDto | null> {
+  async updatePayment(id: string, payment: Partial<Payment>): Promise<PaymentDto | null> {
     const updatedPayment = await this.paymentDao.update(id, payment);
 
     if (!updatedPayment) return null;
@@ -44,7 +44,7 @@ export class PaymentService {
     return this.mapperService.mapPaymentToDto(updatedPayment);
   }
 
-  async deletePayment(id: number): Promise<PaymentDto | null> {
+  async deletePayment(id: string): Promise<PaymentDto | null> {
     const deletedPayment = await this.paymentDao.delete(id);
 
     if (!deletedPayment) return null;

@@ -20,7 +20,7 @@ export class AddressService {
     return addresses.map((address) => this.mapperService.mapAddressToDto(address));
   }
 
-  async getAddressById(id: number): Promise<AddressDto | null> {
+  async getAddressById(id: string): Promise<AddressDto | null> {
     const address = await this.addressDao.findById(id);
 
     if (!address) return null;
@@ -36,7 +36,7 @@ export class AddressService {
     return this.mapperService.mapAddressToDto(createdAddress);
   }
 
-  async updateAddress(id: number, address: Partial<Address>): Promise<AddressDto | null> {
+  async updateAddress(id: string, address: Partial<Address>): Promise<AddressDto | null> {
     const updatedAddress = await this.addressDao.update(id, address);
 
     if (!updatedAddress) return null;
@@ -44,7 +44,7 @@ export class AddressService {
     return this.mapperService.mapAddressToDto(updatedAddress);
   }
 
-  async deleteAddress(id: number): Promise<AddressDto | null> {
+  async deleteAddress(id: string): Promise<AddressDto | null> {
     const deletedAddress = await this.addressDao.delete(id);
 
     if (!deletedAddress) return null;

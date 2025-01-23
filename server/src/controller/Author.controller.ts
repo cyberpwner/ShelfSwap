@@ -11,13 +11,15 @@ export class AuthorController {
 
       res.status(200).json(authors);
     } catch (error) {
-      res.status(500).json({ message: 'Failed to fetch authors', error: error instanceof Error ? error.message : error });
+      res
+        .status(500)
+        .json({ message: 'Failed to fetch authors', error: error instanceof Error ? error.message : error });
     }
   };
 
   getAuthorById: RequestHandler = async (req, res) => {
     try {
-      const id = parseInt(req.params.id, 10);
+      const id = req.params.id;
       const author = await this.authorService.getAuthorById(id);
 
       if (author == null) {
@@ -27,7 +29,9 @@ export class AuthorController {
 
       res.status(200).json(author);
     } catch (error) {
-      res.status(500).json({ message: 'Failed to fetch author', error: error instanceof Error ? error.message : error });
+      res
+        .status(500)
+        .json({ message: 'Failed to fetch author', error: error instanceof Error ? error.message : error });
     }
   };
 
@@ -45,13 +49,15 @@ export class AuthorController {
 
       res.status(200).json(createdAuthor);
     } catch (error) {
-      res.status(500).json({ message: 'Failed to create author', error: error instanceof Error ? error.message : error });
+      res
+        .status(500)
+        .json({ message: 'Failed to create author', error: error instanceof Error ? error.message : error });
     }
   };
 
   updateAuthor: RequestHandler = async (req, res) => {
     try {
-      const id = parseInt(req.params.id, 10);
+      const id = req.params.id;
       const author = new Author();
       Object.assign(author, req.body);
 
@@ -64,13 +70,15 @@ export class AuthorController {
 
       res.status(200).json(updatedAuthor);
     } catch (error) {
-      res.status(500).json({ message: 'Failed to update author', error: error instanceof Error ? error.message : error });
+      res
+        .status(500)
+        .json({ message: 'Failed to update author', error: error instanceof Error ? error.message : error });
     }
   };
 
   deleteAuthor: RequestHandler = async (req, res) => {
     try {
-      const id = parseInt(req.params.id, 10);
+      const id = req.params.id;
 
       const deletedAuthor = await this.authorService.deleteAuthor(id);
 
@@ -81,7 +89,9 @@ export class AuthorController {
 
       res.status(200).json(deletedAuthor);
     } catch (error) {
-      res.status(500).json({ message: 'Failed to delete author', error: error instanceof Error ? error.message : error });
+      res
+        .status(500)
+        .json({ message: 'Failed to delete author', error: error instanceof Error ? error.message : error });
     }
   };
 }

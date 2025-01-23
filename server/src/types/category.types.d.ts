@@ -3,8 +3,8 @@ export interface ICategory {
 }
 
 export interface IBookCategory {
-  bookId: number;
-  categoryId: number;
+  bookId: string;
+  categoryId: string;
 }
 
 export enum BookCategory {

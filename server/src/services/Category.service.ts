@@ -21,7 +21,7 @@ export class CategoryService {
     return categories.map((category) => this.mapperService.mapCategoryToDto(category));
   }
 
-  async getCategoryById(id: number): Promise<CategoryDto | null> {
+  async getCategoryById(id: string): Promise<CategoryDto | null> {
     const category = await this.categoryDao.findById(id);
 
     if (!category) return null;
@@ -45,7 +45,7 @@ export class CategoryService {
     return this.mapperService.mapCategoryToDto(createdCategory);
   }
 
-  async updateCategory(id: number, category: Partial<Category>): Promise<CategoryDto | null> {
+  async updateCategory(id: string, category: Partial<Category>): Promise<CategoryDto | null> {
     const updatedCategory = await this.categoryDao.update(id, category);
 
     if (!updatedCategory) return null;
@@ -53,7 +53,7 @@ export class CategoryService {
     return this.mapperService.mapCategoryToDto(updatedCategory);
   }
 
-  async deleteCategory(id: number): Promise<CategoryDto | null> {
+  async deleteCategory(id: string): Promise<CategoryDto | null> {
     const deletedCategory = await this.categoryDao.delete(id);
 
     if (!deletedCategory) return null;

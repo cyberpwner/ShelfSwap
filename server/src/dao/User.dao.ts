@@ -7,7 +7,7 @@ export class UserDao implements BaseDao<User> {
     return User.find();
   }
 
-  async findById(id: number): Promise<User | null> {
+  async findById(id: string): Promise<User | null> {
     return User.findOne({ where: { id } });
   }
 
@@ -21,16 +21,14 @@ export class UserDao implements BaseDao<User> {
     return user.save();
   }
 
-  async update(id: number, user: Partial<User>): Promise<User | null> {
-    const existingUser = await User.findOneBy({ id });
+  async update(id: string, user: Partial<User>): Promise<User | null> {
+    const updatedUser = new User();
 
-    if (!existingUser) return null;
-
-    Object.assign(existingUser, user);
-    return existingUser.save();
+    Object.assign(updatedUser, user);
+    return updatedUser.save();
   }
 
-  async delete(id: number): Promise<User | null> {
+  async delete(id: string): Promise<User | null> {
     const existingUser = await User.findOneBy({ id });
 
     if (!existingUser) return null;

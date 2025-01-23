@@ -10,7 +10,7 @@ export class BookDao implements BaseDao<Book> {
     return Book.find({ relations: ['authors', 'categories', 'reviews'] });
   }
 
-  async findById(id: number): Promise<Book | null> {
+  async findById(id: string): Promise<Book | null> {
     return Book.findOne({ where: { id }, relations: ['authors', 'categories', 'reviews'] });
   }
 
@@ -68,7 +68,7 @@ export class BookDao implements BaseDao<Book> {
     return createdBook;
   }
 
-  async update(id: number, book: Partial<Book>): Promise<Book | null> {
+  async update(id: string, book: Partial<Book>): Promise<Book | null> {
     const existingBook = await Book.findOneBy({ id });
 
     if (!existingBook) return null;
@@ -77,7 +77,7 @@ export class BookDao implements BaseDao<Book> {
     return existingBook.save();
   }
 
-  async delete(id: number): Promise<Book | null> {
+  async delete(id: string): Promise<Book | null> {
     const existingBook = await Book.findOneBy({ id });
 
     if (!existingBook) return null;

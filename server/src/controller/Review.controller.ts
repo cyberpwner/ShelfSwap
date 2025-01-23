@@ -11,13 +11,15 @@ export class ReviewController {
 
       res.status(200).json(reviews);
     } catch (error) {
-      res.status(500).json({ message: 'Failed to fetch reviews', error: error instanceof Error ? error.message : error });
+      res
+        .status(500)
+        .json({ message: 'Failed to fetch reviews', error: error instanceof Error ? error.message : error });
     }
   };
 
   getReviewById: RequestHandler = async (req, res) => {
     try {
-      const id = parseInt(req.params.id, 10);
+      const id = req.params.id;
       const review = await this.reviewService.getReviewById(id);
 
       if (review == null) {
@@ -27,7 +29,9 @@ export class ReviewController {
 
       res.status(200).json(review);
     } catch (error) {
-      res.status(500).json({ message: 'Failed to fetch review', error: error instanceof Error ? error.message : error });
+      res
+        .status(500)
+        .json({ message: 'Failed to fetch review', error: error instanceof Error ? error.message : error });
     }
   };
 
@@ -45,13 +49,15 @@ export class ReviewController {
 
       res.status(200).json(createdReview);
     } catch (error) {
-      res.status(500).json({ message: 'Failed to create review', error: error instanceof Error ? error.message : error });
+      res
+        .status(500)
+        .json({ message: 'Failed to create review', error: error instanceof Error ? error.message : error });
     }
   };
 
   updateReview: RequestHandler = async (req, res) => {
     try {
-      const id = parseInt(req.params.id, 10);
+      const id = req.params.id;
       const review = new Review();
       Object.assign(review, req.body);
 
@@ -64,13 +70,15 @@ export class ReviewController {
 
       res.status(200).json(updatedReview);
     } catch (error) {
-      res.status(500).json({ message: 'Failed to update review', error: error instanceof Error ? error.message : error });
+      res
+        .status(500)
+        .json({ message: 'Failed to update review', error: error instanceof Error ? error.message : error });
     }
   };
 
   deleteReview: RequestHandler = async (req, res) => {
     try {
-      const id = parseInt(req.params.id, 10);
+      const id = req.params.id;
 
       const deletedReview = await this.reviewService.deleteReview(id);
 
@@ -81,7 +89,9 @@ export class ReviewController {
 
       res.status(200).json(deletedReview);
     } catch (error) {
-      res.status(500).json({ message: 'Failed to delete review', error: error instanceof Error ? error.message : error });
+      res
+        .status(500)
+        .json({ message: 'Failed to delete review', error: error instanceof Error ? error.message : error });
     }
   };
 }

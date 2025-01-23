@@ -6,5 +6,5 @@ export enum PaymentMethod {
 export interface IPayment {
   method: PaymentMethod;
   amount: number;
-  orderId: number;
+  orderId: string;
 }

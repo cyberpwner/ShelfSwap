@@ -16,13 +16,15 @@ export class CategoryController {
 
       res.status(200).json(categories);
     } catch (error) {
-      res.status(500).json({ message: 'Failed to fetch categories', error: error instanceof Error ? error.message : error });
+      res
+        .status(500)
+        .json({ message: 'Failed to fetch categories', error: error instanceof Error ? error.message : error });
     }
   };
 
   getCategoryById: RequestHandler = async (req, res) => {
     try {
-      const id = parseInt(req.params.id, 10);
+      const id = req.params.id;
       const category = await this.categoryService.getCategoryById(id);
 
       if (category == null) {
@@ -32,7 +34,9 @@ export class CategoryController {
 
       res.status(200).json(category);
     } catch (error) {
-      res.status(500).json({ message: 'Failed to fetch category', error: error instanceof Error ? error.message : error });
+      res
+        .status(500)
+        .json({ message: 'Failed to fetch category', error: error instanceof Error ? error.message : error });
     }
   };
 
@@ -60,7 +64,9 @@ export class CategoryController {
       next('route');
       return;
     } catch (error) {
-      res.status(500).json({ message: 'Failed to fetch category', error: error instanceof Error ? error.message : error });
+      res
+        .status(500)
+        .json({ message: 'Failed to fetch category', error: error instanceof Error ? error.message : error });
     }
   };
 
@@ -78,13 +84,15 @@ export class CategoryController {
 
       res.status(200).json(createdCategory);
     } catch (error) {
-      res.status(500).json({ message: 'Failed to create category', error: error instanceof Error ? error.message : error });
+      res
+        .status(500)
+        .json({ message: 'Failed to create category', error: error instanceof Error ? error.message : error });
     }
   };
 
   updateCategory: RequestHandler = async (req, res) => {
     try {
-      const id = parseInt(req.params.id, 10);
+      const id = req.params.id;
       const category = new Category();
       Object.assign(category, req.body);
 
@@ -97,13 +105,15 @@ export class CategoryController {
 
       res.status(200).json(updatedCategory);
     } catch (error) {
-      res.status(500).json({ message: 'Failed to update category', error: error instanceof Error ? error.message : error });
+      res
+        .status(500)
+        .json({ message: 'Failed to update category', error: error instanceof Error ? error.message : error });
     }
   };
 
   deleteCategory: RequestHandler = async (req, res) => {
     try {
-      const id = parseInt(req.params.id, 10);
+      const id = req.params.id;
 
       const deletedCategory = await this.categoryService.deleteCategory(id);
 
@@ -114,7 +124,9 @@ export class CategoryController {
 
       res.status(200).json(deletedCategory);
     } catch (error) {
-      res.status(500).json({ message: 'Failed to delete category', error: error instanceof Error ? error.message : error });
+      res
+        .status(500)
+        .json({ message: 'Failed to delete category', error: error instanceof Error ? error.message : error });
     }
   };
 }

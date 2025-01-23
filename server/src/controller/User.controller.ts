@@ -20,7 +20,7 @@ export class UserController {
 
   getUserById: RequestHandler = async (req, res) => {
     try {
-      const id = parseInt(req.params.id, 10);
+      const id = req.params.id;
       const user = await this.userService.getUserById(id);
 
       if (user == null) {
@@ -54,7 +54,7 @@ export class UserController {
 
   updateUser: RequestHandler = async (req: TypedRequestBody<UpdateBookDto>, res) => {
     try {
-      const id = parseInt(req.params.id, 10);
+      const id = req.params.id;
       const user = new User();
       Object.assign(user, req.body);
 
@@ -73,7 +73,7 @@ export class UserController {
 
   deleteUser: RequestHandler = async (req, res) => {
     try {
-      const id = parseInt(req.params.id, 10);
+      const id = req.params.id;
 
       const deletedUser = await this.userService.deleteUser(id);
 

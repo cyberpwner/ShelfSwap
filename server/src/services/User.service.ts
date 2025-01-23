@@ -21,7 +21,7 @@ export class UserService {
     return users.map((user) => this.mapperService.mapUserToDto(user));
   }
 
-  async getUserById(id: number): Promise<UserDto | null> {
+  async getUserById(id: string): Promise<UserDto | null> {
     const user = await this.userDao.findById(id);
 
     if (!user) return null;

@@ -6,7 +6,7 @@ export class AddressDao implements BaseDao<Address> {
     return Address.find();
   }
 
-  async findById(id: number): Promise<Address | null> {
+  async findById(id: string): Promise<Address | null> {
     return Address.findOne({ where: { id } });
   }
 
@@ -20,7 +20,7 @@ export class AddressDao implements BaseDao<Address> {
     return address.save();
   }
 
-  async update(id: number, address: Partial<Address>): Promise<Address | null> {
+  async update(id: string, address: Partial<Address>): Promise<Address | null> {
     const existingAddress = await Address.findOneBy({ id });
 
     if (!existingAddress) return null;
@@ -29,7 +29,7 @@ export class AddressDao implements BaseDao<Address> {
     return existingAddress.save();
   }
 
-  async delete(id: number): Promise<Address | null> {
+  async delete(id: string): Promise<Address | null> {
     const existingAddress = await Address.findOneBy({ id });
 
     if (!existingAddress) return null;

@@ -13,7 +13,7 @@ export enum OrderStatus {
 export interface IOrder {
   status: OrderStatus;
   trackingNumber?: string;
-  bookId: number;
-  sellerId: number;
-  buyerId: number;
+  bookId: string;
+  sellerId: string;
+  buyerId: string;
 }

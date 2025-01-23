@@ -6,7 +6,7 @@ import { z } from 'zod';
 export class CommonValidation {
   static validateId: RequestHandler = (req, res, next) => {
     try {
-      req.params.id = String(idSchema.parse(Number(req.params.id)));
+      req.params.id = idSchema.parse(req.params.id);
       next();
     } catch (error) {
       if (error instanceof z.ZodError) {

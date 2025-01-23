@@ -1,16 +1,27 @@
-import { BaseEntity, Column, CreateDateColumn, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import {
+  BaseEntity,
+  Column,
+  CreateDateColumn,
+  Entity,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { UserRole } from '../types/user.types.d';
 import { Order } from './Order.js';
 import { Address } from './Address.js';
 import { Review } from './Review.js';
+import { compare, hash } from 'bcrypt';
+import { APP_CONFIG } from '../constants/constants';
 
 // note to future self or other devs:
 // class properties should follow camelCase naming, typeorm will automatically convert them to snake_case in the DB.
 // this is achieved using the 'typeorm-naming-strategies' library. (checkout dataSource file, specifically the namingStrategy property)
 @Entity('User')
 export class User extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column({
     type: 'varchar',

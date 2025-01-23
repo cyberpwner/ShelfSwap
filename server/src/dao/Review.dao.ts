@@ -6,7 +6,7 @@ export class ReviewDao implements BaseDao<Review> {
     return Review.find();
   }
 
-  async findById(id: number): Promise<Review | null> {
+  async findById(id: string): Promise<Review | null> {
     return Review.findOne({ where: { id } });
   }
 
@@ -20,7 +20,7 @@ export class ReviewDao implements BaseDao<Review> {
     return review.save();
   }
 
-  async update(id: number, review: Partial<Review>): Promise<Review | null> {
+  async update(id: string, review: Partial<Review>): Promise<Review | null> {
     const existingReview = await Review.findOneBy({ id });
 
     if (!existingReview) return null;
@@ -29,7 +29,7 @@ export class ReviewDao implements BaseDao<Review> {
     return existingReview.save();
   }
 
-  async delete(id: number): Promise<Review | null> {
+  async delete(id: string): Promise<Review | null> {
     const existingReview = await Review.findOneBy({ id });
 
     if (!existingReview) return null;

@@ -21,7 +21,7 @@ export class BookService {
     return books.map((book) => this.mapperService.mapBookToDto(book));
   }
 
-  async getBookById(id: number): Promise<BookDto | null> {
+  async getBookById(id: string): Promise<BookDto | null> {
     const book = await this.bookDao.findById(id);
 
     if (!book) return null;
@@ -45,7 +45,7 @@ export class BookService {
     return this.mapperService.mapBookToDto(createdBook);
   }
 
-  async updateBook(id: number, book: Partial<Book>): Promise<BookDto | null> {
+  async updateBook(id: string, book: Partial<Book>): Promise<BookDto | null> {
     const updatedBook = await this.bookDao.update(id, book);
 
     if (!updatedBook) return null;
@@ -53,7 +53,7 @@ export class BookService {
     return this.mapperService.mapBookToDto(updatedBook);
   }
 
-  async deleteBook(id: number): Promise<BookDto | null> {
+  async deleteBook(id: string): Promise<BookDto | null> {
     const deletedBook = await this.bookDao.delete(id);
 
     if (!deletedBook) return null;

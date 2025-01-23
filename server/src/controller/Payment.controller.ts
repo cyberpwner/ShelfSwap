@@ -11,13 +11,15 @@ export class PaymentController {
 
       res.status(200).json(payments);
     } catch (error) {
-      res.status(500).json({ message: 'Failed to fetch payments', error: error instanceof Error ? error.message : error });
+      res
+        .status(500)
+        .json({ message: 'Failed to fetch payments', error: error instanceof Error ? error.message : error });
     }
   };
 
   getPaymentById: RequestHandler = async (req, res) => {
     try {
-      const id = parseInt(req.params.id, 10);
+      const id = req.params.id;
       const payment = await this.paymentService.getPaymentById(id);
 
       if (payment == null) {
@@ -27,7 +29,9 @@ export class PaymentController {
 
       res.status(200).json(payment);
     } catch (error) {
-      res.status(500).json({ message: 'Failed to fetch payment', error: error instanceof Error ? error.message : error });
+      res
+        .status(500)
+        .json({ message: 'Failed to fetch payment', error: error instanceof Error ? error.message : error });
     }
   };
 
@@ -45,13 +49,15 @@ export class PaymentController {
 
       res.status(200).json(createdPayment);
     } catch (error) {
-      res.status(500).json({ message: 'Failed to create payment', error: error instanceof Error ? error.message : error });
+      res
+        .status(500)
+        .json({ message: 'Failed to create payment', error: error instanceof Error ? error.message : error });
     }
   };
 
   updatePayment: RequestHandler = async (req, res) => {
     try {
-      const id = parseInt(req.params.id, 10);
+      const id = req.params.id;
       const payment = new Payment();
       Object.assign(payment, req.body);
 
@@ -64,13 +70,15 @@ export class PaymentController {
 
       res.status(200).json(updatedPayment);
     } catch (error) {
-      res.status(500).json({ message: 'Failed to update payment', error: error instanceof Error ? error.message : error });
+      res
+        .status(500)
+        .json({ message: 'Failed to update payment', error: error instanceof Error ? error.message : error });
     }
   };
 
   deletePayment: RequestHandler = async (req, res) => {
     try {
-      const id = parseInt(req.params.id, 10);
+      const id = req.params.id;
 
       const deletedPayment = await this.paymentService.deletePayment(id);
 
@@ -81,7 +89,9 @@ export class PaymentController {
 
       res.status(200).json(deletedPayment);
     } catch (error) {
-      res.status(500).json({ message: 'Failed to delete payment', error: error instanceof Error ? error.message : error });
+      res
+        .status(500)
+        .json({ message: 'Failed to delete payment', error: error instanceof Error ? error.message : error });
     }
   };
 }

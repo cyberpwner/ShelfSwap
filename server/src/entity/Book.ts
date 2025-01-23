@@ -6,8 +6,8 @@ import { Review } from './Review';
 
 @Entity('Book')
 export class Book extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn("uuid")
+  id: string;
 
   @Column({
     type: 'varchar',

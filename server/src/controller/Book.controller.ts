@@ -21,7 +21,7 @@ export class BookController implements InformativeError {
 
   getBookById: RequestHandler = async (req, res) => {
     try {
-      const id = parseInt(req.params.id, 10);
+      const id = req.params.id;
       const book = await this.bookService.getBookById(id);
 
       if (book == null) {
@@ -84,7 +84,7 @@ export class BookController implements InformativeError {
   };
 
   updateBook: RequestHandler = async (req: TypedRequestBody<UpdateBookDto>, res) => {
-    const id = parseInt(req.params.id, 10);
+    const id = req.params.id;
     const book = req.body;
 
     const updatedBook = await this.bookService.updateBook(id, book);
@@ -98,7 +98,7 @@ export class BookController implements InformativeError {
   };
 
   deleteBook: RequestHandler = async (req, res) => {
-    const id = parseInt(req.params.id, 10);
+    const id = req.params.id;
 
     const deletedBook = await this.bookService.deleteBook(id);
 

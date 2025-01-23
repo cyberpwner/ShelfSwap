@@ -20,7 +20,7 @@ export class ReviewService {
     return reviews.map((review) => this.mapperService.mapReviewToDto(review));
   }
 
-  async getReviewById(id: number): Promise<ReviewDto | null> {
+  async getReviewById(id: string): Promise<ReviewDto | null> {
     const review = await this.reviewDao.findById(id);
 
     if (!review) return null;
@@ -36,7 +36,7 @@ export class ReviewService {
     return this.mapperService.mapReviewToDto(createdReview);
   }
 
-  async updateReview(id: number, review: Partial<Review>): Promise<ReviewDto | null> {
+  async updateReview(id: string, review: Partial<Review>): Promise<ReviewDto | null> {
     const updatedReview = await this.reviewDao.update(id, review);
 
     if (!updatedReview) return null;
@@ -44,7 +44,7 @@ export class ReviewService {
     return this.mapperService.mapReviewToDto(updatedReview);
   }
 
-  async deleteReview(id: number): Promise<ReviewDto | null> {
+  async deleteReview(id: string): Promise<ReviewDto | null> {
     const deletedReview = await this.reviewDao.delete(id);
 
     if (!deletedReview) return null;

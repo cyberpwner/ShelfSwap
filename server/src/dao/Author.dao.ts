@@ -6,7 +6,7 @@ export class AuthorDao implements BaseDao<Author> {
     return Author.find({ relations: ['books'] });
   }
 
-  async findById(id: number): Promise<Author | null> {
+  async findById(id: string): Promise<Author | null> {
     return Author.findOne({ where: { id }, relations: ['books'] });
   }
 
@@ -14,7 +14,7 @@ export class AuthorDao implements BaseDao<Author> {
     return author.save();
   }
 
-  async update(id: number, author: Partial<Author>): Promise<Author | null> {
+  async update(id: string, author: Partial<Author>): Promise<Author | null> {
     const existingAuthor = await Author.findOneBy({ id });
 
     if (!existingAuthor) return null;
@@ -23,7 +23,7 @@ export class AuthorDao implements BaseDao<Author> {
     return existingAuthor.save();
   }
 
-  async delete(id: number): Promise<Author | null> {
+  async delete(id: string): Promise<Author | null> {
     const existingAuthor = await Author.findOneBy({ id });
 
     if (!existingAuthor) return null;

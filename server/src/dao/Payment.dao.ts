@@ -6,7 +6,7 @@ export class PaymentDao implements BaseDao<Payment> {
     return Payment.find();
   }
 
-  async findById(id: number): Promise<Payment | null> {
+  async findById(id: string): Promise<Payment | null> {
     return Payment.findOne({ where: { id } });
   }
 
@@ -20,7 +20,7 @@ export class PaymentDao implements BaseDao<Payment> {
     return payment.save();
   }
 
-  async update(id: number, payment: Partial<Payment>): Promise<Payment | null> {
+  async update(id: string, payment: Partial<Payment>): Promise<Payment | null> {
     const existingPayment = await Payment.findOneBy({ id });
 
     if (!existingPayment) return null;
@@ -29,7 +29,7 @@ export class PaymentDao implements BaseDao<Payment> {
     return existingPayment.save();
   }
 
-  async delete(id: number): Promise<Payment | null> {
+  async delete(id: string): Promise<Payment | null> {
     const existingPayment = await Payment.findOneBy({ id });
 
     if (!existingPayment) return null;

@@ -20,7 +20,7 @@ export class AuthorService {
     return authors.map((author) => this.mapperService.mapAuthorToDto(author));
   }
 
-  async getAuthorById(id: number): Promise<AuthorDto | null> {
+  async getAuthorById(id: string): Promise<AuthorDto | null> {
     const author = await this.authorDao.findById(id);
 
     if (!author) return null;
@@ -36,7 +36,7 @@ export class AuthorService {
     return this.mapperService.mapAuthorToDto(createdAuthor);
   }
 
-  async updateAuthor(id: number, author: Partial<Author>): Promise<AuthorDto | null> {
+  async updateAuthor(id: string, author: Partial<Author>): Promise<AuthorDto | null> {
     const updatedAuthor = await this.authorDao.update(id, author);
 
     if (!updatedAuthor) return null;
@@ -44,7 +44,7 @@ export class AuthorService {
     return this.mapperService.mapAuthorToDto(updatedAuthor);
   }
 
-  async deleteAuthor(id: number): Promise<AuthorDto | null> {
+  async deleteAuthor(id: string): Promise<AuthorDto | null> {
     const deletedAuthor = await this.authorDao.delete(id);
 
     if (!deletedAuthor) return null;

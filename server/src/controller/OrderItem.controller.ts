@@ -7,7 +7,7 @@ export class OrderItemController {
 
   getOrderItemById: RequestHandler = async (req, res) => {
     try {
-      const id = parseInt(req.params.id, 10);
+      const id = req.params.id;
       const orderItem = await this.orderItemService.getOrderItemById(id);
 
       if (orderItem == null) {
@@ -17,13 +17,15 @@ export class OrderItemController {
 
       res.status(200).json(orderItem);
     } catch (error) {
-      res.status(500).json({ message: 'Failed to fetch orderItem', error: error instanceof Error ? error.message : error });
+      res
+        .status(500)
+        .json({ message: 'Failed to fetch orderItem', error: error instanceof Error ? error.message : error });
     }
   };
 
   updateOrderItem: RequestHandler = async (req, res) => {
     try {
-      const id = parseInt(req.params.id, 10);
+      const id = req.params.id;
       const orderItem = new OrderItem();
       Object.assign(orderItem, req.body);
 
@@ -36,13 +38,15 @@ export class OrderItemController {
 
       res.status(200).json(updatedOrderItem);
     } catch (error) {
-      res.status(500).json({ message: 'Failed to update orderItem', error: error instanceof Error ? error.message : error });
+      res
+        .status(500)
+        .json({ message: 'Failed to update orderItem', error: error instanceof Error ? error.message : error });
     }
   };
 
   deleteOrderItem: RequestHandler = async (req, res) => {
     try {
-      const id = parseInt(req.params.id, 10);
+      const id = req.params.id;
 
       const deletedOrderItem = await this.orderItemService.deleteOrderItem(id);
 
@@ -53,7 +57,9 @@ export class OrderItemController {
 
       res.status(200).json(deletedOrderItem);
     } catch (error) {
-      res.status(500).json({ message: 'Failed to delete orderItem', error: error instanceof Error ? error.message : error });
+      res
+        .status(500)
+        .json({ message: 'Failed to delete orderItem', error: error instanceof Error ? error.message : error });
     }
   };
 }

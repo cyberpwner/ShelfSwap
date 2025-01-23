@@ -7,7 +7,7 @@ export class CategoryDao implements BaseDao<Category> {
     return Category.find({ relations: ['books'] });
   }
 
-  async findById(id: number): Promise<Category | null> {
+  async findById(id: string): Promise<Category | null> {
     return Category.findOne({ where: { id }, relations: ['books'] });
   }
 
@@ -25,7 +25,7 @@ export class CategoryDao implements BaseDao<Category> {
     return category.save();
   }
 
-  async update(id: number, category: Partial<Category>): Promise<Category | null> {
+  async update(id: string, category: Partial<Category>): Promise<Category | null> {
     const existingCategory = await Category.findOneBy({ id });
 
     if (!existingCategory) return null;
@@ -34,7 +34,7 @@ export class CategoryDao implements BaseDao<Category> {
     return existingCategory.save();
   }
 
-  async delete(id: number): Promise<Category | null> {
+  async delete(id: string): Promise<Category | null> {
     const existingCategory = await Category.findOneBy({ id });
 
     if (!existingCategory) return null;

@@ -22,10 +22,12 @@ import { User } from '../entity/User';
 export class MapperService {
   mapOrderToDto(order: Partial<Order>): OrderDto {
     return {
+      id: order.id!,
       status: order.status!,
       trackingNumber: order.trackingNumber,
       user: this.mapUserToDto(order.user!),
       items: order?.items?.map((item) => ({
+        id: item.id,
         quantity: item.quantity!,
         priceAtPurchase: item.priceAtPurchase!,
         book: this.mapBookToDto(item.book!),
@@ -36,6 +38,7 @@ export class MapperService {
 
   mapOrderItemToDto(orderItem: Partial<OrderItem>): OrderItemDto {
     return {
+      id: orderItem.id!,
       quantity: orderItem.quantity!,
       priceAtPurchase: orderItem.priceAtPurchase!,
       book: this.mapBookToDto(orderItem.book!),
@@ -45,6 +48,7 @@ export class MapperService {
 
   mapUserToDto(user: Partial<User>): UserDto {
     return {
+      id: user.id!,
       username: user.username!,
       email: user.email!,
       role: user.role!,
@@ -55,6 +59,7 @@ export class MapperService {
 
   mapBookToDto(book: Partial<Book>): BookDto {
     return {
+      id: book.id!,
       isbn: book.isbn!,
       title: book.title!,
       price: book.price!,
@@ -65,6 +70,7 @@ export class MapperService {
 
   mapAuthorToDto(author: Partial<Author>): AuthorDto {
     return {
+      id: author.id!,
       name: author.name!,
       books: author?.books?.map((book) => this.mapBookToDto(book)),
     };
@@ -72,6 +78,7 @@ export class MapperService {
 
   mapReviewToDto(review: Partial<Review>): ReviewDto {
     return {
+      id: review.id!,
       rating: review.rating!,
       comment: review?.comment,
       book: this.mapBookToDto(review.book!),
@@ -80,6 +87,7 @@ export class MapperService {
 
   mapPaymentToDto(payment: Partial<Payment>): PaymentDto {
     return {
+      id: payment.id!,
       method: payment.method!,
       amount: payment.amount!,
       order: this.mapOrderToDto(payment.order!),
@@ -88,6 +96,7 @@ export class MapperService {
 
   mapAddressToDto(address: Partial<Address>): AddressDto {
     return {
+      id: address.id!,
       city: address.city!,
       addressLine1: address.addressLine1!,
       addressLine2: address?.addressLine2,
@@ -97,6 +106,7 @@ export class MapperService {
 
   mapCategoryToDto(category: Partial<Category>): CategoryDto {
     return {
+      id: category.id!,
       name: category.name!,
       books: category?.books?.map((book) => this.mapBookToDto(book)),
     };

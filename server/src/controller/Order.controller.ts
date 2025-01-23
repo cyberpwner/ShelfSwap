@@ -32,7 +32,7 @@ export class OrderController implements InformativeError {
 
   getOrderById: RequestHandler = async (req, res) => {
     try {
-      const id = parseInt(req.params.id, 10);
+      const id = req.params.id;
       const order = await this.orderService.getOrderById(id);
 
       if (!order) {
@@ -70,7 +70,7 @@ export class OrderController implements InformativeError {
 
   updateOrder: RequestHandler = async (req, res) => {
     try {
-      const id = parseInt(req.params.id, 10);
+      const id = req.params.id;
       const order = new Order();
       Object.assign(order, req.body);
 
@@ -90,7 +90,7 @@ export class OrderController implements InformativeError {
 
   deleteOrder: RequestHandler = async (req, res) => {
     try {
-      const id = parseInt(req.params.id, 10);
+      const id = req.params.id;
 
       const deletedOrder = await this.orderService.deleteOrder(id);
 

@@ -14,7 +14,7 @@ export class OrderDao implements BaseDao<Order>, InformativeError {
     }
   }
 
-  async findById(id: number): Promise<Order | null> {
+  async findById(id: string): Promise<Order | null> {
     try {
       return Order.findOne({ where: { id }, relations: ['user'] });
     } catch (error) {
@@ -24,7 +24,9 @@ export class OrderDao implements BaseDao<Order>, InformativeError {
 
   async create(order: Order): Promise<Order> {
     if (this.transactionalManager == null) {
-      throw new Error('transactionalManager is not defined, orders should always be created within a transaction to ensure atomicity');
+      throw new Error(
+        'transactionalManager is not defined, orders should always be created within a transaction to ensure atomicity',
+      );
     }
 
     try {
@@ -35,7 +37,7 @@ export class OrderDao implements BaseDao<Order>, InformativeError {
     }
   }
 
-  async update(id: number, order: Partial<Order>): Promise<Order | null> {
+  async update(id: string, order: Partial<Order>): Promise<Order | null> {
     try {
       const existingOrder = await Order.findOne({ where: { id }, relations: ['user'] });
 
@@ -48,7 +50,7 @@ export class OrderDao implements BaseDao<Order>, InformativeError {
     }
   }
 
-  async delete(id: number): Promise<Order | null> {
+  async delete(id: string): Promise<Order | null> {
     try {
       const existingOrder = await Order.findOne({ where: { id }, relations: ['user'] });
 

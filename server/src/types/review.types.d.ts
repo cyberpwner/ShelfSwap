@@ -10,5 +10,5 @@ export enum ReviewRating {
 export interface IReview {
   rating: ReviewRating;
   comment?: string;
-  orderId: number;
+  orderId: string;
 }

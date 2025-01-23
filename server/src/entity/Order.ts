@@ -17,8 +17,8 @@ import { OrderItem } from './OrderItem';
 
 @Entity('Order')
 export class Order extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @ManyToOne(() => User, (user) => user.purchases, {
     onUpdate: 'CASCADE',

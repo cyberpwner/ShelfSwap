@@ -11,13 +11,15 @@ export class AddressController {
 
       res.status(200).json(addresses);
     } catch (error) {
-      res.status(500).json({ message: 'Failed to fetch addresss', error: error instanceof Error ? error.message : error });
+      res
+        .status(500)
+        .json({ message: 'Failed to fetch addresss', error: error instanceof Error ? error.message : error });
     }
   };
 
   getAddressById: RequestHandler = async (req, res) => {
     try {
-      const id = parseInt(req.params.id, 10);
+      const id = req.params.id;
       const address = await this.addressService.getAddressById(id);
 
       if (address == null) {
@@ -27,7 +29,9 @@ export class AddressController {
 
       res.status(200).json(address);
     } catch (error) {
-      res.status(500).json({ message: 'Failed to fetch address', error: error instanceof Error ? error.message : error });
+      res
+        .status(500)
+        .json({ message: 'Failed to fetch address', error: error instanceof Error ? error.message : error });
     }
   };
 
@@ -45,13 +49,15 @@ export class AddressController {
 
       res.status(200).json(createdAddress);
     } catch (error) {
-      res.status(500).json({ message: 'Failed to create address', error: error instanceof Error ? error.message : error });
+      res
+        .status(500)
+        .json({ message: 'Failed to create address', error: error instanceof Error ? error.message : error });
     }
   };
 
   updateAddress: RequestHandler = async (req, res) => {
     try {
-      const id = parseInt(req.params.id, 10);
+      const id = req.params.id;
       const address = new Address();
       Object.assign(address, req.body);
 
@@ -64,13 +70,15 @@ export class AddressController {
 
       res.status(200).json(updatedAddress);
     } catch (error) {
-      res.status(500).json({ message: 'Failed to update address', error: error instanceof Error ? error.message : error });
+      res
+        .status(500)
+        .json({ message: 'Failed to update address', error: error instanceof Error ? error.message : error });
     }
   };
 
   deleteAddress: RequestHandler = async (req, res) => {
     try {
-      const id = parseInt(req.params.id, 10);
+      const id = req.params.id;
 
       const deletedAddress = await this.addressService.deleteAddress(id);
 
@@ -81,7 +89,9 @@ export class AddressController {
 
       res.status(200).json(deletedAddress);
     } catch (error) {
-      res.status(500).json({ message: 'Failed to delete address', error: error instanceof Error ? error.message : error });
+      res
+        .status(500)
+        .json({ message: 'Failed to delete address', error: error instanceof Error ? error.message : error });
     }
   };
 }
