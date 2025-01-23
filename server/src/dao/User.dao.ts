@@ -17,7 +17,7 @@ export class UserDao implements BaseDao<User> {
   async update(id: string, user: Partial<User>): Promise<User | null> {
     const updatedUser = new User();
 
-    Object.assign(updatedUser, user);
+    Object.assign(updatedUser, { id, ...user });
     return updatedUser.save();
   }
 

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-extraneous-class */
 import { RequestHandler } from 'express';
 import { idSchema } from '../schemas/common.schemas';
-import { z } from 'zod';
+import { ValidationErrorHandler } from '../utils/error.utils';
 
 export class CommonValidation {
   static validateId: RequestHandler = (req, res, next) => {
@@ -9,10 +9,7 @@ export class CommonValidation {
       req.params.id = idSchema.parse(req.params.id);
       next();
     } catch (error) {
-      if (error instanceof z.ZodError) {
-        res.status(400).json({ issues: error.issues.map((issue) => issue.message) });
-        return;
-      }
+      ValidationErrorHandler.handleZodError(error, res);
     }
   };
 }
