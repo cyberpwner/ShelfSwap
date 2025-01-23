@@ -1,6 +1,6 @@
 import { PaymentDao } from '../dao/Payment.dao';
 import { PaymentDto } from '../dto/Payment.dto';
-import { Payment } from '../entity/Payment';
+import { Payment } from '../entities/Payment';
 import { MapperService } from './Mapper.service';
 
 export class PaymentService {

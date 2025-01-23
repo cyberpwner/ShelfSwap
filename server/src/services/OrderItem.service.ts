@@ -1,6 +1,6 @@
 import { OrderItemDao } from '../dao/OrderItem.dao';
 import { OrderItemDto } from '../dto/OrderItem.dto';
-import { OrderItem } from '../entity/OrderItem';
+import { OrderItem } from '../entities/OrderItem';
 import { MapperService } from './Mapper.service';
 
 export class OrderItemService {

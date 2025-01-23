@@ -1,8 +1,8 @@
 import { RequestHandler } from 'express';
 import { OrderService } from '../services/Order.service';
 import { getErrorMsg, InformativeError } from '../utils/error.utils';
-import { Order } from '../entity/Order';
-import { OrderItem } from '../entity/OrderItem';
+import { Order } from '../entities/Order';
+import { OrderItem } from '../entities/OrderItem';
 
 export class OrderController implements InformativeError {
   private readonly orderService: OrderService;

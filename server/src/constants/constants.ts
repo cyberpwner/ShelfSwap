@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 dotenv.config();
 import config from 'config';
-import { AppConfig } from '../types/config.types';
+import { AppConfig } from '../types/config.types.d';
 
 const SERVER_CONFIG = config.get<AppConfig['server']>('server');
 const DB_CONFIG = config.get<AppConfig['database']>('database');

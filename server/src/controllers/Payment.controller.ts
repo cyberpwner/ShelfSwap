@@ -1,6 +1,6 @@
 import { RequestHandler } from 'express';
 import { PaymentService } from '../services/Payment.service';
-import { Payment } from '../entity/Payment';
+import { Payment } from '../entities/Payment';
 
 export class PaymentController {
   private readonly paymentService = new PaymentService();

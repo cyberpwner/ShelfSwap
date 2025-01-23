@@ -1,6 +1,6 @@
 import { AuthorDao } from '../dao/Author.dao';
 import { AuthorDto } from '../dto/Author.dto';
-import { Author } from '../entity/Author';
+import { Author } from '../entities/Author';
 import { MapperService } from './Mapper.service';
 
 export class AuthorService {

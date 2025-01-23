@@ -1,6 +1,6 @@
 import { AddressDao } from '../dao/Address.dao';
 import { AddressDto } from '../dto/Address.dto';
-import { Address } from '../entity/Address';
+import { Address } from '../entities/Address';
 import { MapperService } from './Mapper.service';
 
 export class AddressService {

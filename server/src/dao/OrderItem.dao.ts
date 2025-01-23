@@ -1,4 +1,4 @@
-import { OrderItem } from '../entity/OrderItem';
+import { OrderItem } from '../entities/OrderItem';
 import { BaseDao } from './Base.dao';
 import { getErrorMsg, InformativeError } from '../utils/error.utils';
 import { EntityManager } from 'typeorm';

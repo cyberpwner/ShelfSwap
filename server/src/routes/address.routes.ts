@@ -1,5 +1,5 @@
 import express from 'express';
-import { AddressController } from '../controller/Address.controller';
+import { AddressController } from '../controllers/Address.controller';
 import { CommonValidation } from '../middleware/CommonValidation.middleware';
 import { AddressValidation } from '../middleware/AddressValidation.middleware';
 

@@ -1,4 +1,4 @@
-import { Payment } from '../entity/Payment';
+import { Payment } from '../entities/Payment';
 import { BaseDao } from './Base.dao';
 
 export class PaymentDao implements BaseDao<Payment> {

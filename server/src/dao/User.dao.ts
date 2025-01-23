@@ -1,4 +1,4 @@
-import { User } from '../entity/User';
+import { User } from '../entities/User';
 import { BaseDao } from './Base.dao';
 
 export class UserDao implements BaseDao<User> {

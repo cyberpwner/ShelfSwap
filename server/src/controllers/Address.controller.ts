@@ -1,6 +1,6 @@
 import { RequestHandler } from 'express';
 import { AddressService } from '../services/Address.service';
-import { Address } from '../entity/Address';
+import { Address } from '../entities/Address';
 
 export class AddressController {
   private readonly addressService = new AddressService();

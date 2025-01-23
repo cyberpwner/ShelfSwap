@@ -1,5 +1,5 @@
 import { EntityManager } from 'typeorm';
-import { Order } from '../entity/Order';
+import { Order } from '../entities/Order';
 import { getErrorMsg, InformativeError } from '../utils/error.utils';
 import { BaseDao } from './Base.dao';
 

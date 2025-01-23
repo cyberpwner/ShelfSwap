@@ -1,5 +1,5 @@
 import express from 'express';
-import { UserController } from '../controller/User.controller';
+import { UserController } from '../controllers/User.controller';
 import { UserValidation } from '../middleware/UserValidation.middleware';
 import { CommonValidation } from '../middleware/CommonValidation.middleware';
 
@@ -11,7 +11,7 @@ router.get('/', userController.getAllUsers);
 
 router.get('/:id', CommonValidation.validateId, userController.getUserById);
 
-router.post('/', userValidation.validateCreateUser, userController.createUser);
+router.post('/register', userValidation.validateCreateUser, userController.createUser);
 
 router.put('/:id', CommonValidation.validateId, userValidation.validateUpdateUser, userController.updateUser);
 

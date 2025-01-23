@@ -1,6 +1,6 @@
 import { RequestHandler } from 'express';
 import { UserService } from '../services/User.service';
-import { User } from '../entity/User';
+import { User } from '../entities/User';
 import { TypedRequestBody } from '../types/express.types.d';
 import { CreateUserDto } from '../schemas/user.schemas';
 import { UpdateBookDto } from '../schemas/book.schemas';

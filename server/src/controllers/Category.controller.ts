@@ -1,6 +1,6 @@
 import { RequestHandler } from 'express';
 import { CategoryService } from '../services/Category.service';
-import { Category } from '../entity/Category';
+import { Category } from '../entities/Category';
 import { BookCategory } from '../types/category.types.d';
 
 export class CategoryController {

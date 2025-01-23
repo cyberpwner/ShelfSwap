@@ -1,6 +1,6 @@
 import { UserDao } from '../dao/User.dao';
 import { UserDto } from '../dto/User.dto';
-import { User } from '../entity/User';
+import { User } from '../entities/User';
 import { isExistingUserByEmailOrUsername } from '../utils/user.utils';
 import { MapperService } from './Mapper.service';
 

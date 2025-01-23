@@ -1,5 +1,5 @@
 import express from 'express';
-import { ReviewController } from '../controller/Review.controller';
+import { ReviewController } from '../controllers/Review.controller';
 import { ReviewValidation } from '../middleware/ReviewValidation.middleware';
 import { CommonValidation } from '../middleware/CommonValidation.middleware';
 

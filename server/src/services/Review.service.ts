@@ -1,6 +1,6 @@
 import { ReviewDao } from '../dao/Review.dao';
 import { ReviewDto } from '../dto/Review.dto';
-import { Review } from '../entity/Review';
+import { Review } from '../entities/Review';
 import { MapperService } from './Mapper.service';
 
 export class ReviewService {

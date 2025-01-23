@@ -1,6 +1,6 @@
 import { RequestHandler } from 'express';
 import { OrderItemService } from '../services/OrderItem.service';
-import { OrderItem } from '../entity/OrderItem';
+import { OrderItem } from '../entities/OrderItem';
 
 export class OrderItemController {
   private readonly orderItemService = new OrderItemService();

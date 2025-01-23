@@ -1,5 +1,5 @@
 import express from 'express';
-import { CategoryController } from '../controller/Category.controller';
+import { CategoryController } from '../controllers/Category.controller';
 import { CategoryValidation } from '../middleware/CategoryValidation.middleware';
 import { CommonValidation } from '../middleware/CommonValidation.middleware';
 
@@ -13,7 +13,12 @@ router.get('/:id', CommonValidation.validateId, categoryController.getCategoryBy
 
 router.post('/', categoryValidation.validateCreateCategory, categoryController.createCategory);
 
-router.put('/:id', CommonValidation.validateId, categoryValidation.validateUpdateCategory, categoryController.updateCategory);
+router.put(
+  '/:id',
+  CommonValidation.validateId,
+  categoryValidation.validateUpdateCategory,
+  categoryController.updateCategory,
+);
 
 router.delete('/:id', CommonValidation.validateId, categoryController.deleteCategory);
 

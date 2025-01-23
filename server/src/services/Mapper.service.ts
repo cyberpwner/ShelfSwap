@@ -8,15 +8,15 @@ import { OrderItemDto } from '../dto/OrderItem.dto';
 import { PaymentDto } from '../dto/Payment.dto';
 import { ReviewDto } from '../dto/Review.dto';
 import { UserDto } from '../dto/User.dto';
-import { Address } from '../entity/Address';
-import { Author } from '../entity/Author';
-import { Book } from '../entity/Book';
-import { Category } from '../entity/Category';
-import { Order } from '../entity/Order';
-import { OrderItem } from '../entity/OrderItem';
-import { Payment } from '../entity/Payment';
-import { Review } from '../entity/Review';
-import { User } from '../entity/User';
+import { Address } from '../entities/Address';
+import { Author } from '../entities/Author';
+import { Book } from '../entities/Book';
+import { Category } from '../entities/Category';
+import { Order } from '../entities/Order';
+import { OrderItem } from '../entities/OrderItem';
+import { Payment } from '../entities/Payment';
+import { Review } from '../entities/Review';
+import { User } from '../entities/User';
 
 // mapper.service.ts
 export class MapperService {

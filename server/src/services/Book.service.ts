@@ -1,6 +1,6 @@
 import { BookDao } from '../dao/Book.dao';
 import { BookDto } from '../dto/Book.dto';
-import { Book } from '../entity/Book';
+import { Book } from '../entities/Book';
 import { BookCategory } from '../types/category.types.d';
 import { MapperService } from './Mapper.service';
 

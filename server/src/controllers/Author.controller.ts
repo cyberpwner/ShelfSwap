@@ -1,6 +1,6 @@
 import { RequestHandler } from 'express';
 import { AuthorService } from '../services/Author.service';
-import { Author } from '../entity/Author';
+import { Author } from '../entities/Author';
 
 export class AuthorController {
   private readonly authorService = new AuthorService();

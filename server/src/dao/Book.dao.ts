@@ -1,6 +1,6 @@
-import { Author } from '../entity/Author';
-import { Book } from '../entity/Book';
-import { Category } from '../entity/Category';
+import { Author } from '../entities/Author';
+import { Book } from '../entities/Book';
+import { Category } from '../entities/Category';
 import { BookCategory } from '../types/category.types.d';
 import { AppDataSource } from '../utils/dataSource';
 import { BaseDao } from './Base.dao';

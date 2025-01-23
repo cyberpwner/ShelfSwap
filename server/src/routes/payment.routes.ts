@@ -1,5 +1,5 @@
 import express from 'express';
-import { PaymentController } from '../controller/Payment.controller';
+import { PaymentController } from '../controllers/Payment.controller';
 import { PaymentValidation } from '../middleware/PaymentValidation.middleware';
 import { CommonValidation } from '../middleware/CommonValidation.middleware';
 

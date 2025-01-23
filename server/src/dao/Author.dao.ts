@@ -1,4 +1,4 @@
-import { Author } from '../entity/Author';
+import { Author } from '../entities/Author';
 import { BaseDao } from './Base.dao';
 
 export class AuthorDao implements BaseDao<Author> {

@@ -1,4 +1,4 @@
-import { User } from '../entity/User';
+import { User } from '../entities/User';
 
 export async function isExistingUserByEmailOrUsername(user: User): Promise<boolean> {
   const usersFound = await User.createQueryBuilder('User')

@@ -1,6 +1,6 @@
 import { RequestHandler } from 'express';
 import { BookService } from '../services/Book.service';
-import { Book } from '../entity/Book';
+import { Book } from '../entities/Book';
 import { BookCategory } from '../types/category.types.d';
 import { getErrorMsg, InformativeError } from '../utils/error.utils';
 import { TypedRequestBody } from '../types/express.types.d';

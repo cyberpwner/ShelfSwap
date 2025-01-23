@@ -1,6 +1,6 @@
 import { RequestHandler } from 'express';
 import { ReviewService } from '../services/Review.service';
-import { Review } from '../entity/Review';
+import { Review } from '../entities/Review';
 
 export class ReviewController {
   private readonly reviewService = new ReviewService();

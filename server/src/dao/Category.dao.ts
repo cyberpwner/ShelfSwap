@@ -1,4 +1,4 @@
-import { Category } from '../entity/Category';
+import { Category } from '../entities/Category';
 import { BookCategory } from '../types/category.types.d';
 import { BaseDao } from './Base.dao';
 

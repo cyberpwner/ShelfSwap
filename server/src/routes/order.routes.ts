@@ -1,5 +1,5 @@
 import express from 'express';
-import { OrderController } from '../controller/Order.controller';
+import { OrderController } from '../controllers/Order.controller';
 import { OrderValidation } from '../middleware/OrderValidation.middleware';
 import { CommonValidation } from '../middleware/CommonValidation.middleware';
 

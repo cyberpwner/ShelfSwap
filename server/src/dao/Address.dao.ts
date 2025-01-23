@@ -1,4 +1,4 @@
-import { Address } from '../entity/Address';
+import { Address } from '../entities/Address';
 import { BaseDao } from './Base.dao';
 
 export class AddressDao implements BaseDao<Address> {
