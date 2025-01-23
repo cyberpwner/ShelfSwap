@@ -86,4 +86,12 @@ export class User extends BaseEntity {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  async hashPassword(): Promise<void> {
+    this.password = await hash(this.password, APP_CONFIG.bcrypt.saltRounds);
+  }
+
+  async validatePassword(plainPassword: string): Promise<boolean> {
+    return compare(plainPassword, this.password);
+  }
 }

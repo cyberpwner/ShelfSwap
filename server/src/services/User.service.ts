@@ -1,6 +1,7 @@
 import { UserDao } from '../dao/User.dao';
 import { UserDto } from '../dto/User.dto';
 import { User } from '../entity/User';
+import { isExistingUserByEmailOrUsername } from '../utils/user.utils';
 import { MapperService } from './Mapper.service';
 
 export class UserService {
@@ -30,12 +31,28 @@ export class UserService {
   }
 
   async createUser(user: User): Promise<UserDto> {
+    const isExisting = await isExistingUserByEmailOrUsername(user);
+
+    if (isExisting) throw new Error('User already exists');
+
+    // hash password before sending user to dao
+    await user.hashPassword();
+
     const createdUser = await this.userDao.create(user);
 
     return this.mapperService.mapUserToDto(createdUser);
   }
 
-  async updateUser(id: number, user: Partial<User>): Promise<UserDto | null> {
+  async updateUser(id: string, user: Partial<User>): Promise<UserDto | null> {
+    const isExisting = await this.isExistingUser(id);
+
+    if (!isExisting) return null;
+
+    // hash the password if it is one of the fields to be updated
+    if (user.password && user.hashPassword) {
+      await user.hashPassword();
+    }
+
     const updatedUser = await this.userDao.update(id, user);
 
     if (!updatedUser) return null;
@@ -43,11 +60,15 @@ export class UserService {
     return this.mapperService.mapUserToDto(updatedUser);
   }
 
-  async deleteUser(id: number): Promise<UserDto | null> {
+  async deleteUser(id: string): Promise<UserDto | null> {
     const removedUser = await this.userDao.delete(id);
 
     if (!removedUser) return null;
 
     return this.mapperService.mapUserToDto(removedUser);
+  }
+
+  async isExistingUser(userId: string): Promise<boolean> {
+    return (await this.userDao.findById(userId)) ? true : false;
   }
 }

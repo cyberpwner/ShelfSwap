@@ -14,6 +14,9 @@ const developmentConfig: AppConfig = {
   server: {
     port: 5000,
   },
+  bcrypt: {
+    saltRounds: 10,
+  },
 };
 
 export default developmentConfig;

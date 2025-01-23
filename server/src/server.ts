@@ -1,12 +1,6 @@
-import dotenv from 'dotenv';
-dotenv.config();
-import config from 'config';
-
 import app from './app.js';
-import { AppConfig } from './types/config.js';
+import { APP_CONFIG } from './constants/constants.js';
 
-const ServerConfig = config.get<AppConfig['server']>('server');
-
-app.listen(ServerConfig.port, () => {
-  console.log(`Server running on port ${ServerConfig.port}`);
+app.listen(APP_CONFIG.server.port, () => {
+  console.log(`Server running on port ${APP_CONFIG.server.port}`);
 });

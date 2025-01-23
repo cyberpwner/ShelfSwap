@@ -1,11 +1,8 @@
 import { DataSource } from 'typeorm';
-import dotenv from 'dotenv';
-dotenv.config();
-import config from 'config';
-import { AppConfig } from '../types/config';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
+import { APP_CONFIG } from '../constants/constants';
 
-const dbConfig = config.get<AppConfig['database']>('database');
+const dbConfig = APP_CONFIG.database;
 
 export const AppDataSource = new DataSource({
   type: 'mariadb',
