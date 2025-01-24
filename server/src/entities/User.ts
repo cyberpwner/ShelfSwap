@@ -13,7 +13,7 @@ import { Order } from './Order.js';
 import { Address } from './Address.js';
 import { Review } from './Review.js';
 import { compare, hash } from 'bcrypt';
-import { APP_CONFIG } from '../constants/constants';
+import { APP_CONFIG } from '../constants/config.constants';
 
 // note to future self or other devs:
 // class properties should follow camelCase naming, typeorm will automatically convert them to snake_case in the DB.

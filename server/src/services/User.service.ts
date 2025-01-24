@@ -43,14 +43,14 @@ export class UserService {
     return this.mapperService.mapUserToDto(createdUser);
   }
 
-  async login({ email, password }: Pick<User, 'email' | 'password'>): Promise<User | null> {
+  async login({ email, password }: Pick<User, 'email' | 'password'>): Promise<UserDto | null> {
     const existingUser = await this.userDao.findByEmail(email);
 
     if (!existingUser || !(await existingUser.validatePassword(password))) {
       return null;
     }
 
-    return existingUser;
+    return this.mapperService.mapUserToDto(existingUser);
   }
 
   async updateUser(id: string, user: Partial<User>): Promise<UserDto | null> {

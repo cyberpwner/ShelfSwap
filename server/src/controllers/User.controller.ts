@@ -5,6 +5,7 @@ import { TypedRequestBody } from '../types/express.types.d';
 import { CreateUserDto, LoginUserDto } from '../schemas/user.schemas';
 import { UpdateBookDto } from '../schemas/book.schemas';
 import { HttpStatusCode } from '../types/http.types.d';
+import { generateAccessToken } from '../utils/jwt.utils';
 
 export class UserController {
   private readonly userService = new UserService();
@@ -51,7 +52,13 @@ export class UserController {
         return;
       }
 
-      res.status(HttpStatusCode.CREATED).json(createdUser);
+      const accessToken = generateAccessToken({
+        id: createdUser.id,
+        username: createdUser.username,
+        role: createdUser.role,
+      });
+
+      res.status(HttpStatusCode.CREATED).json({ message: 'User created successfully', user: createdUser, accessToken });
     } catch (error) {
       res
         .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
@@ -70,7 +77,9 @@ export class UserController {
       }
 
       // TODO: Generate JWT token here
-      res.status(HttpStatusCode.OK).json({ message: 'Logged in successfully' });
+      const accessToken = generateAccessToken({ id: user.id, username: user.username, role: user.role });
+
+      res.status(HttpStatusCode.OK).json({ message: 'Logged in successfully', user, accessToken });
     } catch (error) {
       res
         .status(HttpStatusCode.INTERNAL_SERVER_ERROR)

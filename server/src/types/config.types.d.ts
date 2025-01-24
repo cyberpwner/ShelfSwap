@@ -16,8 +16,16 @@ export interface BcryptConfig {
   saltRounds: number;
 }
 
+export interface JWTConfig {
+  accessSecret: string;
+  refreshSecret: string;
+  accessExpiration: string;
+  refreshExpiration: string;
+}
+
 export interface AppConfig {
   database: DBConfig;
   server: ServerConfig;
   bcrypt: BcryptConfig;
+  jwt: JWTConfig;
 }

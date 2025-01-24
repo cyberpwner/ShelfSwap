@@ -1,6 +1,6 @@
 import { DataSource } from 'typeorm';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
-import { APP_CONFIG } from '../constants/constants';
+import { APP_CONFIG } from '../constants/config.constants';
 
 const dbConfig = APP_CONFIG.database;
 

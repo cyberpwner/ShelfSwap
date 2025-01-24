@@ -12,4 +12,10 @@ export default {
   bcrypt: {
     saltRounds: 'SALT_ROUNDS',
   },
+  jwt: {
+    accessSecret: 'JWT_ACCESS_SECRET',
+    refreshSecret: 'JWT_REFRESH_SECRET',
+    accessExpiration: 'JWT_ACCESS_EXPIRATION',
+    refreshExpiration: 'JWT_REFRESH_EXPIRATION',
+  },
 };

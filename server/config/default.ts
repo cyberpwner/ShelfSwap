@@ -1,7 +1,4 @@
-import dotenv from 'dotenv';
-import { AppConfig } from '../src/types/config.js';
-
-dotenv.config();
+import { AppConfig } from '../src/types/config.types';
 
 const config: AppConfig = {
   database: {
@@ -16,6 +13,12 @@ const config: AppConfig = {
   },
   bcrypt: {
     saltRounds: 10,
+  },
+  jwt: {
+    accessSecret: 'JWT_ACCESS_SECRET',
+    refreshSecret: 'JWT_REFRESH_SECRET',
+    accessExpiration: 'JWT_ACCESS_EXPIRATION',
+    refreshExpiration: 'JWT_REFRESH_EXPIRATION',
   },
 };
 
