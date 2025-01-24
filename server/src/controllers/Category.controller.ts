@@ -11,9 +11,9 @@ export class CategoryController {
     this.categoryService = new CategoryService();
   }
 
-  getAllCategories: RequestHandler = async (req, res) => {
+  getAll: RequestHandler = async (_req, res) => {
     try {
-      const categories = await this.categoryService.getAllCategories();
+      const categories = await this.categoryService.getAll();
 
       res.status(HttpStatusCode.OK).json(categories);
     } catch (error) {
@@ -23,10 +23,10 @@ export class CategoryController {
     }
   };
 
-  getCategoryById: RequestHandler = async (req, res) => {
+  getById: RequestHandler = async (req, res) => {
     try {
       const id = req.params.id;
-      const category = await this.categoryService.getCategoryById(id);
+      const category = await this.categoryService.getById(id);
 
       if (category == null) {
         res.status(HttpStatusCode.NOT_FOUND).json({ message: 'Category not found' });
@@ -41,17 +41,17 @@ export class CategoryController {
     }
   };
 
-  getCategoryByName: RequestHandler = async (req, res, next) => {
+  getByName: RequestHandler = async (req, res, next) => {
     try {
       const name: BookCategory = req.query?.name as BookCategory;
 
-      // if no name is passed in the query go to the next handler (getAllcategories)
+      // if no name is passed in the query go to the next handler (getAll)
       if (!name || name.trim() === '') {
         next();
         return;
       }
 
-      const category = await this.categoryService.getCategoryByName(name);
+      const category = await this.categoryService.getByName(name);
 
       if (category == null) {
         res.status(HttpStatusCode.NOT_FOUND).json({ message: 'Category not found' });
@@ -61,7 +61,7 @@ export class CategoryController {
 
       res.status(HttpStatusCode.OK).json(category);
 
-      // if a category is provided and is found skip the next handler (getAllCategories)
+      // if a category is provided and is found skip the next handler (getAll)
       next('route');
       return;
     } catch (error) {

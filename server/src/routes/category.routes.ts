@@ -12,23 +12,23 @@ const auth = new Auth();
 
 router.get(
   '/',
-  auth.authenticate,
+  auth.authenticateAccessToken,
   auth.authorize([UserRole.ADMIN, UserRole.USER]),
-  categoryController.getCategoryByName,
-  categoryController.getAllCategories,
+  categoryController.getByName,
+  categoryController.getAll,
 );
 
 router.get(
   '/:id',
-  auth.authenticate,
+  auth.authenticateAccessToken,
   auth.authorize([UserRole.ADMIN, UserRole.USER]),
   CommonValidation.validateId,
-  categoryController.getCategoryById,
+  categoryController.getById,
 );
 
 router.post(
   '/',
-  auth.authenticate,
+  auth.authenticateAccessToken,
   auth.authorize([UserRole.ADMIN]),
   categoryValidation.validateCreateCategory,
   categoryController.createCategory,
@@ -36,7 +36,7 @@ router.post(
 
 router.put(
   '/:id',
-  auth.authenticate,
+  auth.authenticateAccessToken,
   auth.authorize([UserRole.ADMIN]),
   CommonValidation.validateId,
   categoryValidation.validateUpdateCategory,
@@ -45,7 +45,7 @@ router.put(
 
 router.delete(
   '/:id',
-  auth.authenticate,
+  auth.authenticateAccessToken,
   auth.authorize([UserRole.ADMIN]),
   CommonValidation.validateId,
   categoryController.deleteCategory,

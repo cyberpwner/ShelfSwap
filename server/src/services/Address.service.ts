@@ -12,7 +12,7 @@ export class AddressService {
     this.mapperService = new MapperService();
   }
 
-  async getAllAddresses(): Promise<AddressDto[]> {
+  async getAll(): Promise<AddressDto[]> {
     const addresses = await this.addressDao.findAll();
 
     if (addresses.length === 0) return [];
@@ -20,7 +20,7 @@ export class AddressService {
     return addresses.map((address) => this.mapperService.mapAddressToDto(address));
   }
 
-  async getAddressById(id: string): Promise<AddressDto | null> {
+  async getById(id: string): Promise<AddressDto | null> {
     const address = await this.addressDao.findById(id);
 
     if (!address) return null;

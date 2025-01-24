@@ -6,9 +6,9 @@ import { HttpStatusCode } from '../types/http.types.d';
 export class PaymentController {
   private readonly paymentService = new PaymentService();
 
-  getAllPayments: RequestHandler = async (req, res) => {
+  getAll: RequestHandler = async (_req, res) => {
     try {
-      const payments = await this.paymentService.getAllPayments();
+      const payments = await this.paymentService.getAll();
 
       res.status(HttpStatusCode.OK).json(payments);
     } catch (error) {
@@ -18,10 +18,10 @@ export class PaymentController {
     }
   };
 
-  getPaymentById: RequestHandler = async (req, res) => {
+  getById: RequestHandler = async (req, res) => {
     try {
       const id = req.params.id;
-      const payment = await this.paymentService.getPaymentById(id);
+      const payment = await this.paymentService.getById(id);
 
       if (payment == null) {
         res.status(HttpStatusCode.NOT_FOUND).json({ message: 'Payment not found' });

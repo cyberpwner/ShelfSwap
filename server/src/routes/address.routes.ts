@@ -10,19 +10,19 @@ const addressController = new AddressController();
 const addressValidation = new AddressValidation();
 const auth = new Auth();
 
-router.get('/', auth.authenticate, auth.authorize([UserRole.ADMIN]), addressController.getAllAddresses);
+router.get('/', auth.authenticateAccessToken, auth.authorize([UserRole.ADMIN]), addressController.getAll);
 
 router.get(
   '/:id',
-  auth.authenticate,
+  auth.authenticateAccessToken,
   auth.authorize([UserRole.ADMIN, UserRole.USER]),
   CommonValidation.validateId,
-  addressController.getAddressById,
+  addressController.getById,
 );
 
 router.post(
   '/',
-  auth.authenticate,
+  auth.authenticateAccessToken,
   auth.authorize([UserRole.ADMIN, UserRole.USER]),
   addressValidation.validateCreateAddress,
   addressController.createAddress,
@@ -30,7 +30,7 @@ router.post(
 
 router.put(
   '/:id',
-  auth.authenticate,
+  auth.authenticateAccessToken,
   auth.authorize([UserRole.ADMIN, UserRole.USER]),
   CommonValidation.validateId,
   addressValidation.validateUpdateAddress,
@@ -39,7 +39,7 @@ router.put(
 
 router.delete(
   '/:id',
-  auth.authenticate,
+  auth.authenticateAccessToken,
   auth.authorize([UserRole.ADMIN, UserRole.USER]),
   CommonValidation.validateId,
   addressController.deleteAddress,

@@ -13,7 +13,7 @@ export class CategoryService {
     this.mapperService = new MapperService();
   }
 
-  async getAllCategories(): Promise<CategoryDto[]> {
+  async getAll(): Promise<CategoryDto[]> {
     const categories = await this.categoryDao.findAll();
 
     if (categories.length === 0) return [];
@@ -21,7 +21,7 @@ export class CategoryService {
     return categories.map((category) => this.mapperService.mapCategoryToDto(category));
   }
 
-  async getCategoryById(id: string): Promise<CategoryDto | null> {
+  async getById(id: string): Promise<CategoryDto | null> {
     const category = await this.categoryDao.findById(id);
 
     if (!category) return null;
@@ -29,7 +29,7 @@ export class CategoryService {
     return this.mapperService.mapCategoryToDto(category);
   }
 
-  async getCategoryByName(name: BookCategory): Promise<CategoryDto | null> {
+  async getByName(name: BookCategory): Promise<CategoryDto | null> {
     const category = await this.categoryDao.findByName(name);
 
     if (!category) return null;

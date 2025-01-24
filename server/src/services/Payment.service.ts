@@ -12,7 +12,7 @@ export class PaymentService {
     this.mapperService = new MapperService();
   }
 
-  async getAllPayments(): Promise<PaymentDto[]> {
+  async getAll(): Promise<PaymentDto[]> {
     const payments = await this.paymentDao.findAll();
 
     if (payments.length === 0) return [];
@@ -20,7 +20,7 @@ export class PaymentService {
     return payments.map((payment) => this.mapperService.mapPaymentToDto(payment));
   }
 
-  async getPaymentById(id: string): Promise<PaymentDto | null> {
+  async getById(id: string): Promise<PaymentDto | null> {
     const payment = await this.paymentDao.findById(id);
 
     if (!payment) return null;

@@ -10,9 +10,9 @@ import { HttpStatusCode } from '../types/http.types.d';
 export class BookController implements InformativeError {
   private readonly bookService = new BookService();
 
-  getAllBooks: RequestHandler = async (req, res) => {
+  getAll: RequestHandler = async (_req, res) => {
     try {
-      const books = await this.bookService.getAllBooks();
+      const books = await this.bookService.getAll();
 
       res.status(HttpStatusCode.OK).json(books);
     } catch (error) {
@@ -22,10 +22,10 @@ export class BookController implements InformativeError {
     }
   };
 
-  getBookById: RequestHandler = async (req, res) => {
+  getById: RequestHandler = async (req, res) => {
     try {
       const id = req.params.id;
-      const book = await this.bookService.getBookById(id);
+      const book = await this.bookService.getById(id);
 
       if (book == null) {
         res.status(HttpStatusCode.NOT_FOUND).json({ message: 'Book not found' });

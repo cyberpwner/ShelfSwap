@@ -7,9 +7,9 @@ const router = express.Router();
 const orderItemController = new OrderItemController();
 const auth = new Auth();
 
-router.use(auth.authenticate, auth.authorize([UserRole.ADMIN]));
+router.use(auth.authenticateAccessToken, auth.authorize([UserRole.ADMIN]));
 
-router.get('/:id', orderItemController.getOrderItemById);
+router.get('/:id', orderItemController.getById);
 
 router.put('/:id', orderItemController.updateOrderItem);
 

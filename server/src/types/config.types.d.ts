@@ -23,9 +23,14 @@ export interface JWTConfig {
   refreshExpiration: string;
 }
 
+export interface EnvConfig {
+  nodeEnv: 'production' | 'development';
+}
+
 export interface AppConfig {
   database: DBConfig;
   server: ServerConfig;
   bcrypt: BcryptConfig;
   jwt: JWTConfig;
+  env: EnvConfig;
 }

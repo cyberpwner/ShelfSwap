@@ -6,9 +6,9 @@ import { HttpStatusCode } from '../types/http.types.d';
 export class AddressController {
   private readonly addressService = new AddressService();
 
-  getAllAddresses: RequestHandler = async (req, res) => {
+  getAll: RequestHandler = async (_req, res) => {
     try {
-      const addresses = await this.addressService.getAllAddresses();
+      const addresses = await this.addressService.getAll();
 
       res.status(HttpStatusCode.OK).json(addresses);
     } catch (error) {
@@ -18,10 +18,10 @@ export class AddressController {
     }
   };
 
-  getAddressById: RequestHandler = async (req, res) => {
+  getById: RequestHandler = async (req, res) => {
     try {
       const id = req.params.id;
-      const address = await this.addressService.getAddressById(id);
+      const address = await this.addressService.getById(id);
 
       if (address == null) {
         res.status(HttpStatusCode.NOT_FOUND).json({ message: 'Address not found' });

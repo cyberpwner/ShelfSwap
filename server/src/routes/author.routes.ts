@@ -10,19 +10,19 @@ const authorController = new AuthorController();
 const authorValidation = new AuthorValidation();
 const auth = new Auth();
 
-router.get('/', auth.authenticate, auth.authorize([UserRole.ADMIN, UserRole.USER]), authorController.getAllAuthors);
+router.get('/', auth.authenticateAccessToken, auth.authorize([UserRole.ADMIN, UserRole.USER]), authorController.getAll);
 
 router.get(
   '/:id',
-  auth.authenticate,
+  auth.authenticateAccessToken,
   auth.authorize([UserRole.ADMIN, UserRole.USER]),
   CommonValidation.validateId,
-  authorController.getAuthorById,
+  authorController.getById,
 );
 
 router.post(
   '/',
-  auth.authenticate,
+  auth.authenticateAccessToken,
   auth.authorize([UserRole.ADMIN]),
   authorValidation.validateCreateAuthor,
   authorController.createAuthor,
@@ -30,7 +30,7 @@ router.post(
 
 router.put(
   '/:id',
-  auth.authenticate,
+  auth.authenticateAccessToken,
   auth.authorize([UserRole.ADMIN]),
   CommonValidation.validateId,
   authorValidation.validateUpdateAuthor,
@@ -39,7 +39,7 @@ router.put(
 
 router.delete(
   '/:id',
-  auth.authenticate,
+  auth.authenticateAccessToken,
   auth.authorize([UserRole.ADMIN]),
   CommonValidation.validateId,
   authorController.deleteAuthor,

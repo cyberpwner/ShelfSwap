@@ -1,20 +1,27 @@
 import { NextFunction, RequestHandler, Response, Request } from 'express';
 import { HttpStatusCode } from '../types/http.types.d';
-import jwt from 'jsonwebtoken';
-import { APP_CONFIG } from '../constants/config.constants';
 import { UserRole } from '../types/user.types.d';
+import {
+  generateAccessToken,
+  generateRefreshToken,
+  setTokensInCookies,
+  verifyAccessToken,
+  verifyRefreshToken,
+} from '../utils/jwt.utils';
+import { QueryFailedError } from 'typeorm';
+import { UserService } from '../services/User.service';
 
 export class Auth {
-  authenticate: RequestHandler = async (req, res, next) => {
-    const token = req.headers?.authorization?.replace('Bearer ', '');
+  authenticateAccessToken: RequestHandler = async (req, res, next) => {
+    const accessToken = req.cookies?.accessToken;
 
-    if (!token) {
+    if (!accessToken) {
       res.status(HttpStatusCode.UNAUTHORIZED).json({ message: 'Unauthorized' });
       return;
     }
 
     try {
-      const decodedToken = jwt.verify(token, APP_CONFIG.jwt.accessSecret);
+      const decodedToken = verifyAccessToken(accessToken);
 
       if (!decodedToken || typeof decodedToken === 'string') {
         res.status(HttpStatusCode.UNAUTHORIZED).json({ message: 'Unauthorized' });
@@ -37,5 +44,39 @@ export class Auth {
 
       next();
     };
+  };
+
+  refreshTokens: RequestHandler = async (req, res) => {
+    const refreshToken = req.cookies?.refreshToken;
+
+    if (!refreshToken) {
+      res.status(HttpStatusCode.UNAUTHORIZED).json({ message: 'Unauthorized' });
+      return;
+    }
+
+    try {
+      const decodedRefreshToken = verifyRefreshToken(refreshToken);
+
+      if (!decodedRefreshToken || typeof decodedRefreshToken === 'string') throw new Error('Bad token');
+
+      const user = await new UserService().getById(decodedRefreshToken.id);
+
+      if (!user) throw new Error('User not found');
+
+      const newAccessToken = generateAccessToken({ id: user.id, username: user.username, role: user.role });
+      const newRefreshToken = generateRefreshToken({ id: user.id });
+
+      setTokensInCookies(res, newAccessToken, newRefreshToken);
+
+      res.sendStatus(HttpStatusCode.NO_CONTENT);
+    } catch (error) {
+      if (error instanceof QueryFailedError) {
+        res
+          .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+          .json({ message: 'An error occured when trying to query the DB' });
+      }
+
+      res.status(HttpStatusCode.UNAUTHORIZED).json({ message: 'Unauthorized', error });
+    }
   };
 }

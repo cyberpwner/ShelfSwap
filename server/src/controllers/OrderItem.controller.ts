@@ -6,10 +6,10 @@ import { HttpStatusCode } from '../types/http.types.d';
 export class OrderItemController {
   private readonly orderItemService = new OrderItemService();
 
-  getOrderItemById: RequestHandler = async (req, res) => {
+  getById: RequestHandler = async (req, res) => {
     try {
       const id = req.params.id;
-      const orderItem = await this.orderItemService.getOrderItemById(id);
+      const orderItem = await this.orderItemService.getById(id);
 
       if (orderItem == null) {
         res.status(HttpStatusCode.NOT_FOUND).json({ message: 'OrderItem not found' });

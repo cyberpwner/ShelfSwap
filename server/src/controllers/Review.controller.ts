@@ -6,9 +6,9 @@ import { HttpStatusCode } from '../types/http.types.d';
 export class ReviewController {
   private readonly reviewService = new ReviewService();
 
-  getAllReviews: RequestHandler = async (req, res) => {
+  getAll: RequestHandler = async (_req, res) => {
     try {
-      const reviews = await this.reviewService.getAllReviews();
+      const reviews = await this.reviewService.getAll();
 
       res.status(HttpStatusCode.OK).json(reviews);
     } catch (error) {
@@ -18,10 +18,10 @@ export class ReviewController {
     }
   };
 
-  getReviewById: RequestHandler = async (req, res) => {
+  getById: RequestHandler = async (req, res) => {
     try {
       const id = req.params.id;
-      const review = await this.reviewService.getReviewById(id);
+      const review = await this.reviewService.getById(id);
 
       if (review == null) {
         res.status(HttpStatusCode.NOT_FOUND).json({ message: 'Review not found' });

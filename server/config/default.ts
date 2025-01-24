@@ -20,6 +20,9 @@ const config: AppConfig = {
     accessExpiration: 'JWT_ACCESS_EXPIRATION',
     refreshExpiration: 'JWT_REFRESH_EXPIRATION',
   },
+  env: {
+    nodeEnv: 'development',
+  },
 };
 
 export default config;

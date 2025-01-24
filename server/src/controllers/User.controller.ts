@@ -5,14 +5,14 @@ import { TypedRequestBody } from '../types/express.types.d';
 import { CreateUserDto, LoginUserDto } from '../schemas/user.schemas';
 import { UpdateBookDto } from '../schemas/book.schemas';
 import { HttpStatusCode } from '../types/http.types.d';
-import { generateAccessToken } from '../utils/jwt.utils';
+import { generateAccessToken, generateRefreshToken, setTokensInCookies } from '../utils/jwt.utils';
 
 export class UserController {
   private readonly userService = new UserService();
 
-  getAllUsers: RequestHandler = async (req, res) => {
+  getAll: RequestHandler = async (_req, res) => {
     try {
-      const users = await this.userService.getAllUsers();
+      const users = await this.userService.getAll();
 
       res.status(HttpStatusCode.OK).json(users);
     } catch (error) {
@@ -22,10 +22,10 @@ export class UserController {
     }
   };
 
-  getUserById: RequestHandler = async (req, res) => {
+  getById: RequestHandler = async (req, res) => {
     try {
       const id = req.params.id;
-      const user = await this.userService.getUserById(id);
+      const user = await this.userService.getById(id);
 
       if (user == null) {
         res.status(HttpStatusCode.NOT_FOUND).json({ message: 'User not found' });
@@ -58,7 +58,11 @@ export class UserController {
         role: createdUser.role,
       });
 
-      res.status(HttpStatusCode.CREATED).json({ message: 'User created successfully', user: createdUser, accessToken });
+      const refreshToken = generateRefreshToken({ id: createdUser.id });
+
+      setTokensInCookies(res, accessToken, refreshToken);
+
+      res.status(HttpStatusCode.CREATED).json({ message: 'User created successfully', user: createdUser });
     } catch (error) {
       res
         .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
@@ -66,7 +70,7 @@ export class UserController {
     }
   };
 
-  loginUser: RequestHandler = async (req: TypedRequestBody<LoginUserDto>, res) => {
+  login: RequestHandler = async (req: TypedRequestBody<LoginUserDto>, res) => {
     try {
       const { email, password } = req.body;
       const user = await this.userService.login({ email, password });
@@ -76,10 +80,12 @@ export class UserController {
         return;
       }
 
-      // TODO: Generate JWT token here
       const accessToken = generateAccessToken({ id: user.id, username: user.username, role: user.role });
+      const refreshToken = generateRefreshToken({ id: user.id });
 
-      res.status(HttpStatusCode.OK).json({ message: 'Logged in successfully', user, accessToken });
+      setTokensInCookies(res, accessToken, refreshToken);
+
+      res.status(HttpStatusCode.OK).json({ message: 'Logged in successfully', user });
     } catch (error) {
       res
         .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
@@ -87,7 +93,13 @@ export class UserController {
     }
   };
 
-  updateUser: RequestHandler = async (req: TypedRequestBody<UpdateBookDto>, res) => {
+  logout: RequestHandler = async (_req, res) => {
+    res.clearCookie('accessToken');
+    res.clearCookie('refreshToken');
+    res.sendStatus(HttpStatusCode.NO_CONTENT);
+  };
+
+  update: RequestHandler = async (req: TypedRequestBody<UpdateBookDto>, res) => {
     try {
       const id = req.params.id;
       const user = new User();
@@ -108,7 +120,7 @@ export class UserController {
     }
   };
 
-  deleteUser: RequestHandler = async (req, res) => {
+  delete: RequestHandler = async (req, res) => {
     try {
       const id = req.params.id;
 

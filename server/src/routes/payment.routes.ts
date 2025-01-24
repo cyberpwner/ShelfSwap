@@ -10,19 +10,19 @@ const paymentController = new PaymentController();
 const paymentValidation = new PaymentValidation();
 const auth = new Auth();
 
-router.get('/', auth.authenticate, auth.authorize([UserRole.ADMIN]), paymentController.getAllPayments);
+router.get('/', auth.authenticateAccessToken, auth.authorize([UserRole.ADMIN]), paymentController.getAll);
 
 router.get(
   '/:id',
-  auth.authenticate,
+  auth.authenticateAccessToken,
   auth.authorize([UserRole.ADMIN]),
   CommonValidation.validateId,
-  paymentController.getPaymentById,
+  paymentController.getById,
 );
 
 router.post(
   '/',
-  auth.authenticate,
+  auth.authenticateAccessToken,
   auth.authorize([UserRole.ADMIN, UserRole.USER]),
   paymentValidation.validateCreatePayment,
   paymentController.createPayment,
@@ -37,7 +37,7 @@ router.put(
 
 router.delete(
   '/:id',
-  auth.authenticate,
+  auth.authenticateAccessToken,
   auth.authorize([UserRole.ADMIN]),
   CommonValidation.validateId,
   paymentController.deletePayment,

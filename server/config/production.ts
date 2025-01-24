@@ -23,6 +23,9 @@ const productionConfig: AppConfig = {
     accessExpiration: 'JWT_ACCESS_EXPIRATION',
     refreshExpiration: 'JWT_REFRESH_EXPIRATION',
   },
+  env: {
+    nodeEnv: 'production',
+  },
 };
 
 export default productionConfig;

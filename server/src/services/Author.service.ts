@@ -12,7 +12,7 @@ export class AuthorService {
     this.mapperService = new MapperService();
   }
 
-  async getAllAuthors(): Promise<AuthorDto[]> {
+  async getAll(): Promise<AuthorDto[]> {
     const authors = await this.authorDao.findAll();
 
     if (authors.length === 0) return [];
@@ -20,7 +20,7 @@ export class AuthorService {
     return authors.map((author) => this.mapperService.mapAuthorToDto(author));
   }
 
-  async getAuthorById(id: string): Promise<AuthorDto | null> {
+  async getById(id: string): Promise<AuthorDto | null> {
     const author = await this.authorDao.findById(id);
 
     if (!author) return null;

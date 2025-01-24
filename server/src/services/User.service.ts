@@ -13,7 +13,7 @@ export class UserService {
     this.mapperService = new MapperService();
   }
 
-  async getAllUsers(): Promise<UserDto[]> {
+  async getAll(): Promise<UserDto[]> {
     const users = await this.userDao.findAll();
 
     if (users.length === 0) return [];
@@ -22,7 +22,7 @@ export class UserService {
     return users.map((user) => this.mapperService.mapUserToDto(user));
   }
 
-  async getUserById(id: string): Promise<UserDto | null> {
+  async getById(id: string): Promise<UserDto | null> {
     const user = await this.userDao.findById(id);
 
     if (!user) return null;

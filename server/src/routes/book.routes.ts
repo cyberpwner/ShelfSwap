@@ -10,15 +10,15 @@ const bookController = new BookController();
 const bookValidation = new BookValidation();
 const auth = new Auth();
 
-router.get('/', bookController.getAllBooks);
+router.get('/', bookController.getAll);
 
 router.get('/search', bookValidation.validateSearch, bookController.searchByTitleOrAuthor);
 
-router.get('/:id', CommonValidation.validateId, bookController.getBookById);
+router.get('/:id', CommonValidation.validateId, bookController.getById);
 
 router.post(
   '/',
-  auth.authenticate,
+  auth.authenticateAccessToken,
   auth.authorize([UserRole.ADMIN]),
   bookValidation.validateCreateBook,
   bookController.createBook,
@@ -26,7 +26,7 @@ router.post(
 
 router.put(
   '/:id',
-  auth.authenticate,
+  auth.authenticateAccessToken,
   auth.authorize([UserRole.ADMIN]),
   CommonValidation.validateId,
   bookValidation.validateUpdateBook,
@@ -35,7 +35,7 @@ router.put(
 
 router.delete(
   '/:id',
-  auth.authenticate,
+  auth.authenticateAccessToken,
   auth.authorize([UserRole.ADMIN]),
   CommonValidation.validateId,
   bookController.deleteBook,

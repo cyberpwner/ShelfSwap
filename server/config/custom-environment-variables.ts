@@ -18,4 +18,7 @@ export default {
     accessExpiration: 'JWT_ACCESS_EXPIRATION',
     refreshExpiration: 'JWT_REFRESH_EXPIRATION',
   },
+  env: {
+    nodeEnv: 'NODE_ENV',
+  },
 };

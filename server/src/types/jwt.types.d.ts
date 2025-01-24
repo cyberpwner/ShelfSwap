@@ -8,6 +8,4 @@ export interface AccessTokenPayload {
 
 export interface RefreshTokenPayload {
   id: string;
-  username: string;
-  role: UserRole;
 }

@@ -6,9 +6,9 @@ import { HttpStatusCode } from '../types/http.types.d';
 export class AuthorController {
   private readonly authorService = new AuthorService();
 
-  getAllAuthors: RequestHandler = async (req, res) => {
+  getAll: RequestHandler = async (_req, res) => {
     try {
-      const authors = await this.authorService.getAllAuthors();
+      const authors = await this.authorService.getAll();
 
       res.status(HttpStatusCode.OK).json(authors);
     } catch (error) {
@@ -18,10 +18,10 @@ export class AuthorController {
     }
   };
 
-  getAuthorById: RequestHandler = async (req, res) => {
+  getById: RequestHandler = async (req, res) => {
     try {
       const id = req.params.id;
-      const author = await this.authorService.getAuthorById(id);
+      const author = await this.authorService.getById(id);
 
       if (author == null) {
         res.status(HttpStatusCode.NOT_FOUND).json({ message: 'Author not found' });

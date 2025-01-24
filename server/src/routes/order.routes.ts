@@ -12,7 +12,7 @@ const auth = new Auth();
 
 router.post(
   '/',
-  auth.authenticate,
+  auth.authenticateAccessToken,
   auth.authorize([UserRole.ADMIN, UserRole.USER]),
   orderValidation.validateCreateOrder,
   orderController.createOrder,
@@ -20,23 +20,23 @@ router.post(
 
 router.get(
   '/:id',
-  auth.authenticate,
+  auth.authenticateAccessToken,
   auth.authorize([UserRole.ADMIN, UserRole.USER]),
   CommonValidation.validateId,
-  orderController.getOrderById,
+  orderController.getById,
 );
 
 router.get(
   '/filter/:username',
-  auth.authenticate,
+  auth.authenticateAccessToken,
   auth.authorize([UserRole.ADMIN, UserRole.USER]),
   orderValidation.validateGetbyUser,
-  orderController.getOrdersByUser,
+  orderController.getByUser,
 );
 
 router.put(
   '/:id',
-  auth.authenticate,
+  auth.authenticateAccessToken,
   auth.authorize([UserRole.ADMIN]),
   CommonValidation.validateId,
   orderValidation.validateUpdateOrder,
@@ -45,7 +45,7 @@ router.put(
 
 router.delete(
   '/:id',
-  auth.authenticate,
+  auth.authenticateAccessToken,
   auth.authorize([UserRole.ADMIN]),
   CommonValidation.validateId,
   orderController.deleteOrder,

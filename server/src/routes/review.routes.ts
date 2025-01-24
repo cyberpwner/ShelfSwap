@@ -12,19 +12,19 @@ const auth = new Auth();
 
 // TODO: add getReviewsByBook route
 
-router.get('/', auth.authenticate, auth.authorize([UserRole.ADMIN]), reviewController.getAllReviews);
+router.get('/', auth.authenticateAccessToken, auth.authorize([UserRole.ADMIN]), reviewController.getAll);
 
 router.get(
   '/:id',
-  auth.authenticate,
+  auth.authenticateAccessToken,
   auth.authorize([UserRole.ADMIN, UserRole.USER]),
   CommonValidation.validateId,
-  reviewController.getReviewById,
+  reviewController.getById,
 );
 
 router.post(
   '/',
-  auth.authenticate,
+  auth.authenticateAccessToken,
   auth.authorize([UserRole.ADMIN, UserRole.USER]),
   reviewValidation.validateCreateReview,
   reviewController.createReview,
@@ -32,7 +32,7 @@ router.post(
 
 router.put(
   '/:id',
-  auth.authenticate,
+  auth.authenticateAccessToken,
   auth.authorize([UserRole.ADMIN]),
   CommonValidation.validateId,
   reviewValidation.validateUpdateReview,
@@ -41,7 +41,7 @@ router.put(
 
 router.delete(
   '/:id',
-  auth.authenticate,
+  auth.authenticateAccessToken,
   auth.authorize([UserRole.ADMIN]),
   CommonValidation.validateId,
   reviewController.deleteReview,

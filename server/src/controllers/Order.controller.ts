@@ -12,7 +12,7 @@ export class OrderController implements InformativeError {
     this.orderService = new OrderService();
   }
 
-  getOrdersByUser: RequestHandler = async (req, res, next) => {
+  getByUser: RequestHandler = async (req, res, next) => {
     try {
       const { username } = req.params;
 
@@ -21,7 +21,7 @@ export class OrderController implements InformativeError {
         return;
       }
 
-      const orders = await this.orderService.getOrdersByUser(username);
+      const orders = await this.orderService.getByUser(username);
 
       res.status(HttpStatusCode.OK).json(orders);
       next();
@@ -31,10 +31,10 @@ export class OrderController implements InformativeError {
     }
   };
 
-  getOrderById: RequestHandler = async (req, res) => {
+  getById: RequestHandler = async (req, res) => {
     try {
       const id = req.params.id;
-      const order = await this.orderService.getOrderById(id);
+      const order = await this.orderService.getById(id);
 
       if (!order) {
         res.status(HttpStatusCode.NOT_FOUND).json({ message: 'Order not found' });

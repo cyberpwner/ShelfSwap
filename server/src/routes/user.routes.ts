@@ -10,35 +10,37 @@ const userController = new UserController();
 const userValidation = new UserValidation();
 const auth = new Auth();
 
-router.get('/', auth.authenticate, auth.authorize([UserRole.ADMIN]), userController.getAllUsers);
+router.get('/', auth.authenticateAccessToken, auth.authorize([UserRole.ADMIN]), userController.getAll);
 
 router.get(
   '/:id',
-  auth.authenticate,
+  auth.authenticateAccessToken,
   auth.authorize([UserRole.ADMIN]),
   CommonValidation.validateId,
-  userController.getUserById,
+  userController.getById,
 );
-
-router.post('/login', userValidation.validateLogin, userController.loginUser);
 
 router.post('/register', userValidation.validateRegister, userController.register);
 
+router.post('/login', userValidation.validateLogin, userController.login);
+
+router.post('/logout', userController.logout);
+
 router.put(
   '/:id',
-  auth.authenticate,
+  auth.authenticateAccessToken,
   auth.authorize([UserRole.ADMIN, UserRole.USER]),
   CommonValidation.validateId,
   userValidation.validateUpdate,
-  userController.updateUser,
+  userController.update,
 );
 
 router.delete(
   '/:id',
-  auth.authenticate,
+  auth.authenticateAccessToken,
   auth.authorize([UserRole.ADMIN]),
   CommonValidation.validateId,
-  userController.deleteUser,
+  userController.delete,
 );
 
 export default router;

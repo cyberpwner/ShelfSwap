@@ -11,6 +11,7 @@ import authorRoutes from './author.routes.js';
 import addressRoutes from './address.routes.js';
 import paymentRoutes from './payment.routes.js';
 import reviewRoutes from './review.routes.js';
+import authRoutes from './auth.routes.js';
 
 const router = Router();
 
@@ -37,5 +38,6 @@ router.use('/authors', authorRoutes);
 router.use('/addresses', addressRoutes);
 router.use('/payments', paymentRoutes);
 router.use('/reviews', reviewRoutes);
+router.use(authRoutes);
 
 export default router;

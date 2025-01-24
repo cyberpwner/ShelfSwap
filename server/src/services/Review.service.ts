@@ -12,7 +12,7 @@ export class ReviewService {
     this.mapperService = new MapperService();
   }
 
-  async getAllReviews(): Promise<ReviewDto[]> {
+  async getAll(): Promise<ReviewDto[]> {
     const reviews = await this.reviewDao.findAll();
 
     if (reviews.length === 0) return [];
@@ -20,7 +20,7 @@ export class ReviewService {
     return reviews.map((review) => this.mapperService.mapReviewToDto(review));
   }
 
-  async getReviewById(id: string): Promise<ReviewDto | null> {
+  async getById(id: string): Promise<ReviewDto | null> {
     const review = await this.reviewDao.findById(id);
 
     if (!review) return null;

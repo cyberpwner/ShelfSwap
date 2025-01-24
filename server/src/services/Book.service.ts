@@ -1,4 +1,3 @@
-
 import { BookDao } from '../dao/Book.dao';
 import { BookDto } from '../dto/Book.dto';
 import { Book } from '../entities/Book';
@@ -14,7 +13,7 @@ export class BookService {
     this.mapperService = new MapperService();
   }
 
-  async getAllBooks(): Promise<BookDto[]> {
+  async getAll(): Promise<BookDto[]> {
     const books = await this.bookDao.findAll();
 
     if (books.length === 0) return [];
@@ -22,7 +21,7 @@ export class BookService {
     return books.map((book) => this.mapperService.mapBookToDto(book));
   }
 
-  async getBookById(id: string): Promise<BookDto | null> {
+  async getById(id: string): Promise<BookDto | null> {
     const book = await this.bookDao.findById(id);
 
     if (!book) return null;

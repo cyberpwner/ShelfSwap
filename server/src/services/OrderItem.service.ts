@@ -12,7 +12,7 @@ export class OrderItemService {
     this.mapperService = new MapperService();
   }
 
-  async getOrderItemById(id: string): Promise<OrderItemDto | null> {
+  async getById(id: string): Promise<OrderItemDto | null> {
     const item = await this.orderItemDao.findById(id);
 
     if (!item) return null;
@@ -36,7 +36,7 @@ export class OrderItemService {
     return this.mapperService.mapOrderItemToDto(deletedItem);
   }
 
-  async getItemsByOrder(orderId: string): Promise<OrderItemDto[]> {
+  async getByOrder(orderId: string): Promise<OrderItemDto[]> {
     const items = await this.orderItemDao.findByOrder(orderId);
 
     if (items.length === 0) return [];

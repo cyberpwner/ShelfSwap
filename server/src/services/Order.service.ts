@@ -18,7 +18,7 @@ export class OrderService implements InformativeError {
     this.mapperService = new MapperService();
   }
 
-  async getAllOrders(): Promise<OrderDto[]> {
+  async getAll(): Promise<OrderDto[]> {
     const orders = await this.orderDao.findAll();
 
     if (orders.length === 0) return [];
@@ -26,7 +26,7 @@ export class OrderService implements InformativeError {
     return orders.map((order) => this.mapperService.mapOrderToDto(order));
   }
 
-  async getOrderById(id: string): Promise<OrderDto | null> {
+  async getById(id: string): Promise<OrderDto | null> {
     const order = await this.orderDao.findById(id);
 
     if (!order) return null;
@@ -92,7 +92,7 @@ export class OrderService implements InformativeError {
     return this.mapperService.mapOrderToDto(deletedOrder);
   }
 
-  async getOrdersByUser(username: string): Promise<OrderDto[]> {
+  async getByUser(username: string): Promise<OrderDto[]> {
     try {
       const orders = await this.orderDao.findOrdersByUser(username);
 
