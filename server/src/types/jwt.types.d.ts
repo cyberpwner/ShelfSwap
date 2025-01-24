@@ -1,4 +1,4 @@
-import { UserRole } from './user.types';
+import { UserRole } from './user.types.d';
 
 export interface AccessTokenPayload {
   id: string;

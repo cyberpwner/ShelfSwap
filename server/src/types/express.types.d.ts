@@ -5,6 +5,10 @@ export interface TypedRequestBody<T> extends Request {
   body: T;
 }
 
-export interface AuthenticatedRequest extends Request {
-  user: string | JwtPayload;
+declare global {
+  namespace Express {
+    interface Request {
+      user?: string | JwtPayload; // Optional property
+    }
+  }
 }

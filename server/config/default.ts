@@ -1,4 +1,4 @@
-import { AppConfig } from '../src/types/config.types';
+import { AppConfig } from '../src/types/config.types.d';
 
 const config: AppConfig = {
   database: {

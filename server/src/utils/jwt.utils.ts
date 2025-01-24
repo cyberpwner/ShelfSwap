@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { APP_CONFIG } from '../constants/config.constants';
-import { AccessTokenPayload, RefreshTokenPayload } from '../types/jwt.types';
+import { AccessTokenPayload, RefreshTokenPayload } from '../types/jwt.types.d';
 import { accessTokenSignOptions, refreshTokenSignOptions } from '../constants/jwt.constants';
 
 export function generateAccessToken(payload: AccessTokenPayload) {
