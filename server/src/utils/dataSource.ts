@@ -1,11 +1,8 @@
 import { DataSource } from 'typeorm';
-import dotenv from 'dotenv';
-dotenv.config();
-import config from 'config';
-import { AppConfig } from '../types/config';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
+import { APP_CONFIG } from '../constants/config.constants';
 
-const dbConfig = config.get<AppConfig['database']>('database');
+const dbConfig = APP_CONFIG.database;
 
 export const AppDataSource = new DataSource({
   type: 'mariadb',
@@ -15,8 +12,8 @@ export const AppDataSource = new DataSource({
   password: dbConfig.password,
   database: dbConfig.database,
   logging: true,
-  entities: ['src/entity/**/*.ts'],
-  migrations: ['src/migration/**/*.ts'],
+  entities: ['src/entities/**/*.ts'],
+  migrations: ['src/migrations/**/*.ts'],
   // typeorm will make table and column names snake_case even if the attribute is declared in camelCase in the entity class
   // Which is nice cause you can have consistency in both your classes and your db. The library is 'typeorm-naming-strategies' :)
   namingStrategy: new SnakeNamingStrategy(),

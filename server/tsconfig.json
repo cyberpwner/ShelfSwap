@@ -19,6 +19,6 @@
     "noImplicitThis": true,
     "alwaysStrict": true
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "oldDBSchemaMigrations/1736456018043-ChangeAppToNormalBookStore.ts"],
   "exclude": ["node_modules", "build"]
 }
