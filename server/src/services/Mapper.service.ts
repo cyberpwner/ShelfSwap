@@ -53,7 +53,8 @@ export class MapperService {
       email: user.email!,
       role: user.role!,
       bio: user?.bio,
-      profilePicUrl: user?.profilePicUrl,
+      avatarUrl: user?.avatarUrl,
+      cart: user?.cart,
     };
   }
 
@@ -62,7 +63,9 @@ export class MapperService {
       id: book.id!,
       isbn: book.isbn!,
       title: book.title!,
+      description: book?.description,
       price: book.price!,
+      coverUrl: book.coverUrl!,
       authors: book?.authors?.map((author) => this.mapAuthorToDto(author)),
       categories: book?.categories?.map((category) => this.mapCategoryToDto(category)),
     };

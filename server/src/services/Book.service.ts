@@ -38,6 +38,10 @@ export class BookService {
   }
 
   async createBook(book: Book, authorNames: string[], categoryNames: BookCategory[]): Promise<BookDto | null> {
+    const existingBook = await this.bookDao.findByIsbn(book.isbn);
+
+    if (existingBook) throw new Error('Book already exists');
+
     const createdBook = await this.bookDao.createBook(book, authorNames, categoryNames);
 
     if (!createdBook) return null;

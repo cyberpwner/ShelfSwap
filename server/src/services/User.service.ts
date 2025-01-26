@@ -30,6 +30,14 @@ export class UserService {
     return this.mapperService.mapUserToDto(user);
   }
 
+  async getByUsername(id: string): Promise<UserDto | null> {
+    const user = await this.userDao.findById(id);
+
+    if (!user) return null;
+
+    return this.mapperService.mapUserToDto(user);
+  }
+
   async register(user: User): Promise<UserDto> {
     const isExisting = await isExistingUserByEmailOrUsername(user);
 

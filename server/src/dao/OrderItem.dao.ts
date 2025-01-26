@@ -25,7 +25,7 @@ export class OrderItemDao implements BaseDao<OrderItem>, InformativeError {
   async create(item: OrderItem): Promise<OrderItem> {
     if (this.transactionalManager == null) {
       throw new Error(
-        'transactionalManager is not defined, order items should always be created within a transaction to ensure atomicity',
+        'transactionalManager is not defined, order items should always be created within a transaction to ensure atomicity and consistency',
       );
     }
 

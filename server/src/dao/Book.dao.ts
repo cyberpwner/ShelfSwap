@@ -14,6 +14,10 @@ export class BookDao implements BaseDao<Book> {
     return Book.findOne({ where: { id }, relations: ['authors', 'categories', 'reviews'] });
   }
 
+  async findByIsbn(isbn: string) {
+    return Book.findOne({ where: { isbn } });
+  }
+
   async searchByTitleOrAuthor(q: string): Promise<Book[]> {
     return Book.createQueryBuilder('Book')
       .innerJoinAndSelect('Book.authors', 'Author')

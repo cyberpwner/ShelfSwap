@@ -13,7 +13,7 @@ export const userSchema = z.object({
   }),
   role: z.nativeEnum(UserRole),
   bio: z.string().trim().nonempty().max(150).optional(),
-  profilePicUrl: z.string().trim().url().nonempty().max(2048).optional(),
+  avatarUrl: z.string().trim().url().nonempty().max(2048).optional(),
 });
 
 export const createUserSchema = userSchema

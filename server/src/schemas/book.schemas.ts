@@ -16,8 +16,9 @@ export const isbnSchema = z
 export const bookSchema = z.object({
   isbn: isbnSchema,
   title: z.string().trim().nonempty().max(100),
-  description: z.string().trim().nonempty().max(255).optional(),
   price: z.number().gt(0).lt(1000),
+  coverUrl: z.string().trim().url().nonempty().max(2048),
+  description: z.string().trim().nonempty().max(255).optional(),
 });
 
 export const categorySchema = z.object({
@@ -30,11 +31,9 @@ export const createBookSchema = z.object({
   categories: z.array(categorySchema.shape.name).nonempty(),
 });
 
-export const updateBookSchema = bookSchema
-  .partial()
-  .refine((obj) => Object.keys(obj).length > 0, {
-    message: 'At least one book field must be introduced in order to update it',
-  });
+export const updateBookSchema = bookSchema.partial().refine((obj) => Object.keys(obj).length > 0, {
+  message: 'At least one book field must be introduced in order to update it',
+});
 
 export type CreateBookDto = z.infer<typeof createBookSchema>;
 export type UpdateBookDto = z.infer<typeof updateBookSchema>;

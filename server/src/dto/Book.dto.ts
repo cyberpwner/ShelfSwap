@@ -7,6 +7,7 @@ export class BookDto {
   title: string;
   description?: string;
   price: number;
+  coverUrl: string;
   authors?: AuthorDto[];
   categories?: CategoryDto[];
 }

@@ -10,5 +10,5 @@ export interface IUser {
   password: string;
   role: UserRole;
   bio?: string;
-  profilePicUrl?: string;
+  avatarUrl?: string;
 }

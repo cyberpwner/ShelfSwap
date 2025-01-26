@@ -6,5 +6,6 @@ export class UserDto {
   email: string;
   role: UserRole;
   bio?: string;
-  profilePicUrl?: string;
+  avatarUrl?: string;
+  cart?: CartDto;
 }
