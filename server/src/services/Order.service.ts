@@ -3,7 +3,7 @@ import { OrderItemDao } from '../dao/OrderItem.dao';
 import { OrderDto } from '../dto/Order.dto';
 import { Order } from '../entities/Order';
 import { OrderItem } from '../entities/OrderItem';
-import { AppDataSource } from '../utils/dataSource';
+import { AppDataSource } from '../config/dataSource.config';
 import { getErrorMsg, InformativeError } from '../utils/error.utils';
 import { MapperService } from './Mapper.service';
 

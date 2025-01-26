@@ -27,10 +27,17 @@ export interface EnvConfig {
   nodeEnv: 'production' | 'development';
 }
 
+export interface CloudinaryConfig {
+  cloud_name: string;
+  api_key: string;
+  api_secret: string;
+}
+
 export interface AppConfig {
   database: DBConfig;
   server: ServerConfig;
   bcrypt: BcryptConfig;
   jwt: JWTConfig;
   env: EnvConfig;
+  cloudinary: CloudinaryConfig;
 }

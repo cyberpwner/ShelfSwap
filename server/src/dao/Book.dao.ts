@@ -2,7 +2,7 @@ import { Author } from '../entities/Author';
 import { Book } from '../entities/Book';
 import { Category } from '../entities/Category';
 import { BookCategory } from '../types/category.types.d';
-import { AppDataSource } from '../utils/dataSource';
+import { AppDataSource } from '../config/dataSource.config';
 import { BaseDao } from './Base.dao';
 
 export class BookDao implements BaseDao<Book> {

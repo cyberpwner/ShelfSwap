@@ -11,10 +11,9 @@ export const AppDataSource = new DataSource({
   username: dbConfig.username,
   password: dbConfig.password,
   database: dbConfig.database,
-  logging: true,
+  logging: APP_CONFIG.env.nodeEnv === 'development',
   entities: ['src/entities/**/*.ts'],
   migrations: ['src/migrations/**/*.ts'],
   // typeorm will make table and column names snake_case even if the attribute is declared in camelCase in the entity class
-  // Which is nice cause you can have consistency in both your classes and your db. The library is 'typeorm-naming-strategies' :)
   namingStrategy: new SnakeNamingStrategy(),
 });

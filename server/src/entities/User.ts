@@ -61,7 +61,7 @@ export class User extends BaseEntity {
     length: 2048,
     nullable: true,
   })
-  profilePicUrl: string;
+  avatarUrl: string;
 
   @OneToMany(() => Order, (order) => order.user, {
     onUpdate: 'CASCADE',

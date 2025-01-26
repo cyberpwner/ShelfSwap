@@ -1,6 +1,6 @@
 import { Router } from 'express';
 
-import { AppDataSource } from '../utils/dataSource.js';
+import { AppDataSource } from '../config/dataSource.config.js';
 import healthcheckRoute from './healthCheck.routes.js';
 import userRoutes from './user.routes.js';
 import bookRoutes from './book.routes.js';
@@ -12,6 +12,7 @@ import addressRoutes from './address.routes.js';
 import paymentRoutes from './payment.routes.js';
 import reviewRoutes from './review.routes.js';
 import authRoutes from './auth.routes.js';
+import uploadRoutes from './upload.routes';
 
 const router = Router();
 
@@ -38,6 +39,7 @@ router.use('/authors', authorRoutes);
 router.use('/addresses', addressRoutes);
 router.use('/payments', paymentRoutes);
 router.use('/reviews', reviewRoutes);
+router.use('upload', uploadRoutes);
 router.use(authRoutes);
 
 export default router;

@@ -1,4 +1,13 @@
-import { BaseEntity, Column, CreateDateColumn, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import {
+  BaseEntity,
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToMany,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { Category } from './Category';
 import { Author } from './Author';
 import { OrderItem } from './OrderItem';
@@ -6,7 +15,7 @@ import { Review } from './Review';
 
 @Entity('Book')
 export class Book extends BaseEntity {
-  @PrimaryGeneratedColumn("uuid")
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column({
@@ -35,6 +44,12 @@ export class Book extends BaseEntity {
     scale: 2,
   })
   price: number;
+
+  @Column({
+    type: 'varchar',
+    length: 2048,
+  })
+  coverUrl: string;
 
   @OneToMany(() => Review, (review) => review.book, {
     onUpdate: 'CASCADE',

@@ -7,6 +7,7 @@ import { TypedRequestBody } from '../types/express.types.d';
 import { CreateBookDto, UpdateBookDto } from '../schemas/book.schemas';
 import sanitize from 'sanitize-html';
 import { HttpStatusCode } from '../types/http.types.d';
+import { deleteImageFromCloud, uploadBookCover } from '../utils/upload.utils';
 export class BookController implements InformativeError {
   private readonly bookService = new BookService();
 
@@ -70,7 +71,18 @@ export class BookController implements InformativeError {
   };
 
   createBook: RequestHandler = async (req: TypedRequestBody<CreateBookDto>, res) => {
+    let cloudinaryResult;
+
     try {
+      const file = req?.file;
+
+      if (!file) {
+        res.status(HttpStatusCode.BAD_REQUEST).json({ message: 'No image file provided' });
+        return;
+      }
+
+      cloudinaryResult = await uploadBookCover(file.path);
+
       const book = new Book();
       Object.assign(book, req.body.book);
 
@@ -80,12 +92,18 @@ export class BookController implements InformativeError {
       const createdBook = await this.bookService.createBook(book, authorNames, categoryNames);
 
       if (createdBook == null) {
+        // rollback image upload
+        if (cloudinaryResult?.public_id) deleteImageFromCloud(cloudinaryResult.public_id);
+
         res.status(HttpStatusCode.BAD_REQUEST).json({ message: 'Book could not be created' });
         return;
       }
 
       res.status(HttpStatusCode.OK).json(createdBook);
     } catch (error) {
+      // rollback image upload
+      if (cloudinaryResult?.public_id) deleteImageFromCloud(cloudinaryResult.public_id);
+
       res
         .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
         .json({ message: 'Failed to create book', error: this._getErrorInfo(error) });

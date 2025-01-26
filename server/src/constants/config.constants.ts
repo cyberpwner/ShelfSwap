@@ -8,6 +8,7 @@ const DB_CONFIG = config.get<AppConfig['database']>('database');
 const BCRYPT_CONFIG = config.get<AppConfig['bcrypt']>('bcrypt');
 const JWT_CONFIG = config.get<AppConfig['jwt']>('jwt');
 const ENV_CONFIG = config.get<AppConfig['env']>('env');
+const CLOUDINARY_CONFIG = config.get<AppConfig['cloudinary']>('cloudinary');
 
 export const APP_CONFIG: AppConfig = {
   server: { ...SERVER_CONFIG, port: Number(SERVER_CONFIG.port) },
@@ -15,4 +16,5 @@ export const APP_CONFIG: AppConfig = {
   bcrypt: { ...BCRYPT_CONFIG, saltRounds: Number(BCRYPT_CONFIG.saltRounds) },
   jwt: JWT_CONFIG,
   env: ENV_CONFIG,
+  cloudinary: CLOUDINARY_CONFIG,
 };
