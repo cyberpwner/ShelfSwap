@@ -39,7 +39,7 @@ router.use('/authors', authorRoutes);
 router.use('/addresses', addressRoutes);
 router.use('/payments', paymentRoutes);
 router.use('/reviews', reviewRoutes);
-router.use('upload', uploadRoutes);
+router.use('/upload', uploadRoutes);
 router.use(authRoutes);
 
 export default router;

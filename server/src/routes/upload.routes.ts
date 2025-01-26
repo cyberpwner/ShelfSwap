@@ -10,11 +10,22 @@ const uploadController = new UploadController();
 const auth = new Auth();
 const errorHandler = new ErrorHandler();
 
-router.use(errorHandler.handleMulterErrors);
 router.use(auth.authenticateAccessToken);
-router.use(auth.authorize([UserRole.ADMIN]));
 
-router.post('/cover', upload.single('image'), uploadController.uploadBookCoverHandler);
-router.post('/avatar', upload.single('image'), uploadController.uploadAvatarHandler);
+router.post(
+  '/cover',
+  auth.authorize([UserRole.ADMIN]),
+  upload.single('image'),
+  uploadController.uploadBookCoverHandler,
+);
+
+router.post(
+  '/avatar',
+  auth.authorize([UserRole.ADMIN, UserRole.USER]),
+  upload.single('image'),
+  uploadController.uploadAvatarHandler,
+);
+
+router.use(errorHandler.handleMulterErrors);
 
 export default router;

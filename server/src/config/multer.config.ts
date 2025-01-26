@@ -15,7 +15,10 @@ function fileFilter(_req: Request, file: Express.Multer.File, cb: multer.FileFil
   cb(null, true);
 }
 
+const storage = multer.diskStorage({ destination: 'uploads/' });
+
 export const upload = multer({
+  storage,
   fileFilter,
   limits: {
     fileSize: MAX_FILE_SIZE,

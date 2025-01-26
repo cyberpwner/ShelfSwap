@@ -3,7 +3,7 @@ import { MulterError } from 'multer';
 import { HttpStatusCode } from '../types/http.types.d';
 
 export class ErrorHandler {
-  handleMulterErrors: ErrorRequestHandler = (error, _req, res) => {
+  handleMulterErrors: ErrorRequestHandler = (error, req, res) => {
     if (error instanceof MulterError) {
       res.status(HttpStatusCode.BAD_REQUEST).json({ message: error.message });
       return;
