@@ -2,6 +2,8 @@
 import { AddressDto } from '../dto/Address.dto';
 import { AuthorDto } from '../dto/Author.dto';
 import { BookDto } from '../dto/Book.dto';
+import { CartDto } from '../dto/Cart.dto';
+import { CartItemDto } from '../dto/CartItem.dto';
 import { CategoryDto } from '../dto/Category.dto';
 import { OrderDto } from '../dto/Order.dto';
 import { OrderItemDto } from '../dto/OrderItem.dto';
@@ -11,6 +13,8 @@ import { UserDto } from '../dto/User.dto';
 import { Address } from '../entities/Address';
 import { Author } from '../entities/Author';
 import { Book } from '../entities/Book';
+import { Cart } from '../entities/Cart';
+import { CartItem } from '../entities/CartItem';
 import { Category } from '../entities/Category';
 import { Order } from '../entities/Order';
 import { OrderItem } from '../entities/OrderItem';
@@ -112,6 +116,22 @@ export class MapperService {
       id: category.id!,
       name: category.name!,
       books: category?.books?.map((book) => this.mapBookToDto(book)),
+    };
+  }
+
+  mapCartToDto(cart: Partial<Cart>): CartDto {
+    return {
+      id: cart.id!,
+      user: this.mapUserToDto(cart.user!),
+    };
+  }
+
+  mapCartItemToDto(item: Partial<CartItem>): CartItemDto {
+    return {
+      id: item.id!,
+      cart: this.mapCartToDto(item.cart!),
+      book: this.mapBookToDto(item.book!),
+      quantity: item.quantity!,
     };
   }
 }

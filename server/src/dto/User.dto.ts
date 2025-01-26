@@ -1,4 +1,5 @@
 import { UserRole } from '../types/user.types.d';
+import { CartDto } from './Cart.dto';
 
 export class UserDto {
   id: string;

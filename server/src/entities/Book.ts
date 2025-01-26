@@ -12,6 +12,7 @@ import { Category } from './Category';
 import { Author } from './Author';
 import { OrderItem } from './OrderItem';
 import { Review } from './Review';
+import { CartItem } from './CartItem';
 
 @Entity('Book')
 export class Book extends BaseEntity {
@@ -74,6 +75,12 @@ export class Book extends BaseEntity {
     onDelete: 'CASCADE',
   })
   orderItems: OrderItem[];
+
+  @OneToMany(() => CartItem, (item) => item.book, {
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+  })
+  cartItems: CartItem[];
 
   @CreateDateColumn()
   createdAt: Date;

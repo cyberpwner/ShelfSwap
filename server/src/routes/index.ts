@@ -13,6 +13,7 @@ import paymentRoutes from './payment.routes.js';
 import reviewRoutes from './review.routes.js';
 import authRoutes from './auth.routes.js';
 import uploadRoutes from './upload.routes';
+import cartRoutes from './cart.routes.js';
 
 const router = Router();
 
@@ -40,6 +41,7 @@ router.use('/addresses', addressRoutes);
 router.use('/payments', paymentRoutes);
 router.use('/reviews', reviewRoutes);
 router.use('/upload', uploadRoutes);
+router.use('/cart', cartRoutes);
 router.use(authRoutes);
 
 export default router;

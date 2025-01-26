@@ -14,6 +14,7 @@ import { Address } from './Address.js';
 import { Review } from './Review.js';
 import { compare, hash } from 'bcrypt';
 import { APP_CONFIG } from '../constants/config.constants';
+import { Cart } from './Cart';
 
 // note to future self or other devs:
 // class properties should follow camelCase naming, typeorm will automatically convert them to snake_case in the DB.
@@ -80,6 +81,12 @@ export class User extends BaseEntity {
     onDelete: 'CASCADE',
   })
   address: Address;
+
+  @OneToOne(() => Cart, (cart) => cart.user, {
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+  })
+  cart: Cart;
 
   @CreateDateColumn()
   createdAt: Date;
