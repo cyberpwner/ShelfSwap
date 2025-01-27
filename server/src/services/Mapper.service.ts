@@ -35,7 +35,7 @@ export class MapperService {
         quantity: item.quantity!,
         priceAtPurchase: item.priceAtPurchase!,
         book: this.mapBookToDto(item.book!),
-        orderId: item.order.id,
+        orderId: order.id,
       })),
     };
   }
@@ -46,7 +46,7 @@ export class MapperService {
       quantity: orderItem.quantity!,
       priceAtPurchase: orderItem.priceAtPurchase!,
       book: this.mapBookToDto(orderItem.book!),
-      orderId: orderItem.order?.id,
+      order: this.mapOrderToDto(orderItem.order!),
     };
   }
 
@@ -123,15 +123,21 @@ export class MapperService {
     return {
       id: cart.id!,
       user: this.mapUserToDto(cart.user!),
+      items: cart.items?.map((item) => ({
+        id: item.id,
+        book: this.mapBookToDto(item.book),
+        quantity: item.quantity,
+        cartId: cart.id!,
+      })),
     };
   }
 
   mapCartItemToDto(item: Partial<CartItem>): CartItemDto {
     return {
       id: item.id!,
-      cart: this.mapCartToDto(item.cart!),
       book: this.mapBookToDto(item.book!),
       quantity: item.quantity!,
+      cart: this.mapCartToDto(item.cart!),
     };
   }
 }

@@ -1,4 +1,5 @@
 import { BookDto } from './Book.dto';
+import { OrderDto } from './Order.dto';
 
 export class OrderItemDto {
   id: string;
@@ -6,4 +7,5 @@ export class OrderItemDto {
   priceAtPurchase: number;
   book?: BookDto;
   orderId?: string;
+  order?: OrderDto;
 }

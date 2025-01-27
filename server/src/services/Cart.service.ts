@@ -32,13 +32,15 @@ export class CartService implements InformativeError {
 
     let cart = await this.cartDao.findByUser(userId);
 
-    if (!cart) {
-      cart = new Cart();
-      cart.user = user;
-      cart = await this.cartDao.create(cart);
+    if (cart) {
+      return cart;
     }
 
-    return cart;
+    cart = new Cart();
+    cart.user = user;
+    cart = await this.cartDao.create(cart);
+
+    return this.cartDao.findById(cart.id) as Promise<Cart>;
   }
 
   async addItemToCart(userId: string, bookId: string, quantity: number) {

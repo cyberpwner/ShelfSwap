@@ -42,8 +42,9 @@ export class CartController {
     }
 
     try {
-      const cart = await this.cartService.addItemToCart(user.id, item.bookId, item.quantity);
-      res.status(HttpStatusCode.OK).json(cart);
+      await this.cartService.addItemToCart(user.id, item.bookId, item.quantity);
+      const updatedCart = await this.cartService.fetchCart(user.id);
+      res.status(HttpStatusCode.OK).json(updatedCart);
     } catch (error) {
       console.log(error);
       res.status(HttpStatusCode.BAD_REQUEST).json({ message: 'Failed to add item to cart' });
@@ -69,20 +70,22 @@ export class CartController {
   };
 
   updateItemQuantity: RequestHandler = async (req: TypedRequestBody<UpdateItemQuantityDto>, res) => {
-    const user = req?.user;
-
-    if (!user || typeof user === 'string') {
-      throw new Error('Unauthorized');
-    }
-    const itemId = req.params.id;
-    const { quantity } = req.body;
-
     try {
+      const user = req?.user;
+
+      if (!user || typeof user === 'string') {
+        res.status(HttpStatusCode.BAD_REQUEST).json({ message: 'Unauthorized' });
+        return;
+      }
+
+      const itemId = req.params.id;
+      const { quantity } = req.body;
+
       const cart = await this.cartService.updateItemQuantity(user.id, itemId, quantity);
       res.status(HttpStatusCode.OK).json(cart);
     } catch (error) {
       console.log(error);
-      res.status(HttpStatusCode.BAD_REQUEST).json({ message: 'Failed to update item quantity in cart' });
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ message: 'Failed to update item quantity in cart' });
     }
   };
 
