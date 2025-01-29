@@ -16,7 +16,7 @@ export class Auth {
     const accessToken = req.cookies?.accessToken;
 
     if (!accessToken) {
-      res.status(HttpStatusCode.UNAUTHORIZED).json({ message: 'Unauthorized' });
+      res.status(HttpStatusCode.UNAUTHORIZED).json({ error: 'Unauthorized' });
       return;
     }
 
@@ -24,21 +24,21 @@ export class Auth {
       const decodedToken = verifyAccessToken(accessToken);
 
       if (!decodedToken || typeof decodedToken === 'string') {
-        res.status(HttpStatusCode.UNAUTHORIZED).json({ message: 'Unauthorized' });
+        res.status(HttpStatusCode.UNAUTHORIZED).json({ error: 'Unauthorized' });
         return;
       }
 
       req.user = decodedToken;
       next();
-    } catch (error) {
-      res.status(HttpStatusCode.UNAUTHORIZED).json({ message: 'Unauthorized', error });
+    } catch {
+      res.status(HttpStatusCode.UNAUTHORIZED).json({ error: 'Unauthorized' });
     }
   };
 
   authorize = (roles: UserRole[]) => {
     return async (req: Request, res: Response, next: NextFunction) => {
       if (typeof req?.user === 'string' || !roles.includes(req?.user?.role)) {
-        res.status(HttpStatusCode.FORBIDDEN).json({ message: 'Forbidden' });
+        res.status(HttpStatusCode.FORBIDDEN).json({ error: 'Forbidden' });
         return;
       }
 
@@ -50,7 +50,7 @@ export class Auth {
     const refreshToken = req.cookies?.refreshToken;
 
     if (!refreshToken) {
-      res.status(HttpStatusCode.UNAUTHORIZED).json({ message: 'Unauthorized' });
+      res.status(HttpStatusCode.UNAUTHORIZED).json({ error: 'Unauthorized' });
       return;
     }
 
@@ -73,10 +73,10 @@ export class Auth {
       if (error instanceof QueryFailedError) {
         res
           .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-          .json({ message: 'An error occured when trying to query the DB' });
+          .json({ error: 'An error occured when trying to query the DB' });
       }
 
-      res.status(HttpStatusCode.UNAUTHORIZED).json({ message: 'Unauthorized', error });
+      res.status(HttpStatusCode.UNAUTHORIZED).json({ error: 'Unauthorized' });
     }
   };
 }

@@ -24,7 +24,7 @@ app.use('/api', rateLimiter.rateLimiter);
 app.use('/api', routes);
 
 app.use('*', (_req: express.Request, res: express.Response) => {
-  res.status(HttpStatusCode.NOT_FOUND).json({ message: 'End point not found' });
+  res.status(HttpStatusCode.NOT_FOUND).json({ error: 'End point not found' });
 });
 
 export default app;

@@ -11,10 +11,8 @@ export class PaymentController {
       const payments = await this.paymentService.getAll();
 
       res.status(HttpStatusCode.OK).json(payments);
-    } catch (error) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: 'Failed to fetch payments', error: error instanceof Error ? error.message : error });
+    } catch {
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: 'Failed to fetch payments' });
     }
   };
 
@@ -24,15 +22,13 @@ export class PaymentController {
       const payment = await this.paymentService.getById(id);
 
       if (payment == null) {
-        res.status(HttpStatusCode.NOT_FOUND).json({ message: 'Payment not found' });
+        res.status(HttpStatusCode.NOT_FOUND).json({ error: 'Payment not found' });
         return;
       }
 
       res.status(HttpStatusCode.OK).json(payment);
-    } catch (error) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: 'Failed to fetch payment', error: error instanceof Error ? error.message : error });
+    } catch {
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: 'Failed to fetch payment' });
     }
   };
 
@@ -44,15 +40,13 @@ export class PaymentController {
       const createdPayment = await this.paymentService.createPayment(payment);
 
       if (createdPayment == null) {
-        res.status(HttpStatusCode.BAD_REQUEST).json({ message: 'Payment could not be created' });
+        res.status(HttpStatusCode.BAD_REQUEST).json({ error: 'Payment could not be created' });
         return;
       }
 
       res.status(HttpStatusCode.OK).json(createdPayment);
-    } catch (error) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: 'Failed to create payment', error: error instanceof Error ? error.message : error });
+    } catch {
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: 'Failed to create payment' });
     }
   };
 
@@ -65,15 +59,13 @@ export class PaymentController {
       const updatedPayment = await this.paymentService.updatePayment(id, payment);
 
       if (updatedPayment == null) {
-        res.status(HttpStatusCode.NOT_FOUND).json({ message: 'Payment not found' });
+        res.status(HttpStatusCode.NOT_FOUND).json({ error: 'Payment not found' });
         return;
       }
 
       res.status(HttpStatusCode.OK).json(updatedPayment);
-    } catch (error) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: 'Failed to update payment', error: error instanceof Error ? error.message : error });
+    } catch {
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: 'Failed to update payment' });
     }
   };
 
@@ -84,15 +76,13 @@ export class PaymentController {
       const deletedPayment = await this.paymentService.deletePayment(id);
 
       if (deletedPayment == null) {
-        res.status(HttpStatusCode.NOT_FOUND).json({ message: 'Payment not found' });
+        res.status(HttpStatusCode.NOT_FOUND).json({ error: 'Payment not found' });
         return;
       }
 
       res.status(HttpStatusCode.OK).json(deletedPayment);
-    } catch (error) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: 'Failed to delete payment', error: error instanceof Error ? error.message : error });
+    } catch {
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: 'Failed to delete payment' });
     }
   };
 }

@@ -15,10 +15,8 @@ export class UserController {
       const users = await this.userService.getAll();
 
       res.status(HttpStatusCode.OK).json(users);
-    } catch (error) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: 'Failed to fetch users', error: error instanceof Error ? error.message : error });
+    } catch {
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: 'Failed to fetch users' });
     }
   };
 
@@ -28,15 +26,13 @@ export class UserController {
       const user = await this.userService.getById(id);
 
       if (user == null) {
-        res.status(HttpStatusCode.NOT_FOUND).json({ message: 'User not found' });
+        res.status(HttpStatusCode.NOT_FOUND).json({ error: 'User not found' });
         return;
       }
 
       res.status(HttpStatusCode.OK).json(user);
-    } catch (error) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: 'Failed to fetch user', error: error instanceof Error ? error.message : error });
+    } catch {
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: 'Failed to fetch user' });
     }
   };
 
@@ -48,7 +44,7 @@ export class UserController {
       const createdUser = await this.userService.register(user);
 
       if (createdUser == null) {
-        res.status(HttpStatusCode.BAD_REQUEST).json({ message: 'User could not be created' });
+        res.status(HttpStatusCode.BAD_REQUEST).json({ error: 'User could not be created' });
         return;
       }
 
@@ -62,11 +58,9 @@ export class UserController {
 
       setTokensInCookies(res, accessToken, refreshToken);
 
-      res.status(HttpStatusCode.CREATED).json({ message: 'User created successfully', user: createdUser });
-    } catch (error) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: 'Failed to register user', error: error instanceof Error ? error.message : error });
+      res.status(HttpStatusCode.CREATED).json({ error: 'User created successfully', user: createdUser });
+    } catch {
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: 'Failed to register user' });
     }
   };
 
@@ -76,7 +70,7 @@ export class UserController {
       const user = await this.userService.login({ email, password });
 
       if (!user) {
-        res.status(HttpStatusCode.UNAUTHORIZED).json({ message: 'Invalid credentials' });
+        res.status(HttpStatusCode.UNAUTHORIZED).json({ error: 'Invalid credentials' });
         return;
       }
 
@@ -85,11 +79,9 @@ export class UserController {
 
       setTokensInCookies(res, accessToken, refreshToken);
 
-      res.status(HttpStatusCode.OK).json({ message: 'Logged in successfully', user });
-    } catch (error) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: 'Failed to login user', error: error instanceof Error ? error.message : error });
+      res.status(HttpStatusCode.OK).json({ user });
+    } catch {
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: 'Failed to login user' });
     }
   };
 
@@ -108,15 +100,13 @@ export class UserController {
       const updatedUser = await this.userService.updateUser(id, user);
 
       if (updatedUser == null) {
-        res.status(HttpStatusCode.NOT_FOUND).json({ message: 'User not found' });
+        res.status(HttpStatusCode.NOT_FOUND).json({ error: 'User not found' });
         return;
       }
 
       res.status(HttpStatusCode.OK).json(updatedUser);
-    } catch (error) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: 'Failed to update user', error: error instanceof Error ? error.message : error });
+    } catch {
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: 'Failed to update user' });
     }
   };
 
@@ -127,15 +117,13 @@ export class UserController {
       const deletedUser = await this.userService.deleteUser(id);
 
       if (deletedUser == null) {
-        res.status(HttpStatusCode.NOT_FOUND).json({ message: 'User not found' });
+        res.status(HttpStatusCode.NOT_FOUND).json({ error: 'User not found' });
         return;
       }
 
       res.status(HttpStatusCode.OK).json(deletedUser);
-    } catch (error) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: 'Failed to delete user', error: error instanceof Error ? error.message : error });
+    } catch {
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: 'Failed to delete user' });
     }
   };
 }

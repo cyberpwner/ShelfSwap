@@ -12,15 +12,13 @@ export class OrderItemController {
       const orderItem = await this.orderItemService.getById(id);
 
       if (orderItem == null) {
-        res.status(HttpStatusCode.NOT_FOUND).json({ message: 'OrderItem not found' });
+        res.status(HttpStatusCode.NOT_FOUND).json({ error: 'OrderItem not found' });
         return;
       }
 
       res.status(HttpStatusCode.OK).json(orderItem);
-    } catch (error) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: 'Failed to fetch orderItem', error: error instanceof Error ? error.message : error });
+    } catch {
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: 'Failed to fetch orderItem' });
     }
   };
 
@@ -33,15 +31,13 @@ export class OrderItemController {
       const updatedOrderItem = await this.orderItemService.updateOrderItem(id, orderItem);
 
       if (updatedOrderItem == null) {
-        res.status(HttpStatusCode.NOT_FOUND).json({ message: 'OrderItem not found' });
+        res.status(HttpStatusCode.NOT_FOUND).json({ error: 'OrderItem not found' });
         return;
       }
 
       res.status(HttpStatusCode.OK).json(updatedOrderItem);
-    } catch (error) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: 'Failed to update orderItem', error: error instanceof Error ? error.message : error });
+    } catch {
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: 'Failed to update orderItem' });
     }
   };
 
@@ -52,15 +48,13 @@ export class OrderItemController {
       const deletedOrderItem = await this.orderItemService.deleteOrderItem(id);
 
       if (deletedOrderItem == null) {
-        res.status(HttpStatusCode.NOT_FOUND).json({ message: 'OrderItem not found' });
+        res.status(HttpStatusCode.NOT_FOUND).json({ error: 'OrderItem not found' });
         return;
       }
 
       res.status(HttpStatusCode.OK).json(deletedOrderItem);
-    } catch (error) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: 'Failed to delete orderItem', error: error instanceof Error ? error.message : error });
+    } catch {
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: 'Failed to delete orderItem' });
     }
   };
 }

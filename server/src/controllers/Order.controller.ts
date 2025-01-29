@@ -17,7 +17,7 @@ export class OrderController implements InformativeError {
       const { username } = req.params;
 
       if (!username || username.trim().length === 0) {
-        res.status(HttpStatusCode.BAD_REQUEST).json({ message: "username can't be empty" });
+        res.status(HttpStatusCode.BAD_REQUEST).json({ error: "username can't be empty" });
         return;
       }
 
@@ -25,9 +25,8 @@ export class OrderController implements InformativeError {
 
       res.status(HttpStatusCode.OK).json(orders);
       next();
-    } catch (error) {
-      console.log(this._getErrorInfo(error));
-      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ message: 'Failed to fetch orders' });
+    } catch {
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: 'Failed to fetch orders' });
     }
   };
 
@@ -37,14 +36,13 @@ export class OrderController implements InformativeError {
       const order = await this.orderService.getById(id);
 
       if (!order) {
-        res.status(HttpStatusCode.NOT_FOUND).json({ message: 'Order not found' });
+        res.status(HttpStatusCode.NOT_FOUND).json({ error: 'Order not found' });
         return;
       }
 
       res.status(HttpStatusCode.OK).json(order);
-    } catch (error) {
-      console.log(this._getErrorInfo(error));
-      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ message: 'Failed to fetch order' });
+    } catch {
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: 'Failed to fetch order' });
     }
   };
 
@@ -63,9 +61,8 @@ export class OrderController implements InformativeError {
       const createdOrder = await this.orderService.placeOrder(order, items);
 
       res.status(HttpStatusCode.OK).json(createdOrder);
-    } catch (error) {
-      console.log(this._getErrorInfo(error));
-      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ message: 'Failed to create order' });
+    } catch {
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: 'Failed to create order' });
     }
   };
 
@@ -78,14 +75,13 @@ export class OrderController implements InformativeError {
       const updatedOrder = await this.orderService.updateOrder(id, order);
 
       if (!updatedOrder) {
-        res.status(HttpStatusCode.NOT_FOUND).json({ message: 'Order not found' });
+        res.status(HttpStatusCode.NOT_FOUND).json({ error: 'Order not found' });
         return;
       }
 
       res.status(HttpStatusCode.OK).json(updatedOrder);
-    } catch (error) {
-      console.log(this._getErrorInfo(error));
-      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ message: 'Failed to update order' });
+    } catch {
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: 'Failed to update order' });
     }
   };
 
@@ -96,13 +92,12 @@ export class OrderController implements InformativeError {
       const deletedOrder = await this.orderService.deleteOrder(id);
 
       if (!deletedOrder) {
-        res.status(HttpStatusCode.NOT_FOUND).json({ message: 'Order not found' });
+        res.status(HttpStatusCode.NOT_FOUND).json({ error: 'Order not found' });
         return;
       }
 
       res.status(HttpStatusCode.OK).json({ deletedOrder });
-    } catch (error) {
-      console.log(this._getErrorInfo(error));
+    } catch {
       res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({});
     }
   };

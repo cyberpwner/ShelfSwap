@@ -8,16 +8,15 @@ export class UploadController {
       const file = req?.file;
 
       if (!file) {
-        res.status(HttpStatusCode.BAD_REQUEST).json({ message: 'No image file provided' });
+        res.status(HttpStatusCode.BAD_REQUEST).json({ error: 'No image file provided' });
         return;
       }
 
       const result = await uploadBookCover(file.path);
 
       res.status(HttpStatusCode.OK).json({ url: result.secure_url });
-    } catch (error) {
-      console.log('Error uploading image:', error);
-      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ message: 'Failed to upload image' });
+    } catch {
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: 'Failed to upload image' });
     }
   };
 
@@ -26,16 +25,15 @@ export class UploadController {
       const file = req?.file;
 
       if (!file) {
-        res.status(HttpStatusCode.BAD_REQUEST).json({ message: 'No image file provided' });
+        res.status(HttpStatusCode.BAD_REQUEST).json({ error: 'No image file provided' });
         return;
       }
 
       const result = await uploadAvatar(file.path);
 
       res.status(HttpStatusCode.OK).json({ url: result.secure_url });
-    } catch (error) {
-      console.log('Error uploading image:', error);
-      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ message: 'Failed to upload image' });
+    } catch {
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: 'Failed to upload image' });
     }
   };
 }

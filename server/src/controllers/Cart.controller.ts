@@ -21,9 +21,8 @@ export class CartController {
     try {
       const cart = await this.cartService.fetchCart(user.id);
       res.status(HttpStatusCode.OK).json(cart);
-    } catch (error) {
-      console.log(error);
-      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ message: 'Failed to fetch cart' });
+    } catch {
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: 'Failed to fetch cart' });
     }
   };
 
@@ -37,7 +36,7 @@ export class CartController {
     const item = req.body;
 
     if (!item) {
-      res.status(HttpStatusCode.BAD_REQUEST).json({ message: 'No item was provided' });
+      res.status(HttpStatusCode.BAD_REQUEST).json({ error: 'No item was provided' });
       return;
     }
 
@@ -45,9 +44,8 @@ export class CartController {
       await this.cartService.addItemToCart(user.id, item.bookId, item.quantity);
       const updatedCart = await this.cartService.fetchCart(user.id);
       res.status(HttpStatusCode.OK).json(updatedCart);
-    } catch (error) {
-      console.log(error);
-      res.status(HttpStatusCode.BAD_REQUEST).json({ message: 'Failed to add item to cart' });
+    } catch {
+      res.status(HttpStatusCode.BAD_REQUEST).json({ error: 'Failed to add item to cart' });
     }
   };
 
@@ -63,9 +61,8 @@ export class CartController {
     try {
       const cart = await this.cartService.removeItemFromCart(user.id, itemId);
       res.status(HttpStatusCode.OK).json(cart);
-    } catch (error) {
-      console.log(error);
-      res.status(HttpStatusCode.BAD_REQUEST).json({ message: 'Failed to remove item from cart' });
+    } catch {
+      res.status(HttpStatusCode.BAD_REQUEST).json({ error: 'Failed to remove item from cart' });
     }
   };
 
@@ -74,7 +71,7 @@ export class CartController {
       const user = req?.user;
 
       if (!user || typeof user === 'string') {
-        res.status(HttpStatusCode.BAD_REQUEST).json({ message: 'Unauthorized' });
+        res.status(HttpStatusCode.BAD_REQUEST).json({ error: 'Unauthorized' });
         return;
       }
 
@@ -83,9 +80,8 @@ export class CartController {
 
       const cart = await this.cartService.updateItemQuantity(user.id, itemId, quantity);
       res.status(HttpStatusCode.OK).json(cart);
-    } catch (error) {
-      console.log(error);
-      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ message: 'Failed to update item quantity in cart' });
+    } catch {
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: 'Failed to update item quantity in cart' });
     }
   };
 
@@ -101,9 +97,8 @@ export class CartController {
     try {
       const cart = await this.cartService.clearCart(cartId);
       res.status(HttpStatusCode.OK).json(cart);
-    } catch (error) {
-      console.log(error);
-      res.status(HttpStatusCode.BAD_REQUEST).json({ message: 'Failed to clear cart' });
+    } catch {
+      res.status(HttpStatusCode.BAD_REQUEST).json({ error: 'Failed to clear cart' });
     }
   };
 }

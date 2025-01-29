@@ -11,10 +11,8 @@ export class ReviewController {
       const reviews = await this.reviewService.getAll();
 
       res.status(HttpStatusCode.OK).json(reviews);
-    } catch (error) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: 'Failed to fetch reviews', error: error instanceof Error ? error.message : error });
+    } catch {
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: 'Failed to fetch reviews' });
     }
   };
 
@@ -24,15 +22,13 @@ export class ReviewController {
       const review = await this.reviewService.getById(id);
 
       if (review == null) {
-        res.status(HttpStatusCode.NOT_FOUND).json({ message: 'Review not found' });
+        res.status(HttpStatusCode.NOT_FOUND).json({ error: 'Review not found' });
         return;
       }
 
       res.status(HttpStatusCode.OK).json(review);
-    } catch (error) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: 'Failed to fetch review', error: error instanceof Error ? error.message : error });
+    } catch {
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: 'Failed to fetch review' });
     }
   };
 
@@ -44,15 +40,13 @@ export class ReviewController {
       const createdReview = await this.reviewService.createReview(review);
 
       if (createdReview == null) {
-        res.status(HttpStatusCode.BAD_REQUEST).json({ message: 'Review could not be created' });
+        res.status(HttpStatusCode.BAD_REQUEST).json({ error: 'Review could not be created' });
         return;
       }
 
       res.status(HttpStatusCode.OK).json(createdReview);
-    } catch (error) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: 'Failed to create review', error: error instanceof Error ? error.message : error });
+    } catch {
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: 'Failed to create review' });
     }
   };
 
@@ -65,15 +59,13 @@ export class ReviewController {
       const updatedReview = await this.reviewService.updateReview(id, review);
 
       if (updatedReview == null) {
-        res.status(HttpStatusCode.NOT_FOUND).json({ message: 'Review not found' });
+        res.status(HttpStatusCode.NOT_FOUND).json({ error: 'Review not found' });
         return;
       }
 
       res.status(HttpStatusCode.OK).json(updatedReview);
-    } catch (error) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: 'Failed to update review', error: error instanceof Error ? error.message : error });
+    } catch {
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: 'Failed to update review' });
     }
   };
 
@@ -84,15 +76,13 @@ export class ReviewController {
       const deletedReview = await this.reviewService.deleteReview(id);
 
       if (deletedReview == null) {
-        res.status(HttpStatusCode.NOT_FOUND).json({ message: 'Review not found' });
+        res.status(HttpStatusCode.NOT_FOUND).json({ error: 'Review not found' });
         return;
       }
 
       res.status(HttpStatusCode.OK).json(deletedReview);
-    } catch (error) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: 'Failed to delete review', error: error instanceof Error ? error.message : error });
+    } catch {
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: 'Failed to delete review' });
     }
   };
 }

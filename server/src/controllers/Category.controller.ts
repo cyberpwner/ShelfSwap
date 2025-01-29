@@ -16,10 +16,8 @@ export class CategoryController {
       const categories = await this.categoryService.getAll();
 
       res.status(HttpStatusCode.OK).json(categories);
-    } catch (error) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: 'Failed to fetch categories', error: error instanceof Error ? error.message : error });
+    } catch {
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: 'Failed to fetch categories' });
     }
   };
 
@@ -29,15 +27,13 @@ export class CategoryController {
       const category = await this.categoryService.getById(id);
 
       if (category == null) {
-        res.status(HttpStatusCode.NOT_FOUND).json({ message: 'Category not found' });
+        res.status(HttpStatusCode.NOT_FOUND).json({ error: 'Category not found' });
         return;
       }
 
       res.status(HttpStatusCode.OK).json(category);
-    } catch (error) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: 'Failed to fetch category', error: error instanceof Error ? error.message : error });
+    } catch {
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: 'Failed to fetch category' });
     }
   };
 
@@ -54,7 +50,7 @@ export class CategoryController {
       const category = await this.categoryService.getByName(name);
 
       if (category == null) {
-        res.status(HttpStatusCode.NOT_FOUND).json({ message: 'Category not found' });
+        res.status(HttpStatusCode.NOT_FOUND).json({ error: 'Category not found' });
         next('route');
         return;
       }
@@ -64,10 +60,8 @@ export class CategoryController {
       // if a category is provided and is found skip the next handler (getAll)
       next('route');
       return;
-    } catch (error) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: 'Failed to fetch category', error: error instanceof Error ? error.message : error });
+    } catch {
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: 'Failed to fetch category' });
     }
   };
 
@@ -79,15 +73,13 @@ export class CategoryController {
       const createdCategory = await this.categoryService.createCategory(category);
 
       if (createdCategory == null) {
-        res.status(HttpStatusCode.BAD_REQUEST).json({ message: 'Category could not be created' });
+        res.status(HttpStatusCode.BAD_REQUEST).json({ error: 'Category could not be created' });
         return;
       }
 
       res.status(HttpStatusCode.OK).json(createdCategory);
-    } catch (error) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: 'Failed to create category', error: error instanceof Error ? error.message : error });
+    } catch {
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: 'Failed to create category' });
     }
   };
 
@@ -100,15 +92,13 @@ export class CategoryController {
       const updatedCategory = await this.categoryService.updateCategory(id, category);
 
       if (updatedCategory == null) {
-        res.status(HttpStatusCode.NOT_FOUND).json({ message: 'Category not found' });
+        res.status(HttpStatusCode.NOT_FOUND).json({ error: 'Category not found' });
         return;
       }
 
       res.status(HttpStatusCode.OK).json(updatedCategory);
-    } catch (error) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: 'Failed to update category', error: error instanceof Error ? error.message : error });
+    } catch {
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: 'Failed to update category' });
     }
   };
 
@@ -119,15 +109,13 @@ export class CategoryController {
       const deletedCategory = await this.categoryService.deleteCategory(id);
 
       if (deletedCategory == null) {
-        res.status(HttpStatusCode.NOT_FOUND).json({ message: 'Category not found' });
+        res.status(HttpStatusCode.NOT_FOUND).json({ error: 'Category not found' });
         return;
       }
 
       res.status(HttpStatusCode.OK).json(deletedCategory);
-    } catch (error) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: 'Failed to delete category', error: error instanceof Error ? error.message : error });
+    } catch {
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: 'Failed to delete category' });
     }
   };
 }

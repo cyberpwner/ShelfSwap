@@ -15,10 +15,8 @@ export class BookController implements InformativeError {
       const books = await this.bookService.getAll();
 
       res.status(HttpStatusCode.OK).json(books);
-    } catch (error) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: 'Failed to fetch books', error: this._getErrorInfo(error) });
+    } catch {
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: 'Failed to fetch books' });
     }
   };
 
@@ -28,15 +26,13 @@ export class BookController implements InformativeError {
       const book = await this.bookService.getById(id);
 
       if (book == null) {
-        res.status(HttpStatusCode.NOT_FOUND).json({ message: 'Book not found' });
+        res.status(HttpStatusCode.NOT_FOUND).json({ error: 'Book not found' });
         return;
       }
 
       res.status(HttpStatusCode.OK).json(book);
-    } catch (error) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: 'Failed to fetch book', error: this._getErrorInfo(error) });
+    } catch {
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: 'Failed to fetch book' });
     }
   };
 
@@ -44,7 +40,7 @@ export class BookController implements InformativeError {
     const q = req.query.q;
 
     if (!q || String(q).trim() === '') {
-      res.status(HttpStatusCode.BAD_REQUEST).json({ message: "Query parameter 'q' is required" });
+      res.status(HttpStatusCode.BAD_REQUEST).json({ error: "Query parameter 'q' is required" });
       return;
     }
 
@@ -57,15 +53,13 @@ export class BookController implements InformativeError {
       const searchResults = await this.bookService.searchByTitleOrAuthor(sanitizedQuery);
 
       if (!searchResults) {
-        res.status(HttpStatusCode.NOT_FOUND).json({ message: 'Not found' });
+        res.status(HttpStatusCode.NOT_FOUND).json({ error: 'Not found' });
         return;
       }
 
       res.status(HttpStatusCode.OK).json(searchResults);
-    } catch (error) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: 'Failed to find book', error: this._getErrorInfo(error) });
+    } catch {
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: 'Failed to find book' });
     }
   };
 
@@ -80,15 +74,13 @@ export class BookController implements InformativeError {
       const createdBook = await this.bookService.createBook(book, authorNames, categoryNames);
 
       if (createdBook == null) {
-        res.status(HttpStatusCode.BAD_REQUEST).json({ message: 'Book could not be created' });
+        res.status(HttpStatusCode.BAD_REQUEST).json({ error: 'Book could not be created' });
         return;
       }
 
       res.status(HttpStatusCode.OK).json(createdBook);
-    } catch (error) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: 'Failed to create book', error: this._getErrorInfo(error) });
+    } catch {
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: 'Failed to create book' });
     }
   };
 
@@ -99,7 +91,7 @@ export class BookController implements InformativeError {
     const updatedBook = await this.bookService.updateBook(id, book);
 
     if (updatedBook == null) {
-      res.status(HttpStatusCode.NOT_FOUND).json({ message: 'Book not found' });
+      res.status(HttpStatusCode.NOT_FOUND).json({ error: 'Book not found' });
       return;
     }
 
@@ -112,7 +104,7 @@ export class BookController implements InformativeError {
     const deletedBook = await this.bookService.deleteBook(id);
 
     if (!deletedBook) {
-      res.status(HttpStatusCode.NOT_FOUND).json({ message: 'Book not found' });
+      res.status(HttpStatusCode.NOT_FOUND).json({ error: 'Book not found' });
       return;
     }
 

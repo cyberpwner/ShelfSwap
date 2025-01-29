@@ -11,10 +11,8 @@ export class AddressController {
       const addresses = await this.addressService.getAll();
 
       res.status(HttpStatusCode.OK).json(addresses);
-    } catch (error) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: 'Failed to fetch addresss', error: error instanceof Error ? error.message : error });
+    } catch {
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: 'Failed to fetch addresss' });
     }
   };
 
@@ -24,15 +22,13 @@ export class AddressController {
       const address = await this.addressService.getById(id);
 
       if (address == null) {
-        res.status(HttpStatusCode.NOT_FOUND).json({ message: 'Address not found' });
+        res.status(HttpStatusCode.NOT_FOUND).json({ error: 'Address not found' });
         return;
       }
 
       res.status(HttpStatusCode.OK).json(address);
-    } catch (error) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: 'Failed to fetch address', error: error instanceof Error ? error.message : error });
+    } catch {
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: 'Failed to fetch address' });
     }
   };
 
@@ -44,15 +40,13 @@ export class AddressController {
       const createdAddress = await this.addressService.createAddress(address);
 
       if (createdAddress == null) {
-        res.status(HttpStatusCode.BAD_REQUEST).json({ message: 'Address could not be created' });
+        res.status(HttpStatusCode.BAD_REQUEST).json({ error: 'Address could not be created' });
         return;
       }
 
       res.status(HttpStatusCode.OK).json(createdAddress);
-    } catch (error) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: 'Failed to create address', error: error instanceof Error ? error.message : error });
+    } catch {
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: 'Failed to create address' });
     }
   };
 
@@ -65,15 +59,13 @@ export class AddressController {
       const updatedAddress = await this.addressService.updateAddress(id, address);
 
       if (updatedAddress == null) {
-        res.status(HttpStatusCode.NOT_FOUND).json({ message: 'Address not found' });
+        res.status(HttpStatusCode.NOT_FOUND).json({ error: 'Address not found' });
         return;
       }
 
       res.status(HttpStatusCode.OK).json(updatedAddress);
-    } catch (error) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: 'Failed to update address', error: error instanceof Error ? error.message : error });
+    } catch {
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: 'Failed to update address' });
     }
   };
 
@@ -84,15 +76,13 @@ export class AddressController {
       const deletedAddress = await this.addressService.deleteAddress(id);
 
       if (deletedAddress == null) {
-        res.status(HttpStatusCode.NOT_FOUND).json({ message: 'Address not found' });
+        res.status(HttpStatusCode.NOT_FOUND).json({ error: 'Address not found' });
         return;
       }
 
       res.status(HttpStatusCode.OK).json(deletedAddress);
-    } catch (error) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: 'Failed to delete address', error: error instanceof Error ? error.message : error });
+    } catch {
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: 'Failed to delete address' });
     }
   };
 }

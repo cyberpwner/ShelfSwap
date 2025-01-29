@@ -11,10 +11,8 @@ export class AuthorController {
       const authors = await this.authorService.getAll();
 
       res.status(HttpStatusCode.OK).json(authors);
-    } catch (error) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: 'Failed to fetch authors', error: error instanceof Error ? error.message : error });
+    } catch {
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: 'Failed to fetch authors' });
     }
   };
 
@@ -24,15 +22,13 @@ export class AuthorController {
       const author = await this.authorService.getById(id);
 
       if (author == null) {
-        res.status(HttpStatusCode.NOT_FOUND).json({ message: 'Author not found' });
+        res.status(HttpStatusCode.NOT_FOUND).json({ error: 'Author not found' });
         return;
       }
 
       res.status(HttpStatusCode.OK).json(author);
-    } catch (error) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: 'Failed to fetch author', error: error instanceof Error ? error.message : error });
+    } catch {
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: 'Failed to fetch author' });
     }
   };
 
@@ -44,15 +40,13 @@ export class AuthorController {
       const createdAuthor = await this.authorService.createAuthor(author);
 
       if (createdAuthor == null) {
-        res.status(HttpStatusCode.BAD_REQUEST).json({ message: 'Author could not be created' });
+        res.status(HttpStatusCode.BAD_REQUEST).json({ error: 'Author could not be created' });
         return;
       }
 
       res.status(HttpStatusCode.OK).json(createdAuthor);
-    } catch (error) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: 'Failed to create author', error: error instanceof Error ? error.message : error });
+    } catch {
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: 'Failed to create author' });
     }
   };
 
@@ -65,15 +59,13 @@ export class AuthorController {
       const updatedAuthor = await this.authorService.updateAuthor(id, author);
 
       if (updatedAuthor == null) {
-        res.status(HttpStatusCode.NOT_FOUND).json({ message: 'Author not found' });
+        res.status(HttpStatusCode.NOT_FOUND).json({ error: 'Author not found' });
         return;
       }
 
       res.status(HttpStatusCode.OK).json(updatedAuthor);
-    } catch (error) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: 'Failed to update author', error: error instanceof Error ? error.message : error });
+    } catch {
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: 'Failed to update author' });
     }
   };
 
@@ -84,15 +76,13 @@ export class AuthorController {
       const deletedAuthor = await this.authorService.deleteAuthor(id);
 
       if (deletedAuthor == null) {
-        res.status(HttpStatusCode.NOT_FOUND).json({ message: 'Author not found' });
+        res.status(HttpStatusCode.NOT_FOUND).json({ error: 'Author not found' });
         return;
       }
 
       res.status(HttpStatusCode.OK).json(deletedAuthor);
-    } catch (error) {
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: 'Failed to delete author', error: error instanceof Error ? error.message : error });
+    } catch {
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: 'Failed to delete author' });
     }
   };
 }
