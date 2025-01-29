@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import App from './App.tsx';
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter, Route, Routes } from 'react-router';
 import '@fontsource-variable/manrope/index.css';
 import { ChakraProvider, createSystem, defaultConfig } from '@chakra-ui/react';
 import { ColorModeProvider } from './components/ui/color-mode.tsx';
+import LoginPage from './pages/LoginPage.tsx';
 
 const system = createSystem(defaultConfig, {
   theme: {
@@ -23,7 +23,10 @@ createRoot(document.getElementById('root')!).render(
     <ChakraProvider value={system}>
       <ColorModeProvider>
         <BrowserRouter>
-          <App />
+          <Routes>
+            <Route path="/" element={'HomePage'} />
+            <Route path="login" element={<LoginPage />} />
+          </Routes>
         </BrowserRouter>
       </ColorModeProvider>
     </ChakraProvider>

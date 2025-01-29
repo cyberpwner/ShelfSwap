@@ -7,32 +7,78 @@ import { Field } from '../ui/field';
 import { registerSchema } from '@/schemas/user.schemas';
 import FormButton from '../buttons/FormButton';
 import { PasswordInput } from '../ui/password-input';
-import { API_BASE_URL } from '@/constants/api.constants';
+import { axiosInstance } from '@/constants/api.constants';
 import { User } from '@/types/user.types';
 import { useNavigate } from 'react-router';
+import { AxiosError } from 'axios';
 
-async function sendLoginRequest(formData: RegisterData) {
-  const res = await fetch(`${API_BASE_URL}/users/login`, {
-    method: 'POST',
-    headers: {
-      'Content-type': 'application/json',
-    },
-    body: JSON.stringify(formData),
-  });
+interface RegisterResponse {
+  user?: User;
+  message: string;
+}
 
-  const data: { user?: User; message: string } = await res.json();
-  return data;
+interface ErrorResponse {
+  errors?: {
+    fieldErrors: {
+      username?: string[];
+      email?: string[];
+      passwordConfirmation?: string[];
+      password?: string[];
+    };
+    formErrors: string[];
+  };
+  error?: string;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function isErrorResponse(data: any): data is ErrorResponse {
+  return !!data.errors || !!data.error;
 }
 
 interface FormProps extends BoxProps {
   setIsShowRegister: Dispatch<SetStateAction<boolean>>;
 }
 
+interface BackendValidationError {
+  username?: string;
+  email?: string;
+  password?: string;
+  root?: string;
+}
+
 type RegisterData = z.infer<typeof registerSchema>;
+
+async function sendRegisterRequest(formData: RegisterData): Promise<RegisterResponse | ErrorResponse | undefined> {
+  try {
+    const res = await axiosInstance.post(
+      '/users/register',
+      {
+        ...formData,
+        // TODO: remove confirm password from api, or add it to client (either the solution below should be be temporary)
+        passwordConfirmation: formData.password,
+        // TODO: !!![SECURITY ISSUE]!!! a user could potentially create an admin account.
+        // default all accounts created on the API to user.
+        role: 'user',
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+
+    const data: { user?: User; message: string } = res.data;
+    return data;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      return error.response?.data;
+    }
+  }
+}
 
 function RegisterForm({ setIsShowRegister, ...rest }: FormProps) {
   const navigate = useNavigate();
-  const [error, setError] = useState('');
+  const [backendErrors, setBackendErrors] = useState<BackendValidationError>({});
   const {
     register,
     handleSubmit,
@@ -42,16 +88,52 @@ function RegisterForm({ setIsShowRegister, ...rest }: FormProps) {
     resolver: zodResolver(registerSchema),
   });
 
-  const onSubmit = handleSubmit(async (data) => {
-    const res = await sendLoginRequest(data);
+  const onSubmit = handleSubmit(async (formData) => {
+    const data = await sendRegisterRequest(formData);
 
-    if (!res?.user) {
-      setError(res.message);
+    if (!data) {
+      setBackendErrors({ root: 'Failed to register. Try again later.' });
+      return;
+    }
+
+    if (isErrorResponse(data)) {
+      if (data.error) {
+        setBackendErrors({ root: data.error });
+      }
+
+      if (data.errors?.formErrors) {
+        setBackendErrors({ root: data.errors?.formErrors?.join(', ') });
+      }
+
+      if (data.errors && Object.keys(data?.errors).length > 0) {
+        // each entry is an array => ['key', 'value']
+        const aux: BackendValidationError = {};
+
+        outerLoop: for (const entry of Object.entries(data.errors.fieldErrors)) {
+          const fieldErrors = entry[1].join(', ');
+          const fieldName = entry[0];
+
+          switch (fieldName) {
+            case 'username':
+              aux['username'] = fieldErrors;
+              continue outerLoop;
+            case 'email':
+              aux['email'] = fieldErrors;
+              continue outerLoop;
+            case 'password':
+              aux['password'] = fieldErrors;
+              continue outerLoop;
+          }
+        }
+
+        setBackendErrors((prev) => ({ ...prev, ...aux }));
+      }
+
       return;
     }
 
     reset();
-    setError('');
+    setBackendErrors({});
     navigate('/');
   });
 
@@ -69,10 +151,13 @@ function RegisterForm({ setIsShowRegister, ...rest }: FormProps) {
               autoFocus
               p="6"
               w="full"
-              {...register('username')}
               placeholder="your.username"
               _placeholder={{ color: 'gray.500' }}
+              required={true}
+              {...register('username')}
             />
+
+            {backendErrors.username && <small>{backendErrors.username}</small>}
           </Field>
 
           <Field label="Email" invalid={!!errors.email} errorText={errors.email?.message}>
@@ -85,8 +170,11 @@ function RegisterForm({ setIsShowRegister, ...rest }: FormProps) {
               p="6"
               w="full"
               placeholder="juan@mail.com"
+              required={true}
               {...register('email')}
             />
+
+            {backendErrors.email && <small>{backendErrors.email}</small>}
           </Field>
 
           <Field label="Password" invalid={!!errors.password} errorText={errors.password?.message}>
@@ -99,13 +187,16 @@ function RegisterForm({ setIsShowRegister, ...rest }: FormProps) {
               p="6"
               w="full"
               {...register('password')}
+              required={true}
               placeholder="P@ssw0rd!"
             />
+
+            {backendErrors.password && <small>{backendErrors.password}</small>}
           </Field>
 
-          {error && (
+          {backendErrors.root && (
             <Box asChild className="errorBox" color="red">
-              <small> {error} </small>
+              <small>{backendErrors.root}</small>
             </Box>
           )}
         </VStack>
