@@ -14,7 +14,6 @@ function LoginPage() {
       as="section"
       h="100vh"
       sm={{ overflow: 'hidden' }}
-      css={{ '--primary-purple': '#6251DD', '--subtle-purple': '#F4F4FF', '--dark-color': '#090937' }}
       gridTemplateColumns="1fr"
       lg={{ gridTemplateColumns: 'repeat(2, 1fr)' }}
     >
@@ -24,7 +23,7 @@ function LoginPage() {
         <Center h="100vh">
           <Container w="20rem" sm={{ w: '25rem' }}>
             <VStack justify="center" gap="12">
-              <Image src={Logo} />
+              <Image src={Logo} alt="Logo" />
 
               <Box as="header" w="full">
                 <Heading

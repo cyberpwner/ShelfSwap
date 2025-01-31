@@ -6,8 +6,16 @@ import '@fontsource-variable/manrope/index.css';
 import { ChakraProvider, createSystem, defaultConfig } from '@chakra-ui/react';
 import { ColorModeProvider } from './components/ui/color-mode.tsx';
 import LoginPage from './pages/LoginPage.tsx';
+import HomePage from './pages/HomePage.tsx';
 
 const system = createSystem(defaultConfig, {
+  globalCss: {
+    ':root': {
+      '--primary-purple': '#6251DD',
+      '--subtle-purple': '#F4F4FF',
+      '--dark-color': '#090937',
+    },
+  },
   theme: {
     tokens: {
       fonts: {
@@ -24,7 +32,7 @@ createRoot(document.getElementById('root')!).render(
       <ColorModeProvider>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={'HomePage'} />
+            <Route path="/" element={<HomePage />} />
             <Route path="login" element={<LoginPage />} />
           </Routes>
         </BrowserRouter>

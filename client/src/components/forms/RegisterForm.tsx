@@ -11,6 +11,7 @@ import { axiosInstance } from '@/constants/api.constants';
 import { User } from '@/types/user.types';
 import { useNavigate } from 'react-router';
 import { AxiosError } from 'axios';
+import { toaster, Toaster } from '../ui/toaster';
 
 interface RegisterResponse {
   user?: User;
@@ -92,17 +93,42 @@ function RegisterForm({ setIsShowRegister, ...rest }: FormProps) {
     const data = await sendRegisterRequest(formData);
 
     if (!data) {
-      setBackendErrors({ root: 'Failed to register. Try again later.' });
+      const errorMsg = 'Failed to register. Try again later.';
+
+      setBackendErrors({ root: errorMsg });
+
+      // show error in toast message
+      toaster.create({
+        type: 'error',
+        title: 'Oops',
+        description: errorMsg,
+      });
+
       return;
     }
 
     if (isErrorResponse(data)) {
       if (data.error) {
         setBackendErrors({ root: data.error });
+
+        // show error in toast message
+        toaster.create({
+          type: 'error',
+          title: 'Oops',
+          description: data.error,
+        });
       }
 
       if (data.errors?.formErrors) {
-        setBackendErrors({ root: data.errors?.formErrors?.join(', ') });
+        const errorMsg = data.errors?.formErrors?.join(', ');
+        setBackendErrors({ root: errorMsg });
+
+        // show error in toast message
+        toaster.create({
+          type: 'error',
+          title: 'Error',
+          description: errorMsg,
+        });
       }
 
       if (data.errors && Object.keys(data?.errors).length > 0) {
@@ -151,10 +177,19 @@ function RegisterForm({ setIsShowRegister, ...rest }: FormProps) {
               autoFocus
               p="6"
               w="full"
+              _dark={{
+                color: 'gray.100',
+                bg: 'gray.900',
+                _focus: { borderColor: 'gray.200' },
+                _selection: { bg: 'gray.500' },
+              }}
+              css={{ '--focus-color': 'var(--primary-purple)' }}
               placeholder="your.username"
               _placeholder={{ color: 'gray.500' }}
+              transition="all"
               required={true}
               {...register('username')}
+              variant="flushed"
             />
 
             {backendErrors.username && <small>{backendErrors.username}</small>}
@@ -169,9 +204,18 @@ function RegisterForm({ setIsShowRegister, ...rest }: FormProps) {
               bg="var(--subtle-purple)"
               p="6"
               w="full"
+              _dark={{
+                color: 'gray.100',
+                bg: 'gray.900',
+                _focus: { borderColor: 'gray.200' },
+                _selection: { bg: 'gray.500' },
+              }}
+              css={{ '--focus-color': 'var(--primary-purple)' }}
+              transition="all"
               placeholder="juan@mail.com"
               required={true}
               {...register('email')}
+              variant="flushed"
             />
 
             {backendErrors.email && <small>{backendErrors.email}</small>}
@@ -186,19 +230,24 @@ function RegisterForm({ setIsShowRegister, ...rest }: FormProps) {
               bg="var(--subtle-purple)"
               p="6"
               w="full"
+              _dark={{
+                color: 'gray.100',
+                bg: 'gray.900',
+                _focus: { borderColor: 'gray.200' },
+                _selection: { bg: 'gray.500' },
+              }}
+              css={{ '--focus-color': 'var(--primary-purple)' }}
+              transition="all"
+              placeholder="P@ssw0rd!"
               {...register('password')}
               required={true}
-              placeholder="P@ssw0rd!"
+              variant="flushed"
             />
 
             {backendErrors.password && <small>{backendErrors.password}</small>}
           </Field>
 
-          {backendErrors.root && (
-            <Box asChild className="errorBox" color="red">
-              <small>{backendErrors.root}</small>
-            </Box>
-          )}
+          <Toaster />
         </VStack>
 
         <VStack w="full" gap="2">

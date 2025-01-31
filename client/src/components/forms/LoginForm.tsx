@@ -11,6 +11,7 @@ import { PasswordInput } from '../ui/password-input';
 import { useNavigate } from 'react-router';
 import { axiosInstance } from '@/constants/api.constants';
 import { AxiosError } from 'axios';
+import { toaster, Toaster } from '../ui/toaster';
 
 interface FormProps extends BoxProps {
   setIsShowRegister: Dispatch<SetStateAction<boolean>>;
@@ -80,17 +81,42 @@ function LoginForm({ setIsShowRegister, ...rest }: FormProps) {
     const data = await sendLoginRequest(formData);
 
     if (!data) {
-      setBackendErrors({ root: 'Failed to register. Try again later.' });
+      const errorMsg = 'Failed to login. Try again later.';
+
+      setBackendErrors({ root: errorMsg });
+
+      // show error in toast message
+      toaster.create({
+        type: 'error',
+        title: 'Oops',
+        description: errorMsg,
+      });
+
       return;
     }
 
     if (isErrorResponse(data)) {
       if (data.error) {
         setBackendErrors({ root: data.error });
+
+        // show error in toast message
+        toaster.create({
+          type: 'error',
+          title: 'Oops',
+          description: data.error,
+        });
       }
 
       if (data.errors?.formErrors) {
-        setBackendErrors({ root: data.errors?.formErrors?.join(', ') });
+        const errorMsg = data.errors?.formErrors?.join(', ');
+        setBackendErrors({ root: errorMsg });
+
+        // show error in toast message
+        toaster.create({
+          type: 'error',
+          title: 'Error',
+          description: errorMsg,
+        });
       }
 
       if (data.errors && Object.keys(data?.errors).length > 0) {
@@ -142,9 +168,11 @@ function LoginForm({ setIsShowRegister, ...rest }: FormProps) {
                 _focus: { borderColor: 'gray.200' },
                 _selection: { bg: 'gray.500' },
               }}
+              css={{ '--focus-color': 'var(--primary-purple)' }}
               placeholder="juan@mail.com"
               {...register('email')}
               required={true}
+              variant="flushed"
             />
 
             {backendErrors.email && <small>{backendErrors.email}</small>}
@@ -165,20 +193,18 @@ function LoginForm({ setIsShowRegister, ...rest }: FormProps) {
                 _focus: { borderColor: 'gray.200' },
                 _selection: { bg: 'gray.500' },
               }}
+              css={{ '--focus-color': 'var(--primary-purple)' }}
               placeholder="P@ssw0rd!"
               {...register('password')}
               required={true}
+              variant="flushed"
             />
 
             {backendErrors.password && <small>{backendErrors.password}</small>}
           </Field>
 
-          {/* Form error (non-field specific) */}
-          {backendErrors.root && (
-            <Box asChild className="errorBox" color="red">
-              <small>{backendErrors.root}</small>
-            </Box>
-          )}
+          {/* root form errors to be shown in toaster */}
+          <Toaster />
         </VStack>
 
         <VStack w="full" gap="2">
