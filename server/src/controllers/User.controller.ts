@@ -70,7 +70,7 @@ export class UserController {
       const user = await this.userService.login({ email, password });
 
       if (!user) {
-        res.status(HttpStatusCode.UNAUTHORIZED).json({ error: 'Invalid credentials' });
+        res.status(HttpStatusCode.FORBIDDEN).json({ error: 'Invalid credentials' });
         return;
       }
 

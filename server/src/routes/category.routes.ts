@@ -10,13 +10,7 @@ const categoryController = new CategoryController();
 const categoryValidation = new CategoryValidation();
 const auth = new Auth();
 
-router.get(
-  '/',
-  auth.authenticateAccessToken,
-  auth.authorize([UserRole.ADMIN, UserRole.USER]),
-  categoryController.getByName,
-  categoryController.getAll,
-);
+router.get('/', categoryController.getByName, categoryController.getAll);
 
 router.get(
   '/:id',

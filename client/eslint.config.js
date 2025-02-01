@@ -4,11 +4,17 @@ import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 import tseslint from 'typescript-eslint';
 import react from 'eslint-plugin-react';
+import pluginQuery from '@tanstack/eslint-plugin-query';
 
 export default tseslint.config(
   { ignores: ['dist'] },
   {
-    extends: [js.configs.recommended, ...tseslint.configs.strict, ...tseslint.configs.stylistic],
+    extends: [
+      js.configs.recommended,
+      ...tseslint.configs.strict,
+      ...tseslint.configs.stylistic,
+      ...pluginQuery.configs['flat/recommended'],
+    ],
     files: ['**/*.{ts,tsx}'],
     languageOptions: {
       ecmaVersion: 2020,

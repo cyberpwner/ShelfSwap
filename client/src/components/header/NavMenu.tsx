@@ -36,17 +36,17 @@ export function NavMenu() {
 
         <DrawerBody>
           <Stack>
-            <NavLink to={'/profile'} onClick={() => setOpen(false)}>
-              <Flex alignItems="center" gap="2" _hover={{ color: 'var(--primary-purple)' }}>
+            <NavLink to={'/login'} onClick={() => setOpen(false)}>
+              <Flex alignItems="center" gap="2" transition="all" _hover={{ color: 'var(--primary-purple)' }}>
                 <Icon as={FiUser} />
-                <Text>Profile</Text>
+                <Text>Login</Text>
               </Flex>
             </NavLink>
 
             <Separator />
 
             <NavLink to={'/favorites'} onClick={() => setOpen(false)}>
-              <Flex alignItems="center" gap="2" _hover={{ color: 'var(--primary-purple)' }}>
+              <Flex alignItems="center" gap="2" transition="all" _hover={{ color: 'var(--primary-purple)' }}>
                 <Icon as={FiHeart} />
                 <Text>Favorites</Text>
               </Flex>
@@ -55,7 +55,7 @@ export function NavMenu() {
             <Separator />
 
             <NavLink to={'/cart'} onClick={() => setOpen(false)}>
-              <Flex alignItems="center" gap="2" _hover={{ color: 'var(--primary-purple)' }}>
+              <Flex alignItems="center" gap="2" transition="all" _hover={{ color: 'var(--primary-purple)' }}>
                 <Icon as={FiShoppingBag} />
                 <Text>Cart</Text>
               </Flex>

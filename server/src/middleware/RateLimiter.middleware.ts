@@ -10,7 +10,7 @@ export class RateLimiter {
       // TODO: change key to user id (from authentication middleware) and make ip a fallback
       return req.ip || '';
     },
-    message: 'Too many requests. Please try again later.',
+    message: { error: 'Too many requests. Please try again later.' },
     statusCode: HttpStatusCode.TOO_MANY_REQUESTS,
   });
 }

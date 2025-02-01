@@ -3,19 +3,28 @@ import Picture from '../assets/img/Picture.png';
 import Logo from '../assets/img/Logo.svg';
 import LoginForm from '@/components/forms/LoginForm';
 import RegisterForm from '@/components/forms/RegisterForm';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
+import { setupAxiosInterceptors } from '@/constants/api.constants';
 
 function LoginPage() {
   const [isShowRegister, setIsShowRegister] = useState(false);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    setupAxiosInterceptors(navigate);
+  }, [navigate]);
 
   return (
     <Grid
       w="full"
       as="section"
-      h="100vh"
-      sm={{ overflow: 'hidden' }}
+      minH="100vh"
       gridTemplateColumns="1fr"
-      lg={{ gridTemplateColumns: 'repeat(2, 1fr)' }}
+      md={{ overflow: 'hidden' }}
+      lg={{ gridTemplateColumns: 'repeat(2, 1fr)', h: '100vh' }}
+      py={{ base: '16', sm: '0' }}
     >
       <GridItem as="section" bgImage={`url(${Picture})`} bgSize="cover" bgPos="center" hideBelow="lg" />
 
@@ -23,7 +32,7 @@ function LoginPage() {
         <Center h="100vh">
           <Container w="20rem" sm={{ w: '25rem' }}>
             <VStack justify="center" gap="12">
-              <Image src={Logo} alt="Logo" />
+              <Image src={Logo} alt="Logo" w={{ base: '24', md: '32' }} />
 
               <Box as="header" w="full">
                 <Heading

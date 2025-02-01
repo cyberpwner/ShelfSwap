@@ -48,7 +48,7 @@ interface BackendValidationError {
   root?: string;
 }
 
-async function sendLoginRequest(formData: LoginData): Promise<LoginResponse | undefined> {
+async function sendLoginRequest(formData: LoginData) {
   try {
     const response = await axiosInstance.post('/users/login', formData, {
       headers: {
@@ -56,11 +56,10 @@ async function sendLoginRequest(formData: LoginData): Promise<LoginResponse | un
       },
     });
 
-    const data: { user: User; message: string } = response.data;
-    return data;
+    return response;
   } catch (error) {
     if (error instanceof AxiosError) {
-      return error.response?.data;
+      return error.response;
     }
   }
 }
@@ -78,9 +77,9 @@ function LoginForm({ setIsShowRegister, ...rest }: FormProps) {
   });
 
   const onSubmit = handleSubmit(async (formData) => {
-    const data = await sendLoginRequest(formData);
+    const res = await sendLoginRequest(formData);
 
-    if (!data) {
+    if (!res) {
       const errorMsg = 'Failed to login. Try again later.';
 
       setBackendErrors({ root: errorMsg });
@@ -94,6 +93,8 @@ function LoginForm({ setIsShowRegister, ...rest }: FormProps) {
 
       return;
     }
+
+    const data: LoginResponse | ErrorResponse = res.data;
 
     if (isErrorResponse(data)) {
       if (data.error) {
