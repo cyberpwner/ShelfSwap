@@ -1,14 +1,22 @@
-export interface User {
+export interface IUser {
   id: string;
   username: string;
   email: string;
   role: UserRole;
-  bio: null;
-  avatarUrl: null;
+  bio?: string;
+  avatarUrl?: string;
+  createdAt: Date;
+  // cart?: ICart;
 }
 
-export const enum UserRole {
+export enum UserRole {
   'ADMIN' = 'admin',
   'USER' = 'user',
   'GUEST' = 'guest',
+}
+
+export interface IUserState {
+  id: string;
+  username: string;
+  role: UserRole;
 }

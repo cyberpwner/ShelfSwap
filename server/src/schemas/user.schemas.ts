@@ -16,14 +16,7 @@ export const userSchema = z.object({
   avatarUrl: z.string().trim().url().nonempty().max(2048).optional(),
 });
 
-export const createUserSchema = userSchema
-  .extend({
-    passwordConfirmation: userSchema.shape.password,
-  })
-  .refine(({ password, passwordConfirmation }) => password === passwordConfirmation, {
-    message: 'Passwords do not match',
-    path: ['passwordConfirmation'],
-  });
+export const createUserSchema = userSchema;
 
 export const updateUserSchema = userSchema
   .partial()

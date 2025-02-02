@@ -14,13 +14,14 @@ export class BookController implements InformativeError {
     let pageNum = req.query?.page;
 
     if (!pageNum || String(pageNum).trim() === '') {
-      pageNum = '1';
+      pageNum = undefined;
     }
 
-    const decodedPageNum = Number(decodeURIComponent(String(pageNum)));
+    const decodedPageNum = pageNum ? Number(decodeURIComponent(String(pageNum))) : undefined;
+    const pageSize = decodedPageNum ? 10 : undefined;
 
     try {
-      const { data, page, total, totalPages } = await this.bookService.getAll(decodedPageNum);
+      const { data, page, total, totalPages } = await this.bookService.getAll(decodedPageNum, pageSize);
 
       res.status(HttpStatusCode.OK).json({ data, page, total, totalPages });
     } catch {
@@ -32,10 +33,11 @@ export class BookController implements InformativeError {
     let pageNum = req.query?.page;
 
     if (!pageNum || String(pageNum).trim() === '') {
-      pageNum = '1';
+      pageNum = undefined;
     }
 
-    const decodedPageNum = Number(decodeURIComponent(String(pageNum)));
+    const decodedPageNum = pageNum ? Number(decodeURIComponent(String(pageNum))) : undefined;
+    const pageSize = decodedPageNum ? 10 : undefined;
 
     let q = req.query?.q;
 
@@ -52,6 +54,7 @@ export class BookController implements InformativeError {
       const { data, page, total, totalPages } = await this.bookService.searchByTitleOrAuthor(
         sanitizedQuery,
         decodedPageNum,
+        pageSize,
       );
 
       res.status(HttpStatusCode.OK).json({ data, page, total, totalPages });

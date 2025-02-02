@@ -5,7 +5,7 @@ function Footer() {
     <Box p="20" as="footer" py="16" bg="var(--dark-color)" color="gray.100" letterSpacing="wide">
       <Container maxW="5/6" h="full">
         <VStack justifyContent="flex-end">
-          <Text verticalAlign="">&copy; 2025 - Free Palestine</Text>
+          <Text verticalAlign="">Copyright © 2025 Shelfswap, Inc - Free Palestine.</Text>
         </VStack>
       </Container>
     </Box>

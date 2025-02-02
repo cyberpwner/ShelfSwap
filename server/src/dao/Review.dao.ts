@@ -1,13 +1,23 @@
 import { Review } from '../entities/Review';
 import { BaseDao } from './Base.dao';
 
+type ReviewRelations = 'book' | 'user';
+
 export class ReviewDao implements BaseDao<Review> {
-  async findAll(): Promise<Review[]> {
-    return Review.find();
+  async findAll(page?: number, pageSize?: number): Promise<{ data: Review[]; total: number }> {
+    const skip = page && pageSize ? (page - 1) * pageSize : undefined;
+
+    const [reviews, total] = await Review.findAndCount({
+      relations: ['user', 'book'] as ReviewRelations[],
+      skip: skip ?? undefined,
+      take: pageSize ?? undefined,
+    });
+
+    return { data: reviews, total };
   }
 
   async findById(id: string): Promise<Review | null> {
-    return Review.findOne({ where: { id } });
+    return Review.findOne({ where: { id }, relations: ['user', 'book'] as ReviewRelations[] });
   }
 
   async create(review: Review): Promise<Review> {

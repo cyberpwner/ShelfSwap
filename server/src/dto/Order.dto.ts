@@ -8,4 +8,5 @@ export class OrderDto {
   trackingNumber?: string;
   user: UserDto;
   items?: OrderItemDto[];
+  createdAt: Date;
 }

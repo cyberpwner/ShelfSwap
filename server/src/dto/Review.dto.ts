@@ -6,4 +6,5 @@ export class ReviewDto {
   rating: ReviewRating;
   comment?: string;
   book: BookDto;
+  createdAt: Date;
 }

@@ -1,4 +1,5 @@
 import { ReviewDao } from '../dao/Review.dao';
+import { PaginatedDto } from '../dto/Paginated.dto';
 import { ReviewDto } from '../dto/Review.dto';
 import { Review } from '../entities/Review';
 import { MapperService } from './Mapper.service';
@@ -12,12 +13,32 @@ export class ReviewService {
     this.mapperService = new MapperService();
   }
 
-  async getAll(): Promise<ReviewDto[]> {
-    const reviews = await this.reviewDao.findAll();
+  async getAll(page?: number, pageSize?: number): Promise<PaginatedDto<ReviewDto>> {
+    const { data: reviews, total } = await this.reviewDao.findAll(page ?? undefined, pageSize ?? undefined);
 
-    if (reviews.length === 0) return [];
+    if (reviews.length === 0) {
+      return {
+        data: [],
+        total: 0,
+        page: 0,
+        totalPages: 0,
+      };
+    }
 
-    return reviews.map((review) => this.mapperService.mapReviewToDto(review));
+    let totalPages = undefined;
+
+    if (pageSize && total >= pageSize) {
+      totalPages = Math.ceil(total / pageSize);
+    } else {
+      totalPages = 1;
+    }
+
+    return {
+      data: reviews.map((review) => this.mapperService.mapReviewToDto(review)),
+      total,
+      page: page ?? 1,
+      totalPages,
+    };
   }
 
   async getById(id: string): Promise<ReviewDto | null> {

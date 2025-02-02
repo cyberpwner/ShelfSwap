@@ -3,21 +3,15 @@ import Picture from '../assets/img/Picture.png';
 import Logo from '../assets/img/Logo.svg';
 import LoginForm from '@/components/forms/LoginForm';
 import RegisterForm from '@/components/forms/RegisterForm';
-import { useEffect, useState } from 'react';
-import { Navigate, useNavigate } from 'react-router';
-import { setupAxiosInterceptors } from '@/api/api.constants';
-import { useAuth } from '@/contexts/AuthContext/AuthContextProvider';
+import { useState } from 'react';
+import { Link, Navigate } from 'react-router';
+import { useAuth } from '@/contexts/AuthContext/useAuth';
 
 function LoginPage() {
   const [isShowRegister, setIsShowRegister] = useState(false);
-  const { isAuth } = useAuth();
-  const navigate = useNavigate();
+  const { user } = useAuth();
 
-  useEffect(() => {
-    setupAxiosInterceptors(navigate);
-  }, [navigate]);
-
-  if (isAuth) {
+  if (user) {
     return <Navigate to={'/'} replace />;
   }
 
@@ -37,7 +31,9 @@ function LoginPage() {
         <Center h="100vh">
           <Container w="20rem" sm={{ w: '25rem' }}>
             <VStack justify="center" gap="12">
-              <Image src={Logo} alt="Logo" w={{ base: '24', md: '32' }} />
+              <Link to="/">
+                <Image src={Logo} alt="Logo" w={{ base: '24', md: '32' }} />
+              </Link>
 
               <Box as="header" w="full">
                 <Heading

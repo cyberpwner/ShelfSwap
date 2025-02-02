@@ -1,10 +1,15 @@
-import { useAuth } from '@/contexts/AuthContext/AuthContextProvider';
+import CustomSpinner from '@/components/CustomSpinner';
+import { useAuth } from '@/contexts/AuthContext/useAuth';
 import { Navigate, Outlet } from 'react-router';
 
 function ProtectedRoute() {
-  const { isAuth } = useAuth();
+  const { user, loading } = useAuth();
 
-  if (!isAuth) {
+  if (loading) {
+    return <CustomSpinner />;
+  }
+
+  if (!user) {
     return <Navigate to={'/login'} replace />;
   }
 

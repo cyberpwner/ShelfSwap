@@ -2,8 +2,15 @@ import { Address } from '../entities/Address';
 import { BaseDao } from './Base.dao';
 
 export class AddressDao implements BaseDao<Address> {
-  async findAll(): Promise<Address[]> {
-    return Address.find();
+  async findAll(page?: number, pageSize?: number): Promise<{ data: Address[]; total: number }> {
+    const skip = page && pageSize ? (page - 1) * pageSize : undefined;
+
+    const [addresses, total] = await Address.findAndCount({
+      skip: skip ?? undefined,
+      take: pageSize ?? undefined,
+    });
+
+    return { data: addresses, total };
   }
 
   async findById(id: string): Promise<Address | null> {

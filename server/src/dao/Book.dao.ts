@@ -7,13 +7,13 @@ import { BaseDao } from './Base.dao';
 import { Like } from 'typeorm';
 
 export class BookDao implements BaseDao<Book> {
-  async findAll(page = 1, pageSize = 10): Promise<{ data: Book[]; total: number }> {
-    const skip = (page - 1) * pageSize;
+  async findAll(page?: number, pageSize?: number): Promise<{ data: Book[]; total: number }> {
+    const skip = page && pageSize ? (page - 1) * pageSize : undefined;
 
     const [books, total] = await Book.findAndCount({
       relations: ['authors', 'categories', 'reviews'],
-      skip,
-      take: pageSize,
+      skip: skip ?? undefined,
+      take: pageSize ?? undefined,
     });
 
     return { data: books, total };
@@ -27,14 +27,14 @@ export class BookDao implements BaseDao<Book> {
     return Book.findOne({ where: { isbn } });
   }
 
-  async searchByTitleOrAuthor(q: string, page = 1, pageSize = 10): Promise<{ data: Book[]; total: number }> {
-    const skip = (page - 1) * pageSize;
+  async searchByTitleOrAuthor(q: string, page?: number, pageSize?: number): Promise<{ data: Book[]; total: number }> {
+    const skip = page && pageSize ? (page - 1) * pageSize : undefined;
 
     const [books, total] = await Book.findAndCount({
       relations: ['authors', 'categories', 'reviews'],
       where: q.trim().length > 0 ? [{ title: Like(`%${q}%`) }, { authors: { name: Like(`%${q}%`) } }] : undefined,
-      skip,
-      take: pageSize,
+      skip: skip ?? undefined,
+      take: pageSize ?? undefined,
     });
 
     return { data: books, total };

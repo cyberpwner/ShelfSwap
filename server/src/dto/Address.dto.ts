@@ -6,4 +6,5 @@ export class AddressDto {
   addressLine1: string;
   addressLine2?: string;
   user: UserDto;
+  createdAt: Date;
 }

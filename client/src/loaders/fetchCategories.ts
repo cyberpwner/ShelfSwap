@@ -1,5 +1,6 @@
-import { axiosInstance } from '@/api/api.constants';
-import { IBook } from '@/components/book-list/fetchBookList';
+import { axiosInstance } from '@/api/api';
+import { IBook } from '@/types/book.types';
+import { PaginatedDto } from '@/types/dto.types';
 
 export interface ICategory {
   id: string;
@@ -7,7 +8,7 @@ export interface ICategory {
   books: IBook[];
 }
 
-export async function fetchCategories(): Promise<ICategory[]> {
-  const res = await axiosInstance.get<ICategory[]>('/categories');
+export async function fetchCategories(): Promise<PaginatedDto<ICategory>> {
+  const res = await axiosInstance.get<PaginatedDto<ICategory>>('/categories');
   return res.data;
 }

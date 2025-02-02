@@ -1,5 +1,6 @@
 import { CategoryDao } from '../dao/Category.dao';
 import { CategoryDto } from '../dto/Category.dto';
+import { PaginatedDto } from '../dto/Paginated.dto';
 import { Category } from '../entities/Category';
 import { BookCategory } from '../types/category.types.d';
 import { MapperService } from './Mapper.service';
@@ -13,12 +14,32 @@ export class CategoryService {
     this.mapperService = new MapperService();
   }
 
-  async getAll(): Promise<CategoryDto[]> {
-    const categories = await this.categoryDao.findAll();
+  async getAll(page?: number, pageSize?: number): Promise<PaginatedDto<CategoryDto>> {
+    const { data: categorys, total } = await this.categoryDao.findAll(page ?? undefined, pageSize ?? undefined);
 
-    if (categories.length === 0) return [];
+    if (categorys.length === 0) {
+      return {
+        data: [],
+        total: 0,
+        page: 0,
+        totalPages: 0,
+      };
+    }
 
-    return categories.map((category) => this.mapperService.mapCategoryToDto(category));
+    let totalPages = undefined;
+
+    if (pageSize && total >= pageSize) {
+      totalPages = Math.ceil(total / pageSize);
+    } else {
+      totalPages = 1;
+    }
+
+    return {
+      data: categorys.map((category) => this.mapperService.mapCategoryToDto(category)),
+      total,
+      page: page ?? 1,
+      totalPages,
+    };
   }
 
   async getById(id: string): Promise<CategoryDto | null> {

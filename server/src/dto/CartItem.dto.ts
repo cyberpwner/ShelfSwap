@@ -7,4 +7,5 @@ export class CartItemDto {
   quantity: number;
   cartId?: string;
   cart?: CartDto;
+  createdAt: Date;
 }

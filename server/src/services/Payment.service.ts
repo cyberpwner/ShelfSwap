@@ -1,4 +1,5 @@
 import { PaymentDao } from '../dao/Payment.dao';
+import { PaginatedDto } from '../dto/Paginated.dto';
 import { PaymentDto } from '../dto/Payment.dto';
 import { Payment } from '../entities/Payment';
 import { MapperService } from './Mapper.service';
@@ -12,12 +13,32 @@ export class PaymentService {
     this.mapperService = new MapperService();
   }
 
-  async getAll(): Promise<PaymentDto[]> {
-    const payments = await this.paymentDao.findAll();
+  async getAll(page?: number, pageSize?: number): Promise<PaginatedDto<PaymentDto>> {
+    const { data: payments, total } = await this.paymentDao.findAll(page ?? undefined, pageSize ?? undefined);
 
-    if (payments.length === 0) return [];
+    if (payments.length === 0) {
+      return {
+        data: [],
+        total: 0,
+        page: 0,
+        totalPages: 0,
+      };
+    }
 
-    return payments.map((payment) => this.mapperService.mapPaymentToDto(payment));
+    let totalPages = undefined;
+
+    if (pageSize && total >= pageSize) {
+      totalPages = Math.ceil(total / pageSize);
+    } else {
+      totalPages = 1;
+    }
+
+    return {
+      data: payments.map((payment) => this.mapperService.mapPaymentToDto(payment)),
+      total,
+      page: page ?? 1,
+      totalPages,
+    };
   }
 
   async getById(id: string): Promise<PaymentDto | null> {

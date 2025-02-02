@@ -1,9 +1,9 @@
-import { Box, Card, Center, HStack, Image, Text } from '@chakra-ui/react';
-import { IBook } from '../book-list/fetchBookList';
+import { IBook } from '@/types/book.types';
+import { Box, Card, Center, Highlight, HStack, Image, Text } from '@chakra-ui/react';
 
-type Props = Pick<IBook, 'title' | 'price' | 'authors' | 'coverUrl'>;
+type Props = Pick<IBook, 'title' | 'price' | 'authors' | 'coverUrl'> & { search: string };
 
-export function BookCard({ title, authors, price, coverUrl }: Props) {
+export function BookCard({ title, authors, price, coverUrl, search }: Props) {
   return (
     <Card.Root
       maxW={{ base: '72', sm: '80' }}
@@ -26,13 +26,29 @@ export function BookCard({ title, authors, price, coverUrl }: Props) {
 
       <Card.Body maxW="full" gap="0" pt="4">
         <Card.Title fontSize={{ base: 'sm', md: 'md' }} lineClamp="1">
-          {title}
+          <Text key={title}>
+            <Highlight
+              ignoreCase
+              query={search}
+              styles={{ fontWeight: 'semibold', bg: 'purple.subtle', color: 'purple.fg' }}
+            >
+              {title}
+            </Highlight>
+          </Text>
         </Card.Title>
 
         <HStack alignItems="center" justifyContent="space-between">
           <Card.Description lineClamp="1" as="div" display="flex" flexDir="column">
             {authors.map((author) => (
-              <Text key={author.name}>{author.name}</Text>
+              <Text key={author.name}>
+                <Highlight
+                  ignoreCase
+                  query={search}
+                  styles={{ fontWeight: 'semibold', bg: 'purple.subtle', color: 'purple.fg' }}
+                >
+                  {author.name}
+                </Highlight>
+              </Text>
             ))}
           </Card.Description>
 

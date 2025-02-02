@@ -1,41 +1,53 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
-import { axiosInstance } from '@/api/api.constants';
-import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useEffect, useState } from 'react';
-
-interface IAuthContext {
-  isAuth: boolean;
-  setIsAuth: Dispatch<SetStateAction<boolean>>;
-}
-
-const AuthContext = createContext<IAuthContext>({
-  isAuth: false,
-  setIsAuth: () => {},
-});
-
-export const useAuth = () => useContext(AuthContext);
+import { axiosInstance } from '@/api/api';
+import { ReactNode, useEffect, useState } from 'react';
+import { AuthContext } from './AuthContext';
+import { fifteenMinutesInMs } from '@/constants/date';
+import { IUserState } from '@/types/user.types';
 
 interface Props {
   children: ReactNode;
 }
 
 function AuthContextProvider({ children }: Props) {
-  const [isAuth, setIsAuth] = useState(false);
+  const [user, setUser] = useState<IUserState | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  async function checkAuth() {
+    setLoading(true);
+
+    try {
+      const response = await axiosInstance.get<IUserState>('/authcheck');
+
+      const user = response.data;
+
+      setUser(user ?? null);
+    } catch {
+      setUser(null);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  // when authenticated, refresh token every 15 minutes.
+  useEffect(() => {
+    if (user) {
+      const intervalId = setInterval(async () => {
+        await checkAuth();
+      }, fifteenMinutesInMs());
+
+      return () => clearInterval(intervalId);
+    }
+  }, [user]);
 
   useEffect(() => {
-    async function checkAuth() {
-      try {
-        const response = await axiosInstance.get('/authcheck');
+    const callCheckAuth = async () => {
+      await checkAuth();
+    };
 
-        setIsAuth(response.status === 200);
-      } catch {
-        setIsAuth(false);
-      }
-    }
-
-    checkAuth();
+    callCheckAuth();
   }, []);
 
-  return <AuthContext.Provider value={{ isAuth, setIsAuth }}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={{ user, setUser, loading }}>{children}</AuthContext.Provider>;
 }
 
 export default AuthContextProvider;

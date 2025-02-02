@@ -5,6 +5,6 @@ const router = Router();
 const auth = new Auth();
 
 router.post('/refresh', auth.refreshTokens);
-router.get('/authcheck', auth.isAuthenticated);
+router.get('/authcheck', auth.checkAuth);
 
 export default router;

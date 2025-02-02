@@ -7,15 +7,14 @@ import { Field } from '../ui/field';
 import { registerSchema } from '@/schemas/user.schemas';
 import FormButton from '../buttons/FormButton';
 import { PasswordInput } from '../ui/password-input';
-import { axiosInstance } from '@/api/api.constants';
-import { User } from '@/types/user.types';
+import { axiosInstance } from '@/api/api';
+import { IUser } from '@/types/user.types';
 import { useNavigate } from 'react-router';
 import { AxiosError } from 'axios';
 import { toaster, Toaster } from '../ui/toaster';
 
 interface RegisterResponse {
-  user?: User;
-  message: string;
+  user?: IUser;
 }
 
 interface ErrorResponse {
@@ -51,14 +50,12 @@ type RegisterData = z.infer<typeof registerSchema>;
 
 async function sendRegisterRequest(formData: RegisterData): Promise<RegisterResponse | ErrorResponse | undefined> {
   try {
-    const res = await axiosInstance.post(
+    const res = await axiosInstance.post<RegisterResponse>(
       '/users/register',
       {
         ...formData,
-        // TODO: remove confirm password from api, or add it to client (either the solution below should be be temporary)
-        passwordConfirmation: formData.password,
         // TODO: !!![SECURITY ISSUE]!!! a user could potentially create an admin account.
-        // default all accounts created on the API to user.
+        // role should be set on the server.
         role: 'user',
       },
       {
@@ -68,7 +65,7 @@ async function sendRegisterRequest(formData: RegisterData): Promise<RegisterResp
       },
     );
 
-    const data: { user?: User; message: string } = res.data;
+    const data: { user?: IUser } = res.data;
     return data;
   } catch (error) {
     if (error instanceof AxiosError) {

@@ -1,5 +1,6 @@
 import { AddressDao } from '../dao/Address.dao';
 import { AddressDto } from '../dto/Address.dto';
+import { PaginatedDto } from '../dto/Paginated.dto';
 import { Address } from '../entities/Address';
 import { MapperService } from './Mapper.service';
 
@@ -12,12 +13,32 @@ export class AddressService {
     this.mapperService = new MapperService();
   }
 
-  async getAll(): Promise<AddressDto[]> {
-    const addresses = await this.addressDao.findAll();
+  async getAll(page?: number, pageSize?: number): Promise<PaginatedDto<AddressDto>> {
+    const { data: addresses, total } = await this.addressDao.findAll(page ?? undefined, pageSize ?? undefined);
 
-    if (addresses.length === 0) return [];
+    if (addresses.length === 0) {
+      return {
+        data: [],
+        total: 0,
+        page: 0,
+        totalPages: 0,
+      };
+    }
 
-    return addresses.map((address) => this.mapperService.mapAddressToDto(address));
+    let totalPages = undefined;
+
+    if (pageSize && total >= pageSize) {
+      totalPages = Math.ceil(total / pageSize);
+    } else {
+      totalPages = 1;
+    }
+
+    return {
+      data: addresses.map((address) => this.mapperService.mapAddressToDto(address)),
+      total,
+      page: page ?? 1,
+      totalPages,
+    };
   }
 
   async getById(id: string): Promise<AddressDto | null> {

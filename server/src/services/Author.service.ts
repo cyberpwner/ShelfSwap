@@ -1,5 +1,6 @@
 import { AuthorDao } from '../dao/Author.dao';
 import { AuthorDto } from '../dto/Author.dto';
+import { PaginatedDto } from '../dto/Paginated.dto';
 import { Author } from '../entities/Author';
 import { MapperService } from './Mapper.service';
 
@@ -12,12 +13,32 @@ export class AuthorService {
     this.mapperService = new MapperService();
   }
 
-  async getAll(): Promise<AuthorDto[]> {
-    const authors = await this.authorDao.findAll();
+  async getAll(page?: number, pageSize?: number): Promise<PaginatedDto<AuthorDto>> {
+    const { data: authors, total } = await this.authorDao.findAll(page ?? undefined, pageSize ?? undefined);
 
-    if (authors.length === 0) return [];
+    if (authors.length === 0) {
+      return {
+        data: [],
+        total: 0,
+        page: 0,
+        totalPages: 0,
+      };
+    }
 
-    return authors.map((author) => this.mapperService.mapAuthorToDto(author));
+    let totalPages = undefined;
+
+    if (pageSize && total >= pageSize) {
+      totalPages = Math.ceil(total / pageSize);
+    } else {
+      totalPages = 1;
+    }
+
+    return {
+      data: authors.map((author) => this.mapperService.mapAuthorToDto(author)),
+      total,
+      page: page ?? 1,
+      totalPages,
+    };
   }
 
   async getById(id: string): Promise<AuthorDto | null> {

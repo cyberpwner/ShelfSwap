@@ -7,8 +7,10 @@ import CartButton from '../buttons/CartButton';
 import { NavMenu } from './NavMenu';
 import { Link, useNavigate } from 'react-router';
 import { Dispatch, FormEvent, SetStateAction, useEffect, useState } from 'react';
-import { useAuth } from '@/contexts/AuthContext/AuthContextProvider';
+import { useAuth } from '@/contexts/AuthContext/useAuth';
 import LogoutButton from '../buttons/LogoutButton';
+import { FiLogOut } from 'react-icons/fi';
+import { toaster } from '../ui/toaster';
 
 interface Props {
   setSearch: Dispatch<SetStateAction<string>>;
@@ -18,7 +20,7 @@ interface Props {
 function Header({ setSearch, searchParams }: Props) {
   const [inputValue, setInputValue] = useState('');
   const navigate = useNavigate();
-  const { isAuth, setIsAuth } = useAuth();
+  const { user } = useAuth();
 
   function handleSubmit(e: FormEvent<HTMLDivElement>) {
     e.preventDefault();
@@ -72,7 +74,19 @@ function Header({ setSearch, searchParams }: Props) {
             <ProfileButton />
             <FavoritesButton />
             <CartButton />
-            {isAuth && <LogoutButton setIsAuth={setIsAuth} />}
+            {user && (
+              <LogoutButton
+                onClick={() =>
+                  toaster.create({
+                    type: 'success',
+                    title: 'Logged out',
+                    description: 'Logged out successfully',
+                  })
+                }
+              >
+                <FiLogOut />
+              </LogoutButton>
+            )}
           </Group>
         </GridItem>
 

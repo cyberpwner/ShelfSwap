@@ -1,15 +1,19 @@
-import { axiosInstance } from '@/api/api.constants';
+import { axiosInstance } from '@/api/api';
+import { IAuthContext } from '@/contexts/AuthContext/AuthContext';
+import { useAuth } from '@/contexts/AuthContext/useAuth';
 import { Button } from '@chakra-ui/react';
 import axios from 'axios';
-import { Dispatch, SetStateAction } from 'react';
-import { FiLogOut } from 'react-icons/fi';
+import { MouseEventHandler, ReactNode } from 'react';
 
 interface Props {
-  setIsAuth: Dispatch<SetStateAction<boolean>>;
+  children: ReactNode | string;
+  onClick?: MouseEventHandler<HTMLButtonElement>;
 }
 
-function LogoutButton({ setIsAuth }: Props) {
-  async function doLogout(setIsAuth: Dispatch<SetStateAction<boolean>>) {
+function LogoutButton({ children, onClick }: Props) {
+  const { setUser } = useAuth();
+
+  async function doLogout(setUser: IAuthContext['setUser']) {
     try {
       const response = await axiosInstance.post('/users/logout');
 
@@ -19,13 +23,21 @@ function LogoutButton({ setIsAuth }: Props) {
         return error.response;
       }
     } finally {
-      setIsAuth(false);
+      setUser(null);
     }
   }
 
   return (
-    <Button onClick={() => doLogout(setIsAuth)}>
-      <FiLogOut />
+    <Button
+      onClick={(e) => {
+        doLogout(setUser);
+
+        if (onClick) {
+          onClick(e);
+        }
+      }}
+    >
+      {children}
     </Button>
   );
 }

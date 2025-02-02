@@ -3,20 +3,26 @@ import { Order } from '../entities/Order';
 import { getErrorMsg, InformativeError } from '../utils/error.utils';
 import { BaseDao } from './Base.dao';
 
+type OrderRelations = 'user' | 'items' | 'payment';
+
 export class OrderDao implements BaseDao<Order>, InformativeError {
   private transactionalManager: EntityManager;
 
-  async findAll(): Promise<Order[]> {
-    try {
-      return Order.find({ relations: ['user'] });
-    } catch (error) {
-      throw new Error(this._getErrorInfo(error));
-    }
+  async findAll(page?: number, pageSize?: number): Promise<{ data: Order[]; total: number }> {
+    const skip = page && pageSize ? (page - 1) * pageSize : undefined;
+
+    const [orders, total] = await Order.findAndCount({
+      relations: ['user', 'items', 'payment'] as OrderRelations[],
+      skip: skip ?? undefined,
+      take: pageSize ?? undefined,
+    });
+
+    return { data: orders, total };
   }
 
   async findById(id: string): Promise<Order | null> {
     try {
-      return Order.findOne({ where: { id }, relations: ['user'] });
+      return Order.findOne({ where: { id }, relations: ['user', 'items', 'payment'] as OrderRelations[] });
     } catch (error) {
       throw new Error(this._getErrorInfo(error));
     }

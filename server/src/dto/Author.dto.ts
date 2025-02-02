@@ -4,4 +4,5 @@ export class AuthorDto {
   id: string;
   name: string;
   books?: BookDto[];
+  createdAt: Date;
 }

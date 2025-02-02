@@ -6,13 +6,22 @@ import { HttpStatusCode } from '../types/http.types.d';
 export class AddressController {
   private readonly addressService = new AddressService();
 
-  getAll: RequestHandler = async (_req, res) => {
-    try {
-      const addresses = await this.addressService.getAll();
+  getAll: RequestHandler = async (req, res) => {
+    let pageNum = req.query?.page;
 
-      res.status(HttpStatusCode.OK).json(addresses);
+    if (!pageNum || String(pageNum).trim() === '') {
+      pageNum = undefined;
+    }
+
+    const decodedPageNum = pageNum ? Number(decodeURIComponent(String(pageNum))) : undefined;
+    const pageSize = decodedPageNum ? 10 : undefined;
+
+    try {
+      const { data, page, total, totalPages } = await this.addressService.getAll(decodedPageNum, pageSize);
+
+      res.status(HttpStatusCode.OK).json({ data, page, total, totalPages });
     } catch {
-      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: 'Failed to fetch addresss' });
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: 'Failed to fetch addresses' });
     }
   };
 

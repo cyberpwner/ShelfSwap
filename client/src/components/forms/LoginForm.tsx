@@ -5,14 +5,14 @@ import { Dispatch, SetStateAction, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { loginSchema } from '@/schemas/user.schemas';
-import { User } from '@/types/user.types';
+import { IUser } from '@/types/user.types';
 import FormButton from '../buttons/FormButton';
 import { PasswordInput } from '../ui/password-input';
 import { useNavigate } from 'react-router';
-import { axiosInstance } from '@/api/api.constants';
-import { AxiosError } from 'axios';
+import { axiosInstance } from '@/api/api';
+import { isAxiosError } from 'axios';
 import { toaster, Toaster } from '../ui/toaster';
-import { useAuth } from '@/contexts/AuthContext/AuthContextProvider';
+import { useAuth } from '@/contexts/AuthContext/useAuth';
 
 interface FormProps extends BoxProps {
   setIsShowRegister: Dispatch<SetStateAction<boolean>>;
@@ -21,8 +21,7 @@ interface FormProps extends BoxProps {
 type LoginData = z.infer<typeof loginSchema>;
 
 interface LoginResponse {
-  user?: User;
-  message: string;
+  user: IUser;
 }
 interface ErrorResponse {
   errors?: {
@@ -49,19 +48,23 @@ interface BackendValidationError {
   root?: string;
 }
 
-async function sendLoginRequest(formData: LoginData) {
+async function sendLoginRequest(formData: LoginData): Promise<LoginResponse | ErrorResponse> {
   try {
-    const response = await axiosInstance.post('/users/login', formData, {
+    const response = await axiosInstance.post<LoginResponse>('/users/login', formData, {
       headers: {
         'Content-Type': 'application/json',
       },
     });
 
-    return response;
+    return response.data;
   } catch (error) {
-    if (error instanceof AxiosError) {
-      return error.response;
+    if (isAxiosError(error)) {
+      return error.response?.data;
     }
+
+    return {
+      error: 'Something went wrong.',
+    };
   }
 }
 
@@ -76,12 +79,12 @@ function LoginForm({ setIsShowRegister, ...rest }: FormProps) {
   } = useForm<LoginData>({
     resolver: zodResolver(loginSchema),
   });
-  const { setIsAuth } = useAuth();
+  const { setUser } = useAuth();
 
   const onSubmit = handleSubmit(async (formData) => {
-    const res = await sendLoginRequest(formData);
+    const data = await sendLoginRequest(formData);
 
-    if (!res) {
+    if (!data) {
       const errorMsg = 'Failed to login. Try again later.';
 
       setBackendErrors({ root: errorMsg });
@@ -95,8 +98,6 @@ function LoginForm({ setIsShowRegister, ...rest }: FormProps) {
 
       return;
     }
-
-    const data: LoginResponse | ErrorResponse = res.data;
 
     if (isErrorResponse(data)) {
       if (data.error) {
@@ -146,9 +147,11 @@ function LoginForm({ setIsShowRegister, ...rest }: FormProps) {
       return;
     }
 
+    const user = data.user;
+
     reset();
     setBackendErrors({});
-    setIsAuth(true);
+    setUser({ id: user.id, username: user.username, role: user.role });
     navigate('/');
   });
 

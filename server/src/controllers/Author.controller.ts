@@ -2,15 +2,26 @@ import { RequestHandler } from 'express';
 import { AuthorService } from '../services/Author.service';
 import { Author } from '../entities/Author';
 import { HttpStatusCode } from '../types/http.types.d';
+import { TypedRequestBody } from '../types/express.types';
+import { UpdateAuthorDto } from '../schemas/author.schemas';
 
 export class AuthorController {
   private readonly authorService = new AuthorService();
 
-  getAll: RequestHandler = async (_req, res) => {
-    try {
-      const authors = await this.authorService.getAll();
+  getAll: RequestHandler = async (req, res) => {
+    let pageNum = req.query?.page;
 
-      res.status(HttpStatusCode.OK).json(authors);
+    if (!pageNum || String(pageNum).trim() === '') {
+      pageNum = undefined;
+    }
+
+    const decodedPageNum = pageNum ? Number(decodeURIComponent(String(pageNum))) : undefined;
+    const pageSize = decodedPageNum ? 10 : undefined;
+
+    try {
+      const { data, page, total, totalPages } = await this.authorService.getAll(decodedPageNum, pageSize);
+
+      res.status(HttpStatusCode.OK).json({ data, page, total, totalPages });
     } catch {
       res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: 'Failed to fetch authors' });
     }
@@ -50,7 +61,7 @@ export class AuthorController {
     }
   };
 
-  updateAuthor: RequestHandler = async (req, res) => {
+  updateAuthor: RequestHandler = async (req: TypedRequestBody<UpdateAuthorDto>, res) => {
     try {
       const id = req.params.id;
       const author = new Author();

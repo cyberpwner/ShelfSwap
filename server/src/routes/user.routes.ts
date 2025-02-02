@@ -22,6 +22,15 @@ router.get(
 
 router.post('/register', userValidation.validateRegister, userController.register);
 
+// for admin
+router.post(
+  '/create',
+  auth.authenticateAccessToken,
+  auth.authorize([UserRole.ADMIN]),
+  userValidation.validateRegister,
+  userController.createUser,
+);
+
 router.post('/login', userValidation.validateLogin, userController.login);
 
 router.post('/logout', userController.logout);

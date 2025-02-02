@@ -1,13 +1,23 @@
 import { Author } from '../entities/Author';
 import { BaseDao } from './Base.dao';
 
+type AuthorRelations = 'books';
+
 export class AuthorDao implements BaseDao<Author> {
-  async findAll(): Promise<Author[]> {
-    return Author.find({ relations: ['books'] });
+  async findAll(page?: number, pageSize?: number): Promise<{ data: Author[]; total: number }> {
+    const skip = page && pageSize ? (page - 1) * pageSize : undefined;
+
+    const [authors, total] = await Author.findAndCount({
+      relations: ['books'] as AuthorRelations[],
+      skip: skip ?? undefined,
+      take: pageSize ?? undefined,
+    });
+
+    return { data: authors, total };
   }
 
   async findById(id: string): Promise<Author | null> {
-    return Author.findOne({ where: { id }, relations: ['books'] });
+    return Author.findOne({ where: { id }, relations: ['books'] as AuthorRelations[] });
   }
 
   async create(author: Author): Promise<Author> {

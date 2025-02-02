@@ -1,13 +1,23 @@
 import { Payment } from '../entities/Payment';
 import { BaseDao } from './Base.dao';
 
+type PaymentRelations = 'order';
+
 export class PaymentDao implements BaseDao<Payment> {
-  async findAll(): Promise<Payment[]> {
-    return Payment.find();
+  async findAll(page?: number, pageSize?: number): Promise<{ data: Payment[]; total: number }> {
+    const skip = page && pageSize ? (page - 1) * pageSize : undefined;
+
+    const [payments, total] = await Payment.findAndCount({
+      relations: ['order'] as PaymentRelations[],
+      skip: skip ?? undefined,
+      take: pageSize ?? undefined,
+    });
+
+    return { data: payments, total };
   }
 
   async findById(id: string): Promise<Payment | null> {
-    return Payment.findOne({ where: { id } });
+    return Payment.findOne({ where: { id }, relations: ['order'] as PaymentRelations[] });
   }
 
   async create(payment: Payment): Promise<Payment> {

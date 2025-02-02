@@ -1,30 +1,19 @@
-import { axiosInstance } from '@/api/api.constants';
+import { axiosInstance } from '@/api/api';
 import { ICategory } from '@/loaders/fetchCategories';
+import { IBook } from '@/types/book.types';
+import { PaginatedDto } from '@/types/dto.types';
 import { QueryFunctionContext } from '@tanstack/react-query';
 
-export interface IBook {
-  id: string;
-  isbn: string;
-  title: string;
-  description: string;
-  price: number;
-  coverUrl: string;
-  authors: IAuthor[];
-}
-
-interface IAuthor {
-  id: string;
-  name: string;
+// type guard
+function isPaginatedData(data: unknown): data is PaginatedDto<ICategory> {
+  return (data as PaginatedDto<ICategory>).totalPages !== undefined;
 }
 
 export async function fetchBookList({
   queryKey,
-}: QueryFunctionContext<[string, { category: string[]; currentPage: number; search: string }]>): Promise<{
-  data: IBook[];
-  page: number;
-  total: number;
-  totalPages: number;
-}> {
+}: QueryFunctionContext<[string, { category: string[]; currentPage: number; search: string }]>): Promise<
+  PaginatedDto<IBook>
+> {
   const [, { category, currentPage, search }] = queryKey;
 
   const decodedQuery = decodeURIComponent(search);
@@ -36,13 +25,13 @@ export async function fetchBookList({
     url += `?name=${decodedCategory}`;
   }
 
-  const categoryData = (await axiosInstance.get<ICategory[] | ICategory>(url)).data;
+  const categoryData = (await axiosInstance.get<PaginatedDto<ICategory> | ICategory>(url)).data;
 
   let bookIds: string[] = [];
 
   // we extract the book ids
-  if (categoryData instanceof Array) {
-    bookIds = categoryData
+  if (isPaginatedData(categoryData)) {
+    bookIds = categoryData.data
       .map((category) => category.books)
       .reduce((prevBooks, currentBooks) => {
         const arrBuffer = [...prevBooks, ...currentBooks];
