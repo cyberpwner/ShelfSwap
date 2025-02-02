@@ -3,12 +3,13 @@ import Header from '@/components/header/Header';
 import { setupAxiosInterceptors } from '@/api/api.constants';
 import { Box, Container, Stack, Text } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useNavigate, useSearchParams } from 'react-router';
 import { useBookList } from '@/components/book-list/useBookList';
 import PaginationBar from '@/components/pagination-bar/PaginationBar';
 
 function HomePage() {
-  const [search, setSearch] = useState('');
+  const [searchParams] = useSearchParams();
+  const [search, setSearch] = useState(searchParams.get('search') || '');
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedCategory, setSelectedCategory] = useState<string[]>([]);
   const { isPending, isError, data } = useBookList(selectedCategory, currentPage, search);
@@ -28,7 +29,7 @@ function HomePage() {
   return (
     <Stack>
       <Container minH="100vh" maxW="5/6">
-        <Header setSearch={setSearch} />
+        <Header searchParams={searchParams} setSearch={setSearch} />
 
         <Stack maxW="full" as="main" py="24" gap="8">
           <BookList

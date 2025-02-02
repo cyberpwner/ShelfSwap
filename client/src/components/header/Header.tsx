@@ -6,13 +6,14 @@ import FavoritesButton from '../buttons/FavoritesButton';
 import CartButton from '../buttons/CartButton';
 import { NavMenu } from './NavMenu';
 import { Link, useNavigate } from 'react-router';
-import { Dispatch, FormEvent, SetStateAction, useState } from 'react';
+import { Dispatch, FormEvent, SetStateAction, useEffect, useState } from 'react';
 
 interface Props {
   setSearch: Dispatch<SetStateAction<string>>;
+  searchParams: URLSearchParams;
 }
 
-function Header({ setSearch }: Props) {
+function Header({ setSearch, searchParams }: Props) {
   const [inputValue, setInputValue] = useState('');
   const navigate = useNavigate();
 
@@ -23,6 +24,10 @@ function Header({ setSearch }: Props) {
 
     navigate(`/?search=${encodeURIComponent(inputValue) || ''}`);
   }
+
+  useEffect(() => {
+    setInputValue(searchParams.get('search') || '');
+  }, [searchParams]);
 
   return (
     <Box as="header" w="full" h="32">
