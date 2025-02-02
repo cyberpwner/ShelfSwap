@@ -4,6 +4,7 @@ import { StrictMode } from 'react';
 import { ChakraProvider, createSystem, defaultConfig } from '@chakra-ui/react';
 import { ColorModeProvider } from './components/ui/color-mode';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 
@@ -45,6 +46,8 @@ function App() {
                 <Route path="login" element={<LoginPage />} />
               </Routes>
             </BrowserRouter>
+
+            <ReactQueryDevtools initialIsOpen={false} />
           </QueryClientProvider>
         </ColorModeProvider>
       </ChakraProvider>

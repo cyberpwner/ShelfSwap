@@ -5,7 +5,7 @@ import LoginForm from '@/components/forms/LoginForm';
 import RegisterForm from '@/components/forms/RegisterForm';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
-import { setupAxiosInterceptors } from '@/constants/api.constants';
+import { setupAxiosInterceptors } from '@/api/api.constants';
 
 function LoginPage() {
   const [isShowRegister, setIsShowRegister] = useState(false);

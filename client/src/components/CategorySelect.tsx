@@ -1,11 +1,15 @@
-import { createListCollection, Skeleton } from '@chakra-ui/react';
+import { Button, createListCollection, Flex, Skeleton } from '@chakra-ui/react';
 import { SelectContent, SelectItem, SelectLabel, SelectRoot, SelectTrigger, SelectValueText } from './ui/select';
 import { useQuery } from '@tanstack/react-query';
 import { fetchCategories } from '@/loaders/fetchCategories';
-import { useState } from 'react';
+import { Dispatch, SetStateAction } from 'react';
 
-function CategorySelect() {
-  const [selectedCategory, setSelectedCategory] = useState<string[]>([]);
+interface Props {
+  selectedCategory: string[];
+  setSelectedCategory: Dispatch<SetStateAction<string[]>>;
+}
+
+function CategorySelect({ selectedCategory, setSelectedCategory }: Props) {
   const { isError, isPending, data } = useQuery({ queryKey: ['categories'], queryFn: fetchCategories });
 
   if (isError) {
@@ -13,7 +17,7 @@ function CategorySelect() {
   }
 
   if (isPending) {
-    return <Skeleton />;
+    return <Skeleton h="36px" w="64" />;
   }
 
   const categoriesList = createListCollection({
@@ -24,29 +28,43 @@ function CategorySelect() {
   });
 
   return (
-    <SelectRoot
-      value={selectedCategory}
-      onValueChange={(e) => setSelectedCategory(e.value)}
-      collection={categoriesList}
-      size="sm"
-      maxW="72"
-    >
-      <SelectLabel color="var(--dark-color)" fontWeight="bold" letterSpacing="wide" _dark={{ color: 'gray.100' }}>
-        Filter by category:
-      </SelectLabel>
+    <Flex gap="8" pos="relative" w="full">
+      <SelectRoot
+        value={selectedCategory}
+        onValueChange={(e) => setSelectedCategory(e.value)}
+        collection={categoriesList}
+        size="sm"
+        maxW={{ base: '48', sm: '72' }}
+        minW="48"
+      >
+        <SelectLabel color="var(--dark-color)" fontWeight="bold" letterSpacing="wide" _dark={{ color: 'gray.100' }}>
+          Filter by category:
+        </SelectLabel>
 
-      <SelectTrigger>
-        <SelectValueText placeholder="Select category" />
-      </SelectTrigger>
+        <SelectTrigger>
+          <SelectValueText placeholder="Select category" />
+        </SelectTrigger>
 
-      <SelectContent>
-        {categoriesList.items.map((category) => (
-          <SelectItem item={category} key={category.value}>
-            {category.label}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </SelectRoot>
+        <SelectContent>
+          {categoriesList.items.map((category) => (
+            <SelectItem item={category} key={category.value} cursor="pointer">
+              {category.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </SelectRoot>
+
+      <Button
+        onClick={() => setSelectedCategory([])}
+        size="sm"
+        pos="absolute"
+        bottom="0"
+        right="0"
+        _dark={{ bg: 'var(--primary-purple)', color: 'white', _hover: { bg: 'var(--primary-purple)/90' } }}
+      >
+        Reset
+      </Button>
+    </Flex>
   );
 }
 

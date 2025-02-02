@@ -7,7 +7,7 @@ import { Field } from '../ui/field';
 import { registerSchema } from '@/schemas/user.schemas';
 import FormButton from '../buttons/FormButton';
 import { PasswordInput } from '../ui/password-input';
-import { axiosInstance } from '@/constants/api.constants';
+import { axiosInstance } from '@/api/api.constants';
 import { User } from '@/types/user.types';
 import { useNavigate } from 'react-router';
 import { AxiosError } from 'axios';

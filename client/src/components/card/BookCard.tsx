@@ -1,7 +1,9 @@
-import { Card, Center, HStack, Image, Text } from '@chakra-ui/react';
-import MenInTheSunCover from '../../assets/img/MenInTheSunCover.jpg';
+import { Box, Card, Center, HStack, Image, Text } from '@chakra-ui/react';
+import { IBook } from '../book-list/fetchBookList';
 
-export function BookCard() {
+type Props = Pick<IBook, 'title' | 'price' | 'authors' | 'coverUrl'>;
+
+export function BookCard({ title, authors, price, coverUrl }: Props) {
   return (
     <Card.Root
       maxW={{ base: '72', sm: '80' }}
@@ -19,23 +21,27 @@ export function BookCard() {
         transition="all"
         _hover={{ bg: 'var(--subtle-purple)' }}
       >
-        <Image w="5/6" rounded={'sm'} src={MenInTheSunCover} alt="Men in the Sun cover" />
+        <Image w="5/6" rounded={'sm'} src={coverUrl} alt="Men in the Sun cover" />
       </Center>
 
       <Card.Body maxW="full" gap="0" pt="4">
-        <Card.Title>Men in the Sun</Card.Title>
+        <Card.Title>{title}</Card.Title>
 
         <HStack alignItems="center" justifyContent="space-between">
-          <Card.Description>Ghassan Kanafani</Card.Description>
+          <Card.Description as="div" display="flex" flexWrap="wrap">
+            {authors.map((author) => (
+              <Text key={author.name}>{author.name}</Text>
+            ))}
+          </Card.Description>
 
-          <Text
+          <Box
             color="var(--primary-purple)"
             textStyle={{ base: 'md', md: 'lg' }}
             fontWeight="bold"
             letterSpacing="wide"
           >
-            {`87.75€`}
-          </Text>
+            {`${price}€`}
+          </Box>
         </HStack>
       </Card.Body>
     </Card.Root>

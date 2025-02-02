@@ -9,7 +9,7 @@ import { User } from '@/types/user.types';
 import FormButton from '../buttons/FormButton';
 import { PasswordInput } from '../ui/password-input';
 import { useNavigate } from 'react-router';
-import { axiosInstance } from '@/constants/api.constants';
+import { axiosInstance } from '@/api/api.constants';
 import { AxiosError } from 'axios';
 import { toaster, Toaster } from '../ui/toaster';
 
