@@ -79,4 +79,26 @@ export class Auth {
       res.status(HttpStatusCode.UNAUTHORIZED).json({ error: 'Unauthorized' });
     }
   };
+
+  isAuthenticated: RequestHandler = async (req, res) => {
+    const accessToken = req.cookies?.accessToken;
+
+    if (!accessToken) {
+      res.status(HttpStatusCode.UNAUTHORIZED).json({ error: 'Unauthorized' });
+      return;
+    }
+
+    try {
+      const user = verifyAccessToken(accessToken);
+
+      if (!user || typeof user === 'string') {
+        res.status(HttpStatusCode.UNAUTHORIZED).json({ error: 'Unauthorized' });
+        return;
+      }
+
+      res.sendStatus(HttpStatusCode.OK);
+    } catch {
+      res.sendStatus(HttpStatusCode.UNAUTHORIZED);
+    }
+  };
 }

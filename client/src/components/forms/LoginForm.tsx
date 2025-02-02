@@ -12,6 +12,7 @@ import { useNavigate } from 'react-router';
 import { axiosInstance } from '@/api/api.constants';
 import { AxiosError } from 'axios';
 import { toaster, Toaster } from '../ui/toaster';
+import { useAuth } from '@/contexts/AuthContext/AuthContextProvider';
 
 interface FormProps extends BoxProps {
   setIsShowRegister: Dispatch<SetStateAction<boolean>>;
@@ -75,6 +76,7 @@ function LoginForm({ setIsShowRegister, ...rest }: FormProps) {
   } = useForm<LoginData>({
     resolver: zodResolver(loginSchema),
   });
+  const { setIsAuth } = useAuth();
 
   const onSubmit = handleSubmit(async (formData) => {
     const res = await sendLoginRequest(formData);
@@ -146,6 +148,7 @@ function LoginForm({ setIsShowRegister, ...rest }: FormProps) {
 
     reset();
     setBackendErrors({});
+    setIsAuth(true);
     navigate('/');
   });
 

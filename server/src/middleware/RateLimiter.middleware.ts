@@ -5,7 +5,7 @@ import { HttpStatusCode } from '../types/http.types.d';
 export class RateLimiter {
   rateLimiter: RequestHandler = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 1000,
+    max: 10000,
     keyGenerator: (req) => {
       // TODO: change key to user id (from authentication middleware) and make ip a fallback
       return req.ip || '';

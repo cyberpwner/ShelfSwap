@@ -4,17 +4,22 @@ import Logo from '../assets/img/Logo.svg';
 import LoginForm from '@/components/forms/LoginForm';
 import RegisterForm from '@/components/forms/RegisterForm';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { Navigate, useNavigate } from 'react-router';
 import { setupAxiosInterceptors } from '@/api/api.constants';
+import { useAuth } from '@/contexts/AuthContext/AuthContextProvider';
 
 function LoginPage() {
   const [isShowRegister, setIsShowRegister] = useState(false);
-
+  const { isAuth } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
     setupAxiosInterceptors(navigate);
   }, [navigate]);
+
+  if (isAuth) {
+    return <Navigate to={'/'} replace />;
+  }
 
   return (
     <Grid

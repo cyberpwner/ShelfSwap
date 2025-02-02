@@ -8,6 +8,8 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import BookDetails from './pages/BookDetails';
+import ProtectedRoute from './layouts/ProtectedRoute';
+import AuthContextProvider from './contexts/AuthContext/AuthContextProvider';
 
 const system = createSystem(defaultConfig, {
   globalCss: {
@@ -41,15 +43,18 @@ function App() {
       <ChakraProvider value={system}>
         <ColorModeProvider>
           <QueryClientProvider client={queryClient}>
-            <BrowserRouter>
-              <Routes>
-                <Route path="/" element={<HomePage />} />
-                <Route path="login" element={<LoginPage />} />
-                <Route path="books/:id" element={<BookDetails />} />
-              </Routes>
-            </BrowserRouter>
-
-            <ReactQueryDevtools initialIsOpen={false} />
+            <AuthContextProvider>
+              <BrowserRouter>
+                <Routes>
+                  <Route path="/" element={<HomePage />} />
+                  <Route path="login" element={<LoginPage />} />
+                  <Route element={<ProtectedRoute />}>
+                    <Route path="books/:id" element={<BookDetails />} />
+                  </Route>
+                </Routes>
+              </BrowserRouter>
+              <ReactQueryDevtools initialIsOpen={false} />
+            </AuthContextProvider>
           </QueryClientProvider>
         </ColorModeProvider>
       </ChakraProvider>
