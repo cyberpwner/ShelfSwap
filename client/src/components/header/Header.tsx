@@ -5,9 +5,25 @@ import ProfileButton from '../buttons/ProfileButton';
 import FavoritesButton from '../buttons/FavoritesButton';
 import CartButton from '../buttons/CartButton';
 import { NavMenu } from './NavMenu';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
+import { Dispatch, FormEvent, SetStateAction, useState } from 'react';
 
-function Header() {
+interface Props {
+  setSearch: Dispatch<SetStateAction<string>>;
+}
+
+function Header({ setSearch }: Props) {
+  const [inputValue, setInputValue] = useState('');
+  const navigate = useNavigate();
+
+  function handleSubmit(e: FormEvent<HTMLDivElement>) {
+    e.preventDefault();
+
+    setSearch(inputValue);
+
+    navigate(`/?search=${encodeURIComponent(inputValue) || ''}`);
+  }
+
   return (
     <Box as="header" w="full" h="32">
       <Grid
@@ -24,9 +40,11 @@ function Header() {
           </Link>
         </GridItem>
 
-        <GridItem as="form" className="search-part">
+        <GridItem as="form" onSubmit={handleSubmit} className="search-part">
           <Center>
             <SearchBox
+              inputValue={inputValue}
+              setInputValue={setInputValue}
               w="full"
               md={{ w: '3/4' }}
               bg="var(--subtle-purple)"

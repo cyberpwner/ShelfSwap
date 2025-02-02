@@ -17,13 +17,17 @@ interface IAuthor {
   name: string;
 }
 
-export async function fetchBookList({ queryKey }: QueryFunctionContext<[string, string[], number]>): Promise<{
+export async function fetchBookList({
+  queryKey,
+}: QueryFunctionContext<[string, { category: string[]; currentPage: number; search: string }]>): Promise<{
   data: IBook[];
   page: number;
   total: number;
   totalPages: number;
 }> {
-  const [, category, currentPage] = queryKey;
+  const [, { category, currentPage, search }] = queryKey;
+
+  const decodedQuery = decodeURIComponent(search);
 
   let url = '/categories';
 
@@ -56,7 +60,7 @@ export async function fetchBookList({ queryKey }: QueryFunctionContext<[string, 
     totalPages,
   } = (
     await axiosInstance.get<{ data: IBook[]; page: number; total: number; totalPages: number }>(
-      `/books?page=${currentPage}`,
+      `/books/search?q=${decodedQuery || ''}&page=${currentPage}`,
     )
   ).data;
 

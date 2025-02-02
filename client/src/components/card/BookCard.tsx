@@ -30,7 +30,7 @@ export function BookCard({ title, authors, price, coverUrl }: Props) {
         </Card.Title>
 
         <HStack alignItems="center" justifyContent="space-between">
-          <Card.Description as="div" display="flex" flexWrap="wrap">
+          <Card.Description lineClamp="1" as="div" display="flex" flexDir="column">
             {authors.map((author) => (
               <Text key={author.name}>{author.name}</Text>
             ))}

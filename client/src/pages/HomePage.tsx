@@ -8,9 +8,10 @@ import { useBookList } from '@/components/book-list/useBookList';
 import PaginationBar from '@/components/pagination-bar/PaginationBar';
 
 function HomePage() {
+  const [search, setSearch] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedCategory, setSelectedCategory] = useState<string[]>([]);
-  const { isPending, isError, data } = useBookList(selectedCategory, currentPage);
+  const { isPending, isError, data } = useBookList(selectedCategory, currentPage, search);
   const navigate = useNavigate();
 
   // navigate is sent to axios interceptor so it can redirect user to login page if they try to access protected routes while not logged in
@@ -27,7 +28,7 @@ function HomePage() {
   return (
     <Stack>
       <Container minH="100vh" maxW="5/6">
-        <Header />
+        <Header setSearch={setSearch} />
 
         <Stack maxW="full" as="main" py="24" gap="8">
           <BookList
