@@ -4,7 +4,7 @@ import { BookCategory } from '../types/category.types.d';
 import { authorSchema } from './author.schemas';
 
 export const searchQuerySchema = z.object({
-  q: z.string().trim().nonempty().max(100),
+  q: z.string().trim().max(100).optional(),
 });
 
 export const isbnSchema = z

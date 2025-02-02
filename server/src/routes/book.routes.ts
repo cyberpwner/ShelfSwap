@@ -12,7 +12,7 @@ const auth = new Auth();
 
 router.get('/', bookController.getAll);
 
-router.get('/search', bookValidation.validateSearch, bookController.searchByTitleOrAuthor);
+router.get('/search', bookController.searchByTitleOrAuthor);
 
 router.get('/:id', CommonValidation.validateId, bookController.getById);
 

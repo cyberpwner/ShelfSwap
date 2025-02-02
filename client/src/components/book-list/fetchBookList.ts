@@ -17,22 +17,28 @@ interface IAuthor {
   name: string;
 }
 
-export async function fetchBookList({ queryKey }: QueryFunctionContext<[string, string[]]>): Promise<IBook[]> {
-  const [, category] = queryKey;
+export async function fetchBookList({ queryKey }: QueryFunctionContext<[string, string[], number]>): Promise<{
+  data: IBook[];
+  page: number;
+  total: number;
+  totalPages: number;
+}> {
+  const [, category, currentPage] = queryKey;
 
   let url = '/categories';
 
   if (category.length > 0) {
-    url += `?name=${category[0]}`;
+    const decodedCategory = decodeURIComponent(category[0]);
+    url += `?name=${decodedCategory}`;
   }
 
-  const data = (await axiosInstance.get<ICategory[] | ICategory>(url)).data;
+  const categoryData = (await axiosInstance.get<ICategory[] | ICategory>(url)).data;
 
   let bookIds: string[] = [];
 
   // we extract the book ids
-  if (data instanceof Array) {
-    bookIds = data
+  if (categoryData instanceof Array) {
+    bookIds = categoryData
       .map((category) => category.books)
       .reduce((prevBooks, currentBooks) => {
         const arrBuffer = [...prevBooks, ...currentBooks];
@@ -40,11 +46,27 @@ export async function fetchBookList({ queryKey }: QueryFunctionContext<[string, 
       })
       .map((book) => book.id);
   } else {
-    bookIds = data.books.map((book) => book.id);
+    bookIds = categoryData.books.map((book) => book.id);
   }
 
-  const books = (await axiosInstance.get<IBook[]>('/books')).data;
+  const {
+    data: books,
+    page,
+    total,
+    totalPages,
+  } = (
+    await axiosInstance.get<{ data: IBook[]; page: number; total: number; totalPages: number }>(
+      `/books?page=${currentPage}`,
+    )
+  ).data;
 
-  // return books with said bookIds
-  return books.filter((book) => bookIds.includes(book.id));
+  // filter books with said bookIds
+  const filteredBooks = books.filter((book) => bookIds.includes(book.id));
+
+  return {
+    page,
+    total,
+    totalPages,
+    data: filteredBooks,
+  };
 }

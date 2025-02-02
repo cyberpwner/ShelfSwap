@@ -4,10 +4,19 @@ import { Category } from '../entities/Category';
 import { BookCategory } from '../types/category.types.d';
 import { AppDataSource } from '../config/dataSource.config';
 import { BaseDao } from './Base.dao';
+import { Like } from 'typeorm';
 
 export class BookDao implements BaseDao<Book> {
-  async findAll(): Promise<Book[]> {
-    return Book.find({ relations: ['authors', 'categories', 'reviews'] });
+  async findAll(page = 1, pageSize = 10): Promise<{ data: Book[]; total: number }> {
+    const skip = (page - 1) * pageSize;
+
+    const [books, total] = await Book.findAndCount({
+      relations: ['authors', 'categories', 'reviews'],
+      skip,
+      take: pageSize,
+    });
+
+    return { data: books, total };
   }
 
   async findById(id: string): Promise<Book | null> {
@@ -18,12 +27,17 @@ export class BookDao implements BaseDao<Book> {
     return Book.findOne({ where: { isbn } });
   }
 
-  async searchByTitleOrAuthor(q: string): Promise<Book[]> {
-    return Book.createQueryBuilder('Book')
-      .innerJoinAndSelect('Book.authors', 'Author')
-      .where('Book.title like :searchQuery', { searchQuery: `%${q}%` })
-      .orWhere('Author.name like :searchQuery', { searchQuery: `%${q}%` })
-      .getMany();
+  async searchByTitleOrAuthor(q: string, page = 1, pageSize = 10): Promise<{ data: Book[]; total: number }> {
+    const skip = (page - 1) * pageSize;
+
+    const [books, total] = await Book.findAndCount({
+      relations: ['authors', 'categories', 'reviews'],
+      where: q.trim().length > 0 ? [{ title: Like(`%${q}%`) }, { authors: { name: Like(`%${q}%`) } }] : undefined,
+      skip,
+      take: pageSize,
+    });
+
+    return { data: books, total };
   }
 
   async create(book: Book): Promise<Book> {

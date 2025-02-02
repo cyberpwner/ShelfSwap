@@ -25,7 +25,9 @@ export function BookCard({ title, authors, price, coverUrl }: Props) {
       </Center>
 
       <Card.Body maxW="full" gap="0" pt="4">
-        <Card.Title>{title}</Card.Title>
+        <Card.Title fontSize={{ base: 'sm', md: 'md' }} lineClamp="1">
+          {title}
+        </Card.Title>
 
         <HStack alignItems="center" justifyContent="space-between">
           <Card.Description as="div" display="flex" flexWrap="wrap">

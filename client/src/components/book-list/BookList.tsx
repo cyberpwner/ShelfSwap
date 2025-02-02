@@ -2,14 +2,19 @@ import { Grid, GridItem, HStack, Stack, Text } from '@chakra-ui/react';
 import { BookCard } from '../card/BookCard';
 import { Link } from 'react-router';
 import CategorySelect from '../CategorySelect';
-import { useState } from 'react';
-import { useBookList } from '@/components/book-list/useBookList';
 import { Skeleton } from '../ui/skeleton';
+import { IBook } from './fetchBookList';
+import { Dispatch, SetStateAction } from 'react';
 
-function BookList() {
-  const [selectedCategory, setSelectedCategory] = useState<string[]>([]);
-  const { isPending, isError, data: books } = useBookList(selectedCategory);
+interface Props {
+  selectedCategory: string[];
+  setSelectedCategory: Dispatch<SetStateAction<string[]>>;
+  isPending: boolean;
+  isError: boolean;
+  books: IBook[] | undefined;
+}
 
+function BookList({ selectedCategory, setSelectedCategory, isPending, isError, books }: Props) {
   if (isError) {
     return <Text>An error occurred. Try again later</Text>;
   }
@@ -31,9 +36,10 @@ function BookList() {
         {/* if it's loading, show skeletons of books*/}
         {isPending &&
           [1, 2, 3, 4, 5, 6].map((num) => (
-            <Stack animation="scale-fade-in" gap="4" key={num}>
+            <Stack gap="4" key={num}>
               <Skeleton h="80" w="64" />
               <Skeleton h="6" w="24" />
+              
               <HStack justifyContent="space-between">
                 <Skeleton h="5" w="36" />
                 <Skeleton h="5" w="8" />

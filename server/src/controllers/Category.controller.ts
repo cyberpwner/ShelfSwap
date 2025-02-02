@@ -51,15 +51,10 @@ export class CategoryController {
 
       if (category == null) {
         res.status(HttpStatusCode.NOT_FOUND).json({ error: 'Category not found' });
-        next('route');
         return;
       }
 
       res.status(HttpStatusCode.OK).json(category);
-
-      // if a category is provided and is found skip the next handler (getAll)
-      next('route');
-      return;
     } catch {
       res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: 'Failed to fetch category' });
     }

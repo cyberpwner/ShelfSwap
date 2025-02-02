@@ -1,5 +1,6 @@
 import { BookDao } from '../dao/Book.dao';
 import { BookDto } from '../dto/Book.dto';
+import { PaginatedDto } from '../dto/Paginated.dto';
 import { Book } from '../entities/Book';
 import { BookCategory } from '../types/category.types.d';
 import { MapperService } from './Mapper.service';
@@ -13,12 +14,32 @@ export class BookService {
     this.mapperService = new MapperService();
   }
 
-  async getAll(): Promise<BookDto[]> {
-    const books = await this.bookDao.findAll();
+  async getAll(page = 1, pageSize = 10): Promise<PaginatedDto<BookDto>> {
+    const { data: books, total } = await this.bookDao.findAll(page, pageSize);
 
-    if (books.length === 0) return [];
+    if (books.length === 0) {
+      return {
+        data: [],
+        total: 0,
+        page,
+        totalPages: 0,
+      };
+    }
 
-    return books.map((book) => this.mapperService.mapBookToDto(book));
+    let totalPages = undefined;
+
+    if (total >= pageSize) {
+      totalPages = Math.ceil(total / pageSize);
+    } else {
+      totalPages = 1;
+    }
+
+    return {
+      data: books.map((book) => this.mapperService.mapBookToDto(book)),
+      total,
+      page,
+      totalPages,
+    };
   }
 
   async getById(id: string): Promise<BookDto | null> {
@@ -29,12 +50,32 @@ export class BookService {
     return this.mapperService.mapBookToDto(book);
   }
 
-  async searchByTitleOrAuthor(q: string): Promise<BookDto[]> {
-    const books = await this.bookDao.searchByTitleOrAuthor(q);
+  async searchByTitleOrAuthor(q: string, page = 1, pageSize = 10): Promise<PaginatedDto<BookDto>> {
+    const { data: books, total } = await this.bookDao.searchByTitleOrAuthor(q, page, pageSize);
 
-    if (books.length === 0) return [];
+    if (books.length === 0) {
+      return {
+        data: [],
+        total: 0,
+        page,
+        totalPages: 0,
+      };
+    }
 
-    return books.map((book) => this.mapperService.mapBookToDto(book));
+    let totalPages = undefined;
+
+    if (total >= pageSize) {
+      totalPages = Math.ceil(total / pageSize);
+    } else {
+      totalPages = 1;
+    }
+
+    return {
+      data: books.map((book) => this.mapperService.mapBookToDto(book)),
+      total,
+      page,
+      totalPages,
+    };
   }
 
   async createBook(book: Book, authorNames: string[], categoryNames: BookCategory[]): Promise<BookDto | null> {

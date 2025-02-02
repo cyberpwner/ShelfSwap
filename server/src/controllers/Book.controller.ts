@@ -10,13 +10,53 @@ import { HttpStatusCode } from '../types/http.types.d';
 export class BookController implements InformativeError {
   private readonly bookService = new BookService();
 
-  getAll: RequestHandler = async (_req, res) => {
-    try {
-      const books = await this.bookService.getAll();
+  getAll: RequestHandler = async (req, res) => {
+    let pageNum = req.query?.page;
 
-      res.status(HttpStatusCode.OK).json(books);
+    if (!pageNum || String(pageNum).trim() === '') {
+      pageNum = '1';
+    }
+
+    const decodedPageNum = Number(decodeURIComponent(String(pageNum)));
+
+    try {
+      const { data, page, total, totalPages } = await this.bookService.getAll(decodedPageNum);
+
+      res.status(HttpStatusCode.OK).json({ data, page, total, totalPages });
     } catch {
       res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: 'Failed to fetch books' });
+    }
+  };
+
+  searchByTitleOrAuthor: RequestHandler = async (req, res) => {
+    let pageNum = req.query?.page;
+
+    if (!pageNum || String(pageNum).trim() === '') {
+      pageNum = '1';
+    }
+
+    const decodedPageNum = Number(decodeURIComponent(String(pageNum)));
+
+    let q = req.query?.q;
+
+    if (!q || String(q).trim() === '') {
+      q = '';
+    }
+
+    // sanitize the query before using it
+
+    const decodedQuery = decodeURIComponent(String(q));
+    const sanitizedQuery = sanitize(decodedQuery);
+
+    try {
+      const { data, page, total, totalPages } = await this.bookService.searchByTitleOrAuthor(
+        sanitizedQuery,
+        decodedPageNum,
+      );
+
+      res.status(HttpStatusCode.OK).json({ data, page, total, totalPages });
+    } catch {
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: 'Failed to search for book' });
     }
   };
 
@@ -33,33 +73,6 @@ export class BookController implements InformativeError {
       res.status(HttpStatusCode.OK).json(book);
     } catch {
       res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: 'Failed to fetch book' });
-    }
-  };
-
-  searchByTitleOrAuthor: RequestHandler = async (req, res) => {
-    const q = req.query.q;
-
-    if (!q || String(q).trim() === '') {
-      res.status(HttpStatusCode.BAD_REQUEST).json({ error: "Query parameter 'q' is required" });
-      return;
-    }
-
-    // sanitize the query before using it
-
-    const decodedQuery = decodeURIComponent(String(q));
-    const sanitizedQuery = sanitize(decodedQuery);
-
-    try {
-      const searchResults = await this.bookService.searchByTitleOrAuthor(sanitizedQuery);
-
-      if (!searchResults) {
-        res.status(HttpStatusCode.NOT_FOUND).json({ error: 'Not found' });
-        return;
-      }
-
-      res.status(HttpStatusCode.OK).json(searchResults);
-    } catch {
-      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: 'Failed to find book' });
     }
   };
 
