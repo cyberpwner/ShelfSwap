@@ -1,11 +1,12 @@
 import BookList from '@/components/book-list/BookList';
 import Header from '@/components/header/Header';
 import { setupAxiosInterceptors } from '@/api/api.constants';
-import { Box, Container, Stack, Text } from '@chakra-ui/react';
+import { Container, Stack } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router';
 import { useBookList } from '@/components/book-list/useBookList';
 import PaginationBar from '@/components/pagination-bar/PaginationBar';
+import Footer from '@/components/Footer';
 
 function HomePage() {
   const [searchParams] = useSearchParams();
@@ -48,11 +49,7 @@ function HomePage() {
         </Stack>
       </Container>
 
-      <Box as="footer" py="16" bg="var(--dark-color)" color="gray.100" letterSpacing="wide">
-        <Container maxW="5/6" h="full">
-          <Text>Footer</Text>
-        </Container>
-      </Box>
+      <Footer />
     </Stack>
   );
 }

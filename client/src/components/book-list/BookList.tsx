@@ -39,7 +39,7 @@ function BookList({ selectedCategory, setSelectedCategory, isPending, isError, b
             <Stack gap="4" key={num}>
               <Skeleton h="80" w="64" />
               <Skeleton h="6" w="24" />
-              
+
               <HStack justifyContent="space-between">
                 <Skeleton h="5" w="36" />
                 <Skeleton h="5" w="8" />
@@ -53,7 +53,7 @@ function BookList({ selectedCategory, setSelectedCategory, isPending, isError, b
           books.length > 0 &&
           books.map((book) => (
             <GridItem key={book.id}>
-              <Link to={`/${book.id}`}>
+              <Link to={`/books/${book.id}`}>
                 <BookCard title={book.title} authors={book.authors} price={book.price} coverUrl={book.coverUrl} />
               </Link>
             </GridItem>

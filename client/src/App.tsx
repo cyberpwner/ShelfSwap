@@ -7,6 +7,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
+import BookDetails from './pages/BookDetails';
 
 const system = createSystem(defaultConfig, {
   globalCss: {
@@ -44,6 +45,7 @@ function App() {
               <Routes>
                 <Route path="/" element={<HomePage />} />
                 <Route path="login" element={<LoginPage />} />
+                <Route path="books/:id" element={<BookDetails />} />
               </Routes>
             </BrowserRouter>
 
