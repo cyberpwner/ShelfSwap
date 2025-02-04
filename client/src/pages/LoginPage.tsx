@@ -9,9 +9,9 @@ import { useAuth } from '@/contexts/AuthContext/useAuth';
 
 function LoginPage() {
   const [isShowRegister, setIsShowRegister] = useState(false);
-  const { isAuth } = useAuth();
+  const { user } = useAuth();
 
-  if (isAuth) {
+  if (user) {
     return <Navigate to={'/'} replace />;
   }
 

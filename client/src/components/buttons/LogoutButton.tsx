@@ -1,15 +1,15 @@
 import { axiosInstance } from '@/api/api';
+import { IAuthContext } from '@/contexts/AuthContext/AuthContext';
 import { Button } from '@chakra-ui/react';
 import axios from 'axios';
-import { Dispatch, SetStateAction } from 'react';
 import { FiLogOut } from 'react-icons/fi';
 
 interface Props {
-  setIsAuth: Dispatch<SetStateAction<boolean>>;
+  setUser: IAuthContext['setUser'];
 }
 
-function LogoutButton({ setIsAuth }: Props) {
-  async function doLogout(setIsAuth: Dispatch<SetStateAction<boolean>>) {
+function LogoutButton({ setUser }: Props) {
+  async function doLogout(setUser: Props['setUser']) {
     try {
       const response = await axiosInstance.post('/users/logout');
 
@@ -19,12 +19,12 @@ function LogoutButton({ setIsAuth }: Props) {
         return error.response;
       }
     } finally {
-      setIsAuth(false);
+      setUser(null);
     }
   }
 
   return (
-    <Button onClick={() => doLogout(setIsAuth)}>
+    <Button onClick={() => doLogout(setUser)}>
       <FiLogOut />
     </Button>
   );

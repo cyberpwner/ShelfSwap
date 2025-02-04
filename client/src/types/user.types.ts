@@ -12,3 +12,9 @@ export const enum UserRole {
   'USER' = 'user',
   'GUEST' = 'guest',
 }
+
+export interface IUserState {
+  id: string;
+  username: string;
+  role: UserRole;
+}

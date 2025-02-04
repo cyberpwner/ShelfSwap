@@ -18,7 +18,7 @@ interface Props {
 function Header({ setSearch, searchParams }: Props) {
   const [inputValue, setInputValue] = useState('');
   const navigate = useNavigate();
-  const { isAuth, setIsAuth } = useAuth();
+  const { user, setUser } = useAuth();
 
   function handleSubmit(e: FormEvent<HTMLDivElement>) {
     e.preventDefault();
@@ -72,7 +72,7 @@ function Header({ setSearch, searchParams }: Props) {
             <ProfileButton />
             <FavoritesButton />
             <CartButton />
-            {isAuth && <LogoutButton setIsAuth={setIsAuth} />}
+            {user && <LogoutButton setUser={setUser} />}
           </Group>
         </GridItem>
 

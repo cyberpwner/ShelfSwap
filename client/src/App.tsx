@@ -10,6 +10,8 @@ import LoginPage from './pages/LoginPage';
 import BookDetails from './pages/BookDetails';
 import ProtectedRoute from './layouts/ProtectedRoute';
 import AuthContextProvider from './contexts/AuthContext/AuthContextProvider';
+import AdminOnlyRoute from './layouts/AdminOnlyRoute';
+import Dashboard from './pages/Dashboard';
 
 const system = createSystem(defaultConfig, {
   globalCss: {
@@ -52,6 +54,10 @@ function App() {
 
                     <Route element={<ProtectedRoute />}>
                       <Route path="books/:id" element={<BookDetails />} />
+                    </Route>
+
+                    <Route element={<AdminOnlyRoute />}>
+                      <Route path="dashboard" element={<Dashboard />} />
                     </Route>
                   </Route>
                 </Routes>

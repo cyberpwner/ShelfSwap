@@ -2,40 +2,52 @@ import { axiosInstance } from '@/api/api';
 import { ReactNode, useEffect, useState } from 'react';
 import { AuthContext } from './AuthContext';
 import { fifteenMinutesInMs } from '@/constants/date';
+import { IUserState } from '@/types/user.types';
 
 interface Props {
   children: ReactNode;
 }
 
 function AuthContextProvider({ children }: Props) {
-  const [isAuth, setIsAuth] = useState(false);
+  const [user, setUser] = useState<IUserState | null>(null);
+  const [loading, setLoading] = useState(true);
 
   async function checkAuth() {
-    try {
-      const response = await axiosInstance.get('/authcheck');
+    setLoading(true);
 
-      setIsAuth(response.status === 200);
+    try {
+      const response = await axiosInstance.get<IUserState>('/authcheck');
+
+      const user = response.data;
+
+      setUser(user ?? null);
     } catch {
-      setIsAuth(false);
+      setUser(null);
+    } finally {
+      setLoading(false);
     }
   }
 
   // when authenticated, refresh token every 15 minutes.
   useEffect(() => {
-    if (isAuth) {
+    if (user) {
       const intervalId = setInterval(async () => {
         await checkAuth();
       }, fifteenMinutesInMs());
 
       return () => clearInterval(intervalId);
     }
-  }, [isAuth]);
+  }, [user]);
 
   useEffect(() => {
-    checkAuth();
+    const callCheckAuth = async () => {
+      await checkAuth();
+    };
+
+    callCheckAuth();
   }, []);
 
-  return <AuthContext.Provider value={{ isAuth, setIsAuth }}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={{ user, setUser, loading }}>{children}</AuthContext.Provider>;
 }
 
 export default AuthContextProvider;

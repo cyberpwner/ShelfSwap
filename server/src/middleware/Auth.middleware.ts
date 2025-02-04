@@ -80,7 +80,7 @@ export class Auth {
     }
   };
 
-  isAuthenticated: RequestHandler = async (req, res) => {
+  checkAuth: RequestHandler = async (req, res) => {
     const accessToken = req.cookies?.accessToken;
 
     if (!accessToken) {
@@ -96,7 +96,7 @@ export class Auth {
         return;
       }
 
-      res.sendStatus(HttpStatusCode.OK);
+      res.status(HttpStatusCode.OK).json({ id: user.id, username: user.username, role: user.role });
     } catch {
       res.sendStatus(HttpStatusCode.UNAUTHORIZED);
     }
