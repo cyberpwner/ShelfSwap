@@ -43,18 +43,21 @@ function App() {
       <ChakraProvider value={system}>
         <ColorModeProvider>
           <QueryClientProvider client={queryClient}>
-            <AuthContextProvider>
-              <BrowserRouter>
+            <BrowserRouter>
+              <AuthContextProvider>
                 <Routes>
-                  <Route path="/" element={<HomePage />} />
-                  <Route path="login" element={<LoginPage />} />
-                  <Route element={<ProtectedRoute />}>
-                    <Route path="books/:id" element={<BookDetails />} />
+                  <Route path="/">
+                    <Route index element={<HomePage />} />
+                    <Route path="login" element={<LoginPage />} />
+
+                    <Route element={<ProtectedRoute />}>
+                      <Route path="books/:id" element={<BookDetails />} />
+                    </Route>
                   </Route>
                 </Routes>
-              </BrowserRouter>
-              <ReactQueryDevtools initialIsOpen={false} />
-            </AuthContextProvider>
+              </AuthContextProvider>
+            </BrowserRouter>
+            <ReactQueryDevtools initialIsOpen={false} />
           </QueryClientProvider>
         </ColorModeProvider>
       </ChakraProvider>

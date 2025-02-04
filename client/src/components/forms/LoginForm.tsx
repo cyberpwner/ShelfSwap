@@ -12,7 +12,7 @@ import { useNavigate } from 'react-router';
 import { axiosInstance } from '@/api/api.constants';
 import { AxiosError } from 'axios';
 import { toaster, Toaster } from '../ui/toaster';
-import { useAuth } from '@/contexts/AuthContext/AuthContextProvider';
+import { useAuth } from '@/contexts/AuthContext/useAuth';
 
 interface FormProps extends BoxProps {
   setIsShowRegister: Dispatch<SetStateAction<boolean>>;

@@ -1,18 +1,6 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
 import { axiosInstance } from '@/api/api.constants';
-import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useEffect, useState } from 'react';
-
-interface IAuthContext {
-  isAuth: boolean;
-  setIsAuth: Dispatch<SetStateAction<boolean>>;
-}
-
-const AuthContext = createContext<IAuthContext>({
-  isAuth: false,
-  setIsAuth: () => {},
-});
-
-export const useAuth = () => useContext(AuthContext);
+import { ReactNode, useEffect, useState } from 'react';
+import { AuthContext } from './AuthContext';
 
 interface Props {
   children: ReactNode;

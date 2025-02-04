@@ -7,7 +7,7 @@ import CartButton from '../buttons/CartButton';
 import { NavMenu } from './NavMenu';
 import { Link, useNavigate } from 'react-router';
 import { Dispatch, FormEvent, SetStateAction, useEffect, useState } from 'react';
-import { useAuth } from '@/contexts/AuthContext/AuthContextProvider';
+import { useAuth } from '@/contexts/AuthContext/useAuth';
 import LogoutButton from '../buttons/LogoutButton';
 
 interface Props {

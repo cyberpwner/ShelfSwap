@@ -1,5 +1,4 @@
 import axios, { AxiosError, AxiosResponse, HttpStatusCode } from 'axios';
-import { NavigateFunction } from 'react-router';
 
 export const API_BASE_URL = 'http://localhost:3000/api';
 
@@ -9,7 +8,7 @@ export const axiosInstance = axios.create({
   withCredentials: true,
 });
 
-export function setupAxiosInterceptors(navigate: NavigateFunction) {
+export function setupAxiosInterceptors() {
   let interceptorId: number | null = null;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -41,9 +40,6 @@ export function setupAxiosInterceptors(navigate: NavigateFunction) {
     } catch (refreshError) {
       // send logout request to delete tokens from cookies
       await axiosInstance.post('/users/logout');
-
-      // redirect to login page
-      navigate('/login');
 
       // reject promise
       return Promise.reject(refreshError);
