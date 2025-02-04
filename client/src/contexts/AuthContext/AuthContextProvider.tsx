@@ -1,4 +1,4 @@
-import { axiosInstance } from '@/api/api.constants';
+import { axiosInstance } from '@/api/api';
 import { ReactNode, useEffect, useState } from 'react';
 import { AuthContext } from './AuthContext';
 

@@ -1,4 +1,4 @@
-import { axiosInstance } from '@/api/api.constants';
+import { axiosInstance } from '@/api/api';
 import { ICategory } from '@/loaders/fetchCategories';
 import { QueryFunctionContext } from '@tanstack/react-query';
 

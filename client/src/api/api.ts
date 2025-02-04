@@ -8,7 +8,7 @@ export const axiosInstance = axios.create({
   withCredentials: true,
 });
 
-export function setupAxiosInterceptors() {
+function setupAxiosInterceptors() {
   let interceptorId: number | null = null;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -51,3 +51,6 @@ export function setupAxiosInterceptors() {
   // attach interceptor
   interceptorId = axiosInstance.interceptors.response.use(responseInterceptor, errorInterceptor);
 }
+
+// we can just setup the interceptors here since we no longer use navigate func in them.
+setupAxiosInterceptors();

@@ -1,4 +1,4 @@
-import { axiosInstance } from '@/api/api.constants';
+import { axiosInstance } from '@/api/api';
 import { IBook } from '@/components/book-list/fetchBookList';
 
 export interface ICategory {
