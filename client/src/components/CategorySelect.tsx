@@ -21,7 +21,7 @@ function CategorySelect({ selectedCategory, setSelectedCategory }: Props) {
   }
 
   const categoriesList = createListCollection({
-    items: data.map(({ name }) => ({
+    items: data.data.map(({ name }) => ({
       label: capitalize(name),
       value: name,
     })),

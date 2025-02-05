@@ -8,13 +8,13 @@ import { registerSchema } from '@/schemas/user.schemas';
 import FormButton from '../buttons/FormButton';
 import { PasswordInput } from '../ui/password-input';
 import { axiosInstance } from '@/api/api';
-import { User } from '@/types/user.types';
+import { IUser } from '@/types/user.types';
 import { useNavigate } from 'react-router';
 import { AxiosError } from 'axios';
 import { toaster, Toaster } from '../ui/toaster';
 
 interface RegisterResponse {
-  user?: User;
+  user?: IUser;
   message: string;
 }
 
@@ -68,7 +68,7 @@ async function sendRegisterRequest(formData: RegisterData): Promise<RegisterResp
       },
     );
 
-    const data: { user?: User; message: string } = res.data;
+    const data: { user?: IUser; message: string } = res.data;
     return data;
   } catch (error) {
     if (error instanceof AxiosError) {

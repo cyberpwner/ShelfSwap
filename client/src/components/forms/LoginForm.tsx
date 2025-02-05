@@ -5,7 +5,7 @@ import { Dispatch, SetStateAction, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { loginSchema } from '@/schemas/user.schemas';
-import { User } from '@/types/user.types';
+import { IUser } from '@/types/user.types';
 import FormButton from '../buttons/FormButton';
 import { PasswordInput } from '../ui/password-input';
 import { useNavigate } from 'react-router';
@@ -21,7 +21,7 @@ interface FormProps extends BoxProps {
 type LoginData = z.infer<typeof loginSchema>;
 
 interface LoginResponse {
-  user: User;
+  user: IUser;
 }
 interface ErrorResponse {
   errors?: {
