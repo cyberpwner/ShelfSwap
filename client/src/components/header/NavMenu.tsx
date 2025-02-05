@@ -15,9 +15,13 @@ import { useState } from 'react';
 import { RiMenu3Line } from 'react-icons/ri';
 import { NavLink } from 'react-router';
 import { FiHeart, FiShoppingBag, FiUser } from 'react-icons/fi';
+import LogoutButton from '../buttons/LogoutButton';
+import { useAuth } from '@/contexts/AuthContext/useAuth';
+import { Toaster, toaster } from '../ui/toaster';
 
 export function NavMenu() {
   const [open, setOpen] = useState(false);
+  const { user } = useAuth();
 
   return (
     <DrawerRoot open={open} onOpenChange={(e) => setOpen(e.open)}>
@@ -69,10 +73,28 @@ export function NavMenu() {
           <DrawerActionTrigger asChild>
             <Button variant="outline">Close</Button>
           </DrawerActionTrigger>
+
+          {user && (
+            <LogoutButton
+              onClick={() => {
+                setOpen(false);
+
+                toaster.create({
+                  type: 'success',
+                  title: 'Logged out',
+                  description: 'Logged out successfully!',
+                });
+              }}
+            >
+              Logout
+            </LogoutButton>
+          )}
         </DrawerFooter>
 
         <DrawerCloseTrigger />
       </DrawerContent>
+
+      <Toaster />
     </DrawerRoot>
   );
 }

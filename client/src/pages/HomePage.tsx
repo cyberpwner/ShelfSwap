@@ -26,6 +26,7 @@ function HomePage() {
 
         <Stack maxW="full" as="main" py="24" gap="8">
           <BookList
+            search={search}
             selectedCategory={selectedCategory}
             setSelectedCategory={setSelectedCategory}
             isPending={isPending}

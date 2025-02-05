@@ -1,12 +1,15 @@
-import { Grid, GridItem, HStack, Stack, Text } from '@chakra-ui/react';
+import { For, Grid, GridItem, HStack, Stack, Text } from '@chakra-ui/react';
 import { BookCard } from '../card/BookCard';
 import { Link } from 'react-router';
 import CategorySelect from '../CategorySelect';
 import { Skeleton } from '../ui/skeleton';
 import { IBook } from './fetchBookList';
 import { Dispatch, SetStateAction } from 'react';
+import CustomEmptyState from '../ui/custom-empty-state';
+import { LuSwatchBook } from 'react-icons/lu';
 
 interface Props {
+  search: string;
   selectedCategory: string[];
   setSelectedCategory: Dispatch<SetStateAction<string[]>>;
   isPending: boolean;
@@ -14,14 +17,18 @@ interface Props {
   books: IBook[] | undefined;
 }
 
-function BookList({ selectedCategory, setSelectedCategory, isPending, isError, books }: Props) {
+function BookList({ search, selectedCategory, setSelectedCategory, isPending, isError, books }: Props) {
   if (isError) {
     return <Text>An error occurred. Try again later</Text>;
   }
 
   return (
-    <Stack gap="8" alignItems={{ base: 'center', md: 'flex-start' }}>
+    <Stack gap="8" alignItems={!books || books.length === 0 ? 'center' : { base: 'center', md: 'flex-start' }}>
       <CategorySelect selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} />
+
+      {(!books || books.length === 0) && (
+        <CustomEmptyState size="lg" icon={<LuSwatchBook />} title="None found" description="No books were found" />
+      )}
 
       <Grid
         templateColumns={{
@@ -49,15 +56,21 @@ function BookList({ selectedCategory, setSelectedCategory, isPending, isError, b
 
         {/* if data is ready, show books */}
 
-        {books &&
-          books.length > 0 &&
-          books.map((book) => (
+        <For each={books}>
+          {(book) => (
             <GridItem key={book.id}>
               <Link to={`/books/${book.id}`}>
-                <BookCard title={book.title} authors={book.authors} price={book.price} coverUrl={book.coverUrl} />
+                <BookCard
+                  search={search}
+                  title={book.title}
+                  authors={book.authors}
+                  price={book.price}
+                  coverUrl={book.coverUrl}
+                />
               </Link>
             </GridItem>
-          ))}
+          )}
+        </For>
       </Grid>
     </Stack>
   );
