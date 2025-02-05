@@ -1,4 +1,5 @@
 import { UserDao } from '../dao/User.dao';
+import { PaginatedDto } from '../dto/Paginated.dto';
 import { UserDto } from '../dto/User.dto';
 import { User } from '../entities/User';
 import { isExistingUserByEmailOrUsername } from '../utils/user.utils';
@@ -13,13 +14,32 @@ export class UserService {
     this.mapperService = new MapperService();
   }
 
-  async getAll(): Promise<UserDto[]> {
-    const users = await this.userDao.findAll();
+  async getAll(page = 1, pageSize = 10): Promise<PaginatedDto<UserDto>> {
+    const { data: users, total } = await this.userDao.findAll(page, pageSize);
 
-    if (users.length === 0) return [];
+    if (users.length === 0) {
+      return {
+        data: [],
+        total: 0,
+        page,
+        totalPages: 0,
+      };
+    }
 
-    // sanitize users (remove sensitive data before sending to -> controller -> frontend)
-    return users.map((user) => this.mapperService.mapUserToDto(user));
+    let totalPages = undefined;
+
+    if (total >= pageSize) {
+      totalPages = Math.ceil(total / pageSize);
+    } else {
+      totalPages = 1;
+    }
+
+    return {
+      data: users.map((user) => this.mapperService.mapUserToDto(user)),
+      total,
+      page,
+      totalPages,
+    };
   }
 
   async getById(id: string): Promise<UserDto | null> {

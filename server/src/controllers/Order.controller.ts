@@ -12,19 +12,19 @@ export class OrderController implements InformativeError {
     this.orderService = new OrderService();
   }
 
-  getByUser: RequestHandler = async (req, res, next) => {
+  getAll: RequestHandler = async (req, res) => {
+    let pageNum = req.query?.page;
+
+    if (!pageNum || String(pageNum).trim() === '') {
+      pageNum = '1';
+    }
+
+    const decodedPageNum = Number(decodeURIComponent(String(pageNum)));
+
     try {
-      const { username } = req.params;
+      const { data, page, total, totalPages } = await this.orderService.getAll(decodedPageNum);
 
-      if (!username || username.trim().length === 0) {
-        res.status(HttpStatusCode.BAD_REQUEST).json({ error: "username can't be empty" });
-        return;
-      }
-
-      const orders = await this.orderService.getByUser(username);
-
-      res.status(HttpStatusCode.OK).json(orders);
-      next();
+      res.status(HttpStatusCode.OK).json({ data, page, total, totalPages });
     } catch {
       res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: 'Failed to fetch orders' });
     }

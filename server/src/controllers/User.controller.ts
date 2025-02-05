@@ -3,18 +3,26 @@ import { UserService } from '../services/User.service';
 import { User } from '../entities/User';
 import { TypedRequestBody } from '../types/express.types.d';
 import { CreateUserDto, LoginUserDto } from '../schemas/user.schemas';
-import { UpdateBookDto } from '../schemas/book.schemas';
+import { UpdateUserDto } from '../schemas/user.schemas';
 import { HttpStatusCode } from '../types/http.types.d';
 import { generateAccessToken, generateRefreshToken, setTokensInCookies } from '../utils/jwt.utils';
 
 export class UserController {
   private readonly userService = new UserService();
 
-  getAll: RequestHandler = async (_req, res) => {
-    try {
-      const users = await this.userService.getAll();
+  getAll: RequestHandler = async (req, res) => {
+    let pageNum = req.query?.page;
 
-      res.status(HttpStatusCode.OK).json(users);
+    if (!pageNum || String(pageNum).trim() === '') {
+      pageNum = '1';
+    }
+
+    const decodedPageNum = Number(decodeURIComponent(String(pageNum)));
+
+    try {
+      const { data, page, total, totalPages } = await this.userService.getAll(decodedPageNum);
+
+      res.status(HttpStatusCode.OK).json({ data, page, total, totalPages });
     } catch {
       res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: 'Failed to fetch users' });
     }
@@ -91,7 +99,7 @@ export class UserController {
     res.sendStatus(HttpStatusCode.NO_CONTENT);
   };
 
-  update: RequestHandler = async (req: TypedRequestBody<UpdateBookDto>, res) => {
+  update: RequestHandler = async (req: TypedRequestBody<UpdateUserDto>, res) => {
     try {
       const id = req.params.id;
       const user = new User();

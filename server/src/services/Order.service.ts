@@ -6,6 +6,7 @@ import { OrderItem } from '../entities/OrderItem';
 import { AppDataSource } from '../config/dataSource.config';
 import { getErrorMsg, InformativeError } from '../utils/error.utils';
 import { MapperService } from './Mapper.service';
+import { PaginatedDto } from '../dto/Paginated.dto';
 
 export class OrderService implements InformativeError {
   private readonly orderDao: OrderDao;
@@ -18,12 +19,32 @@ export class OrderService implements InformativeError {
     this.mapperService = new MapperService();
   }
 
-  async getAll(): Promise<OrderDto[]> {
-    const orders = await this.orderDao.findAll();
+  async getAll(page = 1, pageSize = 10): Promise<PaginatedDto<OrderDto>> {
+    const { data: orders, total } = await this.orderDao.findAll(page, pageSize);
 
-    if (orders.length === 0) return [];
+    if (orders.length === 0) {
+      return {
+        data: [],
+        total: 0,
+        page,
+        totalPages: 0,
+      };
+    }
 
-    return orders.map((order) => this.mapperService.mapOrderToDto(order));
+    let totalPages = undefined;
+
+    if (total >= pageSize) {
+      totalPages = Math.ceil(total / pageSize);
+    } else {
+      totalPages = 1;
+    }
+
+    return {
+      data: orders.map((order) => this.mapperService.mapOrderToDto(order)),
+      total,
+      page,
+      totalPages,
+    };
   }
 
   async getById(id: string): Promise<OrderDto | null> {

@@ -11,11 +11,19 @@ export class CategoryController {
     this.categoryService = new CategoryService();
   }
 
-  getAll: RequestHandler = async (_req, res) => {
-    try {
-      const categories = await this.categoryService.getAll();
+  getAll: RequestHandler = async (req, res) => {
+    let pageNum = req.query?.page;
 
-      res.status(HttpStatusCode.OK).json(categories);
+    if (!pageNum || String(pageNum).trim() === '') {
+      pageNum = '1';
+    }
+
+    const decodedPageNum = Number(decodeURIComponent(String(pageNum)));
+
+    try {
+      const { data, page, total, totalPages } = await this.categoryService.getAll(decodedPageNum);
+
+      res.status(HttpStatusCode.OK).json({ data, page, total, totalPages });
     } catch {
       res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: 'Failed to fetch categories' });
     }
