@@ -14,21 +14,21 @@ export class BookService {
     this.mapperService = new MapperService();
   }
 
-  async getAll(page = 1, pageSize = 10): Promise<PaginatedDto<BookDto>> {
-    const { data: books, total } = await this.bookDao.findAll(page, pageSize);
+  async getAll(page?: number, pageSize?: number): Promise<PaginatedDto<BookDto>> {
+    const { data: books, total } = await this.bookDao.findAll(page ?? undefined, pageSize ?? undefined);
 
     if (books.length === 0) {
       return {
         data: [],
         total: 0,
-        page,
+        page: 0,
         totalPages: 0,
       };
     }
 
     let totalPages = undefined;
 
-    if (total >= pageSize) {
+    if (pageSize && pageSize && total >= pageSize) {
       totalPages = Math.ceil(total / pageSize);
     } else {
       totalPages = 1;
@@ -37,7 +37,7 @@ export class BookService {
     return {
       data: books.map((book) => this.mapperService.mapBookToDto(book)),
       total,
-      page,
+      page: page ?? 1,
       totalPages,
     };
   }
@@ -50,21 +50,21 @@ export class BookService {
     return this.mapperService.mapBookToDto(book);
   }
 
-  async searchByTitleOrAuthor(q: string, page = 1, pageSize = 10): Promise<PaginatedDto<BookDto>> {
+  async searchByTitleOrAuthor(q: string, page?: number, pageSize?: number): Promise<PaginatedDto<BookDto>> {
     const { data: books, total } = await this.bookDao.searchByTitleOrAuthor(q, page, pageSize);
 
     if (books.length === 0) {
       return {
         data: [],
         total: 0,
-        page,
+        page: 0,
         totalPages: 0,
       };
     }
 
     let totalPages = undefined;
 
-    if (total >= pageSize) {
+    if (pageSize && pageSize && total >= pageSize) {
       totalPages = Math.ceil(total / pageSize);
     } else {
       totalPages = 1;
@@ -73,7 +73,7 @@ export class BookService {
     return {
       data: books.map((book) => this.mapperService.mapBookToDto(book)),
       total,
-      page,
+      page: page ?? 1,
       totalPages,
     };
   }

@@ -14,21 +14,21 @@ export class UserService {
     this.mapperService = new MapperService();
   }
 
-  async getAll(page = 1, pageSize = 10): Promise<PaginatedDto<UserDto>> {
-    const { data: users, total } = await this.userDao.findAll(page, pageSize);
+  async getAll(page?: number, pageSize?: number): Promise<PaginatedDto<UserDto>> {
+    const { data: users, total } = await this.userDao.findAll(page ?? undefined, pageSize ?? undefined);
 
     if (users.length === 0) {
       return {
         data: [],
         total: 0,
-        page,
+        page: 0,
         totalPages: 0,
       };
     }
 
     let totalPages = undefined;
 
-    if (total >= pageSize) {
+    if (pageSize && total >= pageSize) {
       totalPages = Math.ceil(total / pageSize);
     } else {
       totalPages = 1;
@@ -37,7 +37,7 @@ export class UserService {
     return {
       data: users.map((user) => this.mapperService.mapUserToDto(user)),
       total,
-      page,
+      page: page ?? 1,
       totalPages,
     };
   }

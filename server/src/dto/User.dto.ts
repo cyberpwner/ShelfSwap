@@ -9,4 +9,5 @@ export class UserDto {
   bio?: string;
   avatarUrl?: string;
   cart?: CartDto;
+  createdAt: Date;
 }

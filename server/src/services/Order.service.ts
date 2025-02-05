@@ -19,21 +19,21 @@ export class OrderService implements InformativeError {
     this.mapperService = new MapperService();
   }
 
-  async getAll(page = 1, pageSize = 10): Promise<PaginatedDto<OrderDto>> {
-    const { data: orders, total } = await this.orderDao.findAll(page, pageSize);
+  async getAll(page?: number, pageSize?: number): Promise<PaginatedDto<OrderDto>> {
+    const { data: orders, total } = await this.orderDao.findAll(page ?? undefined, pageSize ?? undefined);
 
     if (orders.length === 0) {
       return {
         data: [],
         total: 0,
-        page,
+        page: 0,
         totalPages: 0,
       };
     }
 
     let totalPages = undefined;
 
-    if (total >= pageSize) {
+    if (pageSize && total >= pageSize) {
       totalPages = Math.ceil(total / pageSize);
     } else {
       totalPages = 1;
@@ -42,7 +42,7 @@ export class OrderService implements InformativeError {
     return {
       data: orders.map((order) => this.mapperService.mapOrderToDto(order)),
       total,
-      page,
+      page: page ?? 1,
       totalPages,
     };
   }

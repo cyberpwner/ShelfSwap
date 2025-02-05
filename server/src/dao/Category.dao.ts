@@ -5,13 +5,13 @@ import { BaseDao } from './Base.dao';
 type CategoryRelations = 'books';
 
 export class CategoryDao implements BaseDao<Category> {
-  async findAll(page = 1, pageSize = 10): Promise<{ data: Category[]; total: number }> {
-    const skip = (page - 1) * pageSize;
+  async findAll(page?: number, pageSize?: number): Promise<{ data: Category[]; total: number }> {
+    const skip = page && pageSize ? (page - 1) * pageSize : undefined;
 
     const [categories, total] = await Category.findAndCount({
       relations: ['books'] as CategoryRelations[],
-      skip,
-      take: pageSize,
+      skip: skip ?? undefined,
+      take: pageSize ?? undefined,
     });
 
     return { data: categories, total };

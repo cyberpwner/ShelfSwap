@@ -4,13 +4,13 @@ import { BaseDao } from './Base.dao';
 type AuthorRelations = 'books';
 
 export class AuthorDao implements BaseDao<Author> {
-  async findAll(page = 1, pageSize = 10): Promise<{ data: Author[]; total: number }> {
-    const skip = (page - 1) * pageSize;
+  async findAll(page?: number, pageSize?: number): Promise<{ data: Author[]; total: number }> {
+    const skip = page && pageSize ? (page - 1) * pageSize : undefined;
 
     const [authors, total] = await Author.findAndCount({
       relations: ['books'] as AuthorRelations[],
-      skip,
-      take: pageSize,
+      skip: skip ?? undefined,
+      take: pageSize ?? undefined,
     });
 
     return { data: authors, total };

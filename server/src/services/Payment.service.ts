@@ -13,21 +13,21 @@ export class PaymentService {
     this.mapperService = new MapperService();
   }
 
-  async getAll(page = 1, pageSize = 10): Promise<PaginatedDto<PaymentDto>> {
-    const { data: payments, total } = await this.paymentDao.findAll(page, pageSize);
+  async getAll(page?: number, pageSize?: number): Promise<PaginatedDto<PaymentDto>> {
+    const { data: payments, total } = await this.paymentDao.findAll(page ?? undefined, pageSize ?? undefined);
 
     if (payments.length === 0) {
       return {
         data: [],
         total: 0,
-        page,
+        page: 0,
         totalPages: 0,
       };
     }
 
     let totalPages = undefined;
 
-    if (total >= pageSize) {
+    if (pageSize && total >= pageSize) {
       totalPages = Math.ceil(total / pageSize);
     } else {
       totalPages = 1;
@@ -36,7 +36,7 @@ export class PaymentService {
     return {
       data: payments.map((payment) => this.mapperService.mapPaymentToDto(payment)),
       total,
-      page,
+      page: page ?? 1,
       totalPages,
     };
   }

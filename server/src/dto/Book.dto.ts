@@ -10,4 +10,5 @@ export class BookDto {
   coverUrl: string;
   authors?: AuthorDto[];
   categories?: CategoryDto[];
+  createdAt: Date;
 }

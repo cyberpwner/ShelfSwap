@@ -13,21 +13,21 @@ export class ReviewService {
     this.mapperService = new MapperService();
   }
 
-  async getAll(page = 1, pageSize = 10): Promise<PaginatedDto<ReviewDto>> {
-    const { data: reviews, total } = await this.reviewDao.findAll(page, pageSize);
+  async getAll(page?: number, pageSize?: number): Promise<PaginatedDto<ReviewDto>> {
+    const { data: reviews, total } = await this.reviewDao.findAll(page ?? undefined, pageSize ?? undefined);
 
     if (reviews.length === 0) {
       return {
         data: [],
         total: 0,
-        page,
+        page: 0,
         totalPages: 0,
       };
     }
 
     let totalPages = undefined;
 
-    if (total >= pageSize) {
+    if (pageSize && total >= pageSize) {
       totalPages = Math.ceil(total / pageSize);
     } else {
       totalPages = 1;
@@ -36,7 +36,7 @@ export class ReviewService {
     return {
       data: reviews.map((review) => this.mapperService.mapReviewToDto(review)),
       total,
-      page,
+      page: page ?? 1,
       totalPages,
     };
   }

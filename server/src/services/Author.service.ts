@@ -13,21 +13,21 @@ export class AuthorService {
     this.mapperService = new MapperService();
   }
 
-  async getAll(page = 1, pageSize = 10): Promise<PaginatedDto<AuthorDto>> {
-    const { data: authors, total } = await this.authorDao.findAll(page, pageSize);
+  async getAll(page?: number, pageSize?: number): Promise<PaginatedDto<AuthorDto>> {
+    const { data: authors, total } = await this.authorDao.findAll(page ?? undefined, pageSize ?? undefined);
 
     if (authors.length === 0) {
       return {
         data: [],
         total: 0,
-        page,
+        page: 0,
         totalPages: 0,
       };
     }
 
     let totalPages = undefined;
 
-    if (total >= pageSize) {
+    if (pageSize && total >= pageSize) {
       totalPages = Math.ceil(total / pageSize);
     } else {
       totalPages = 1;
@@ -36,7 +36,7 @@ export class AuthorService {
     return {
       data: authors.map((author) => this.mapperService.mapAuthorToDto(author)),
       total,
-      page,
+      page: page ?? 1,
       totalPages,
     };
   }

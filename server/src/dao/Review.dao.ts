@@ -4,13 +4,13 @@ import { BaseDao } from './Base.dao';
 type ReviewRelations = 'book' | 'user';
 
 export class ReviewDao implements BaseDao<Review> {
-  async findAll(page = 1, pageSize = 10): Promise<{ data: Review[]; total: number }> {
-    const skip = (page - 1) * pageSize;
+  async findAll(page?: number, pageSize?: number): Promise<{ data: Review[]; total: number }> {
+    const skip = page && pageSize ? (page - 1) * pageSize : undefined;
 
     const [reviews, total] = await Review.findAndCount({
       relations: ['user', 'book'] as ReviewRelations[],
-      skip,
-      take: pageSize,
+      skip: skip ?? undefined,
+      take: pageSize ?? undefined,
     });
 
     return { data: reviews, total };

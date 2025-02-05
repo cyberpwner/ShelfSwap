@@ -6,4 +6,5 @@ export class PaymentDto {
   method: PaymentMethod;
   amount: number;
   order: OrderDto;
+  createdAt: Date;
 }

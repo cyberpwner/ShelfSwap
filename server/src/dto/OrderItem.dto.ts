@@ -8,4 +8,5 @@ export class OrderItemDto {
   book?: BookDto;
   orderId?: string;
   order?: OrderDto;
+  createdAt: Date;
 }

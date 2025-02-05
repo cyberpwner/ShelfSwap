@@ -16,13 +16,14 @@ export class OrderController implements InformativeError {
     let pageNum = req.query?.page;
 
     if (!pageNum || String(pageNum).trim() === '') {
-      pageNum = '1';
+      pageNum = undefined;
     }
 
-    const decodedPageNum = Number(decodeURIComponent(String(pageNum)));
+    const decodedPageNum = pageNum ? Number(decodeURIComponent(String(pageNum))) : undefined;
+    const pageSize = decodedPageNum ? 10 : undefined;
 
     try {
-      const { data, page, total, totalPages } = await this.orderService.getAll(decodedPageNum);
+      const { data, page, total, totalPages } = await this.orderService.getAll(decodedPageNum, pageSize);
 
       res.status(HttpStatusCode.OK).json({ data, page, total, totalPages });
     } catch {
@@ -34,6 +35,22 @@ export class OrderController implements InformativeError {
     try {
       const id = req.params.id;
       const order = await this.orderService.getById(id);
+
+      if (!order) {
+        res.status(HttpStatusCode.NOT_FOUND).json({ error: 'Order not found' });
+        return;
+      }
+
+      res.status(HttpStatusCode.OK).json(order);
+    } catch {
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: 'Failed to fetch order' });
+    }
+  };
+
+  getByUser: RequestHandler = async (req, res) => {
+    try {
+      const username = req.params.username;
+      const order = await this.orderService.getByUser(username);
 
       if (!order) {
         res.status(HttpStatusCode.NOT_FOUND).json({ error: 'Order not found' });

@@ -8,13 +8,13 @@ type OrderRelations = 'user' | 'items' | 'payment';
 export class OrderDao implements BaseDao<Order>, InformativeError {
   private transactionalManager: EntityManager;
 
-  async findAll(page = 1, pageSize = 10): Promise<{ data: Order[]; total: number }> {
-    const skip = (page - 1) * pageSize;
+  async findAll(page?: number, pageSize?: number): Promise<{ data: Order[]; total: number }> {
+    const skip = page && pageSize ? (page - 1) * pageSize : undefined;
 
     const [orders, total] = await Order.findAndCount({
       relations: ['user', 'items', 'payment'] as OrderRelations[],
-      skip,
-      take: pageSize,
+      skip: skip ?? undefined,
+      take: pageSize ?? undefined,
     });
 
     return { data: orders, total };

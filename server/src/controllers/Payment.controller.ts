@@ -10,13 +10,14 @@ export class PaymentController {
     let pageNum = req.query?.page;
 
     if (!pageNum || String(pageNum).trim() === '') {
-      pageNum = '1';
+      pageNum = undefined;
     }
 
-    const decodedPageNum = Number(decodeURIComponent(String(pageNum)));
+    const decodedPageNum = pageNum ? Number(decodeURIComponent(String(pageNum))) : undefined;
+    const pageSize = decodedPageNum ? 10 : undefined;
 
     try {
-      const { data, page, total, totalPages } = await this.paymentService.getAll(decodedPageNum);
+      const { data, page, total, totalPages } = await this.paymentService.getAll(decodedPageNum, pageSize);
 
       res.status(HttpStatusCode.OK).json({ data, page, total, totalPages });
     } catch {

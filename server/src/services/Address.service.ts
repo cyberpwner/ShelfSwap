@@ -13,21 +13,21 @@ export class AddressService {
     this.mapperService = new MapperService();
   }
 
-  async getAll(page = 1, pageSize = 10): Promise<PaginatedDto<AddressDto>> {
-    const { data: addresses, total } = await this.addressDao.findAll(page, pageSize);
+  async getAll(page?: number, pageSize?: number): Promise<PaginatedDto<AddressDto>> {
+    const { data: addresses, total } = await this.addressDao.findAll(page ?? undefined, pageSize ?? undefined);
 
     if (addresses.length === 0) {
       return {
         data: [],
         total: 0,
-        page,
+        page: 0,
         totalPages: 0,
       };
     }
 
     let totalPages = undefined;
 
-    if (total >= pageSize) {
+    if (pageSize && total >= pageSize) {
       totalPages = Math.ceil(total / pageSize);
     } else {
       totalPages = 1;
@@ -36,7 +36,7 @@ export class AddressService {
     return {
       data: addresses.map((address) => this.mapperService.mapAddressToDto(address)),
       total,
-      page,
+      page: page ?? 1,
       totalPages,
     };
   }

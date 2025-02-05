@@ -22,7 +22,6 @@ import { Payment } from '../entities/Payment';
 import { Review } from '../entities/Review';
 import { User } from '../entities/User';
 
-// mapper.service.ts
 export class MapperService {
   mapOrderToDto(order: Partial<Order>): OrderDto {
     return {
@@ -36,7 +35,9 @@ export class MapperService {
         priceAtPurchase: item.priceAtPurchase!,
         book: this.mapBookToDto(item.book!),
         orderId: order.id,
+        createdAt: item.createdAt!,
       })),
+      createdAt: order.createdAt!,
     };
   }
 
@@ -47,6 +48,7 @@ export class MapperService {
       priceAtPurchase: orderItem.priceAtPurchase!,
       book: this.mapBookToDto(orderItem.book!),
       order: this.mapOrderToDto(orderItem.order!),
+      createdAt: orderItem.createdAt!,
     };
   }
 
@@ -59,6 +61,7 @@ export class MapperService {
       bio: user?.bio,
       avatarUrl: user?.avatarUrl,
       cart: user?.cart,
+      createdAt: user.createdAt!,
     };
   }
 
@@ -72,6 +75,7 @@ export class MapperService {
       coverUrl: book.coverUrl!,
       authors: book?.authors?.map((author) => this.mapAuthorToDto(author)),
       categories: book?.categories?.map((category) => this.mapCategoryToDto(category)),
+      createdAt: book.createdAt!,
     };
   }
 
@@ -80,6 +84,7 @@ export class MapperService {
       id: author.id!,
       name: author.name!,
       books: author?.books?.map((book) => this.mapBookToDto(book)),
+      createdAt: author.createdAt!,
     };
   }
 
@@ -89,6 +94,7 @@ export class MapperService {
       rating: review.rating!,
       comment: review?.comment,
       book: this.mapBookToDto(review.book!),
+      createdAt: review.created_at!,
     };
   }
 
@@ -98,6 +104,7 @@ export class MapperService {
       method: payment.method!,
       amount: payment.amount!,
       order: this.mapOrderToDto(payment.order!),
+      createdAt: payment.createdAt!,
     };
   }
 
@@ -108,6 +115,7 @@ export class MapperService {
       addressLine1: address.addressLine1!,
       addressLine2: address?.addressLine2,
       user: this.mapUserToDto(address.user!),
+      createdAt: address.createdAt!,
     };
   }
 
@@ -116,6 +124,7 @@ export class MapperService {
       id: category.id!,
       name: category.name!,
       books: category?.books?.map((book) => this.mapBookToDto(book)),
+      createdAt: category.createdAt!,
     };
   }
 
@@ -128,7 +137,9 @@ export class MapperService {
         book: this.mapBookToDto(item.book),
         quantity: item.quantity,
         cartId: cart.id!,
+        createdAt: cart.createdAt!,
       })),
+      createdAt: cart.createdAt!,
     };
   }
 
@@ -138,6 +149,7 @@ export class MapperService {
       book: this.mapBookToDto(item.book!),
       quantity: item.quantity!,
       cart: this.mapCartToDto(item.cart!),
+      createdAt: item.createdAt!,
     };
   }
 }
