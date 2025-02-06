@@ -3,10 +3,10 @@ import { BookCard } from '../card/BookCard';
 import { Link } from 'react-router';
 import CategorySelect from '../CategorySelect';
 import { Skeleton } from '../ui/skeleton';
-import { IBook } from './fetchBookList';
 import { Dispatch, SetStateAction } from 'react';
 import CustomEmptyState from '../ui/custom-empty-state';
 import { LuSwatchBook } from 'react-icons/lu';
+import { IBook } from '@/types/book.types';
 
 interface Props {
   search: string;

@@ -1,5 +1,5 @@
+import { IBook } from '@/types/book.types';
 import { Box, Card, Center, Highlight, HStack, Image, Text } from '@chakra-ui/react';
-import { IBook } from '../book-list/fetchBookList';
 
 type Props = Pick<IBook, 'title' | 'price' | 'authors' | 'coverUrl'> & { search: string };
 

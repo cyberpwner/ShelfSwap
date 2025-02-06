@@ -67,7 +67,26 @@ export class UserController {
 
       setTokensInCookies(res, accessToken, refreshToken);
 
-      res.status(HttpStatusCode.CREATED).json({ error: 'User created successfully', user: createdUser });
+      res.status(HttpStatusCode.CREATED).json({ user: createdUser });
+    } catch {
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: 'Failed to register user' });
+    }
+  };
+
+  // for admin (doesn't generate and set tokens on cookies)
+  createUser: RequestHandler = async (req: TypedRequestBody<CreateUserDto>, res) => {
+    try {
+      const user = new User();
+      Object.assign(user, req.body);
+
+      const createdUser = await this.userService.register(user);
+
+      if (createdUser == null) {
+        res.status(HttpStatusCode.BAD_REQUEST).json({ error: 'User could not be created' });
+        return;
+      }
+
+      res.status(HttpStatusCode.CREATED).json({ user: createdUser });
     } catch {
       res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: 'Failed to register user' });
     }

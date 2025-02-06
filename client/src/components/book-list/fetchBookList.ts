@@ -1,22 +1,8 @@
 import { axiosInstance } from '@/api/api';
 import { ICategory } from '@/loaders/fetchCategories';
+import { IBook } from '@/types/book.types';
 import { PaginatedDto } from '@/types/dto.types';
 import { QueryFunctionContext } from '@tanstack/react-query';
-
-export interface IBook {
-  id: string;
-  isbn: string;
-  title: string;
-  description: string;
-  price: number;
-  coverUrl: string;
-  authors: IAuthor[];
-}
-
-interface IAuthor {
-  id: string;
-  name: string;
-}
 
 // type guard
 function isPaginatedData(data: unknown): data is PaginatedDto<ICategory> {

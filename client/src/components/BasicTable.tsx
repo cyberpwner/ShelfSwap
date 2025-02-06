@@ -51,10 +51,15 @@ function BasicTable<T>({ data, columns, pathnameToEdit }: Props<T>) {
           type="search"
           id="filter"
           name="filter"
+          minW="48"
         />
       </Field>
 
-      <Table.ScrollArea borderWidth="1px" maxW={{ base: 'xs', sm: 'md', md: 'xl', lg: 'full' }} maxH="1000px">
+      <Table.ScrollArea
+        borderWidth="1px"
+        maxW={{ base: 'xs', sm: 'md', md: 'xl', lg: '3xl', xl: '4xl', '2xl': '5xl' }}
+        maxH="1000px"
+      >
         <Table.Root variant="outline" showColumnBorder stickyHeader interactive>
           <Table.Header>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -95,7 +100,7 @@ function BasicTable<T>({ data, columns, pathnameToEdit }: Props<T>) {
                   <For each={[...new Array(row.getVisibleCells().length + 1)]}>
                     {(_cell, index) =>
                       index === row.getVisibleCells().length ? (
-                        <Table.Cell p="4" key={'action'}>
+                        <Table.Cell maxW="96" p="4" key={'action'}>
                           <LinkButton to={`${pathnameToEdit}/${row.getValue('id')}`} size="sm">
                             Edit
                           </LinkButton>

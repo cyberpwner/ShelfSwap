@@ -13,6 +13,7 @@ import AuthContextProvider from './contexts/AuthContext/AuthContextProvider';
 import AdminOnlyRoute from './layouts/AdminOnlyRoute';
 import Dashboard from './pages/Dashboard';
 import NotFound from './pages/NotFound';
+import CreateUserPage from './pages/CreateUserPage';
 
 const system = createSystem(defaultConfig, {
   globalCss: {
@@ -58,7 +59,11 @@ function App() {
                     </Route>
 
                     <Route element={<AdminOnlyRoute />}>
-                      <Route path="dashboard" element={<Dashboard />} />
+                      <Route path="dashboard">
+                        <Route index element={<Dashboard />} />
+                        <Route path="users/create" element={<CreateUserPage />} />
+                        <Route path="users/:id" />
+                      </Route>
                     </Route>
                   </Route>
 

@@ -1,6 +1,6 @@
-import { Box, BoxProps, Input, Spinner, VStack } from '@chakra-ui/react';
+import { Box, Input, Spinner, VStack } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Field } from '../ui/field';
@@ -35,10 +35,6 @@ function isErrorResponse(data: any): data is ErrorResponse {
   return !!data.errors || !!data.error;
 }
 
-interface FormProps extends BoxProps {
-  setIsShowRegister: Dispatch<SetStateAction<boolean>>;
-}
-
 interface BackendValidationError {
   username?: string;
   email?: string;
@@ -51,12 +47,9 @@ type RegisterData = z.infer<typeof registerSchema>;
 async function sendRegisterRequest(formData: RegisterData): Promise<RegisterResponse | ErrorResponse | undefined> {
   try {
     const res = await axiosInstance.post<RegisterResponse>(
-      '/users/register',
+      '/users/create',
       {
         ...formData,
-        // TODO: !!![SECURITY ISSUE]!!! a user could potentially create an admin account.
-        // role should be set on the server.
-        role: 'user',
       },
       {
         headers: {
@@ -74,7 +67,7 @@ async function sendRegisterRequest(formData: RegisterData): Promise<RegisterResp
   }
 }
 
-function RegisterForm({ setIsShowRegister, ...rest }: FormProps) {
+function CreateUserForm({ ...rest }) {
   const navigate = useNavigate();
   const [backendErrors, setBackendErrors] = useState<BackendValidationError>({});
   const {
@@ -157,7 +150,7 @@ function RegisterForm({ setIsShowRegister, ...rest }: FormProps) {
 
     reset();
     setBackendErrors({});
-    navigate('/');
+    navigate('/dashboard');
   });
 
   return (
@@ -255,17 +248,7 @@ function RegisterForm({ setIsShowRegister, ...rest }: FormProps) {
             disabled={isSubmitting || isLoading}
             _dark={{ bg: 'var(--primary-purple)', color: 'white', _hover: { bg: 'var(--primary-purple)/90' } }}
           >
-            {isLoading || isSubmitting ? <Spinner /> : 'Register'}
-          </FormButton>
-
-          <FormButton
-            handleClick={() => setIsShowRegister((prev: boolean) => !prev)}
-            p="6"
-            w="full"
-            disabled={isSubmitting || isLoading}
-            _dark={{ bg: 'var(--primary-purple)', color: 'white', _hover: { bg: 'var(--primary-purple)/90' } }}
-          >
-            Login
+            {isLoading || isSubmitting ? <Spinner /> : 'Create user'}
           </FormButton>
         </VStack>
       </VStack>
@@ -273,4 +256,4 @@ function RegisterForm({ setIsShowRegister, ...rest }: FormProps) {
   );
 }
 
-export default RegisterForm;
+export default CreateUserForm;

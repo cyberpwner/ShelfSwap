@@ -1,5 +1,5 @@
 import { axiosInstance } from '@/api/api';
-import { IBook } from '@/components/book-list/fetchBookList';
+import { IBook } from '@/types/book.types';
 import { PaginatedDto } from '@/types/dto.types';
 
 export interface ICategory {
