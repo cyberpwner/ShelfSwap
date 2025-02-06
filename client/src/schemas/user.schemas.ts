@@ -1,3 +1,4 @@
+import { UserRole } from '@/types/user.types';
 import { z } from 'zod';
 
 const passwordRegex = new RegExp(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,50}$/);
@@ -13,6 +14,10 @@ export const registerSchema = z.object({
     message:
       'Password must be of length [8-50], must have at least 1 big letter, 1 small letter, 1 digit, 1 of these special characters: #?!@$%^&*-',
   }),
+});
+
+export const createUserSchema = registerSchema.extend({
+  role: z.nativeEnum(UserRole),
 });
 
 export const loginSchema = z.object({

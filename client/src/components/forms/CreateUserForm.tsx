@@ -1,19 +1,20 @@
-import { Box, Input, Spinner, VStack } from '@chakra-ui/react';
+import { Box, createListCollection, Input, Spinner, VStack } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Field } from '../ui/field';
-import { registerSchema } from '@/schemas/user.schemas';
+import { createUserSchema } from '@/schemas/user.schemas';
 import FormButton from '../buttons/FormButton';
 import { PasswordInput } from '../ui/password-input';
 import { axiosInstance } from '@/api/api';
-import { IUser } from '@/types/user.types';
+import { IUser, UserRole } from '@/types/user.types';
 import { useNavigate } from 'react-router';
 import { AxiosError } from 'axios';
 import { toaster, Toaster } from '../ui/toaster';
+import { SelectContent, SelectItem, SelectRoot, SelectTrigger, SelectValueText } from '../ui/select';
 
-interface RegisterResponse {
+interface CreateUserResponse {
   user?: IUser;
 }
 
@@ -22,8 +23,8 @@ interface ErrorResponse {
     fieldErrors: {
       username?: string[];
       email?: string[];
-      passwordConfirmation?: string[];
       password?: string[];
+      role?: string[];
     };
     formErrors: string[];
   };
@@ -39,14 +40,17 @@ interface BackendValidationError {
   username?: string;
   email?: string;
   password?: string;
+  role?: string;
   root?: string;
 }
 
-type RegisterData = z.infer<typeof registerSchema>;
+type CreateUserData = z.infer<typeof createUserSchema>;
 
-async function sendRegisterRequest(formData: RegisterData): Promise<RegisterResponse | ErrorResponse | undefined> {
+async function sendCreateUserRequest(
+  formData: CreateUserData,
+): Promise<CreateUserResponse | ErrorResponse | undefined> {
   try {
-    const res = await axiosInstance.post<RegisterResponse>(
+    const res = await axiosInstance.post<CreateUserResponse>(
       '/users/create',
       {
         ...formData,
@@ -74,16 +78,17 @@ function CreateUserForm({ ...rest }) {
     register,
     handleSubmit,
     reset,
+    control,
     formState: { errors, isSubmitting, isLoading },
-  } = useForm<RegisterData>({
-    resolver: zodResolver(registerSchema),
+  } = useForm<CreateUserData>({
+    resolver: zodResolver(createUserSchema),
   });
 
   const onSubmit = handleSubmit(async (formData) => {
-    const data = await sendRegisterRequest(formData);
+    const data = await sendCreateUserRequest(formData);
 
     if (!data) {
-      const errorMsg = 'Failed to register. Try again later.';
+      const errorMsg = 'Failed to createUser. Try again later.';
 
       setBackendErrors({ root: errorMsg });
 
@@ -138,6 +143,9 @@ function CreateUserForm({ ...rest }) {
               continue outerLoop;
             case 'password':
               aux['password'] = fieldErrors;
+              continue outerLoop;
+            case 'role':
+              aux['role'] = fieldErrors;
               continue outerLoop;
           }
         }
@@ -237,6 +245,33 @@ function CreateUserForm({ ...rest }) {
             {backendErrors.password && <small>{backendErrors.password}</small>}
           </Field>
 
+          <Field label="Role" invalid={!!errors.role} errorText={errors.role?.message}>
+            <Controller
+              control={control}
+              name="role"
+              render={({ field }) => (
+                <SelectRoot
+                  name={field.name}
+                  value={field.value as unknown as string[]}
+                  onValueChange={({ value }) => field.onChange(value ? value[0] : undefined)}
+                  onInteractOutside={() => field.onBlur()}
+                  collection={roles}
+                >
+                  <SelectTrigger>
+                    <SelectValueText placeholder="Select role" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {roles.items.map((role) => (
+                      <SelectItem cursor="pointer" item={role} key={role.value}>
+                        {role.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </SelectRoot>
+              )}
+            />
+          </Field>
+
           <Toaster />
         </VStack>
 
@@ -255,5 +290,12 @@ function CreateUserForm({ ...rest }) {
     </Box>
   );
 }
+
+const roles = createListCollection({
+  items: [
+    { label: 'User', value: UserRole.USER as string },
+    { label: 'Admin', value: UserRole.ADMIN as string },
+  ],
+});
 
 export default CreateUserForm;

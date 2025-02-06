@@ -9,7 +9,7 @@ export interface IUser {
   // cart?: ICart;
 }
 
-export const enum UserRole {
+export enum UserRole {
   'ADMIN' = 'admin',
   'USER' = 'user',
   'GUEST' = 'guest',

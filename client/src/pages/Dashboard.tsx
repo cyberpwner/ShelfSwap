@@ -55,7 +55,15 @@ function Dashboard() {
             </LinkButton>
           </VStack>
         )}
-        {currentPage === 'books' && <BookListTable />}
+        {currentPage === 'books' && (
+          <VStack position="relative">
+            <BookListTable />
+
+            <LinkButton w="32" to={'books/create'}>
+              Add new book
+            </LinkButton>
+          </VStack>
+        )}
       </Stack>
     </Grid>
   );
