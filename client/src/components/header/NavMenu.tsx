@@ -18,6 +18,7 @@ import { FiHeart, FiShoppingBag, FiUser } from 'react-icons/fi';
 import LogoutButton from '../buttons/LogoutButton';
 import { useAuth } from '@/contexts/AuthContext/useAuth';
 import { Toaster, toaster } from '../ui/toaster';
+import { UserRole } from '@/types/user.types';
 
 export function NavMenu() {
   const [open, setOpen] = useState(false);
@@ -40,10 +41,10 @@ export function NavMenu() {
 
         <DrawerBody>
           <Stack>
-            <NavLink to={'/login'} onClick={() => setOpen(false)}>
+            <NavLink to={user && user.role === UserRole.ADMIN ? '/dashboard' : 'login'} onClick={() => setOpen(false)}>
               <Flex alignItems="center" gap="2" transition="all" _hover={{ color: 'var(--primary-purple)' }}>
                 <Icon as={FiUser} />
-                <Text>Login</Text>
+                <Text>{user && user.role === UserRole.ADMIN ? 'Dashboard' : 'Login'}</Text>
               </Flex>
             </NavLink>
 

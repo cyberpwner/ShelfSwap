@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, DrawerFooter, Separator, Stack } from '@chakra-ui/react';
+import { Button, DrawerFooter, Separator, Stack } from '@chakra-ui/react';
 import {
   DrawerActionTrigger,
   DrawerBackdrop,
@@ -14,6 +14,7 @@ import { RiMenuUnfold3Line } from 'react-icons/ri';
 import { Toaster } from './ui/toaster';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { DashboardPages } from '@/pages/Dashboard';
+import { LinkButton } from './ui/link-button';
 
 interface Props {
   currentPage: DashboardPages;
@@ -40,31 +41,42 @@ function DashboardDrawer({ currentPage, setCurrentPage }: Props) {
 
         <DrawerBody>
           <Stack>
-            <ButtonGroup orientation="vertical" fontWeight="semibold">
-              <Button
-                disabled={currentPage === 'users'}
-                onClick={() => {
-                  setCurrentPage('users');
-                  setOpen(false);
-                }}
-                fontWeight="inherit"
-              >
-                Users
-              </Button>
+            <Button
+              disabled={currentPage === 'users'}
+              onClick={() => {
+                setCurrentPage('users');
+                setOpen(false);
+              }}
+              fontWeight="inherit"
+            >
+              Users
+            </Button>
 
-              <Separator />
+            <Separator />
 
-              <Button
-                fontWeight="inherit"
-                disabled={currentPage === 'books'}
-                onClick={() => {
-                  setCurrentPage('books');
-                  setOpen(false);
-                }}
-              >
-                Books
-              </Button>
-            </ButtonGroup>
+            <Button
+              fontWeight="inherit"
+              disabled={currentPage === 'books'}
+              onClick={() => {
+                setCurrentPage('books');
+                setOpen(false);
+              }}
+            >
+              Books
+            </Button>
+
+            <Separator />
+
+            <LinkButton
+              colorPalette="purple"
+              to="/"
+              fontWeight="inherit"
+              onClick={() => {
+                setOpen(false);
+              }}
+            >
+              Home
+            </LinkButton>
           </Stack>
         </DrawerBody>
 

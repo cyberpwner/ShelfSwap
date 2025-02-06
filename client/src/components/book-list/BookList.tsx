@@ -26,7 +26,7 @@ function BookList({ search, selectedCategory, setSelectedCategory, isPending, is
     <Stack gap="8" alignItems={!books || books.length === 0 ? 'center' : { base: 'center', md: 'flex-start' }}>
       <CategorySelect selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} />
 
-      {(!books || books.length === 0) && (
+      {!isPending && (!books || books.length === 0) && (
         <CustomEmptyState size="lg" icon={<LuSwatchBook />} title="None found" description="No books were found" />
       )}
 

@@ -2,8 +2,10 @@ import BookListTable from '@/components/book-list-table/BookListTable';
 import DashboardDrawer from '@/components/DashboardDrawer';
 import { LinkButton } from '@/components/ui/link-button';
 import UserListTable from '@/components/user-list/UserListTable';
-import { Box, Button, ButtonGroup, Grid, Heading, Stack, VStack } from '@chakra-ui/react';
+import { Box, Button, ButtonGroup, Grid, Heading, HStack, Stack, VStack } from '@chakra-ui/react';
 import { useState } from 'react';
+import { Link } from 'react-router';
+import { FiArrowLeft } from 'react-icons/fi';
 
 export type DashboardPages = 'users' | 'books';
 
@@ -12,8 +14,22 @@ function Dashboard() {
 
   return (
     <Grid templateColumns="auto 1fr" w="full" minH="100vh" position="relative">
-      <VStack hideBelow={'md'} bg="blue.800" color="gray.100" p={{ base: '6', md: '8', lg: '10', xl: '12' }}>
+      <VStack
+        pos="relative"
+        hideBelow={'md'}
+        bg="blue.800"
+        color="gray.100"
+        p={{ base: '6', md: '8', lg: '10', xl: '12' }}
+      >
         <Heading fontSize={{ base: 'lg', lg: 'xl' }}>Dashboard</Heading>
+
+        <Box _hover={{ color: 'black' }} pos="absolute" top="4" left="4">
+          <Link to="/">
+            <HStack>
+              <FiArrowLeft fontWeight="bold" />
+            </HStack>
+          </Link>
+        </Box>
 
         <VStack h="full" justifyContent="center">
           <ButtonGroup variant="outline" orientation="vertical" color="white" fontWeight="semibold">
@@ -55,6 +71,7 @@ function Dashboard() {
             </LinkButton>
           </VStack>
         )}
+
         {currentPage === 'books' && (
           <VStack position="relative">
             <BookListTable />

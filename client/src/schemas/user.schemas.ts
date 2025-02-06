@@ -20,7 +20,16 @@ export const createUserSchema = registerSchema.extend({
   role: z.nativeEnum(UserRole),
 });
 
+export const updateUserSchema = createUserSchema
+  .extend({
+    bio: z.string().max(255).optional(),
+    avatarUrl: z.string().max(2048).optional(),
+  })
+  .partial();
+
 export const loginSchema = z.object({
   email: registerSchema.shape.email,
   password: registerSchema.shape.password,
 });
+
+export type TUpdateUser = z.infer<typeof updateUserSchema>;

@@ -14,6 +14,7 @@ import AdminOnlyRoute from './layouts/AdminOnlyRoute';
 import Dashboard from './pages/Dashboard';
 import NotFound from './pages/NotFound';
 import CreateUserPage from './pages/CreateUserPage';
+import EditUser from './pages/EditUser';
 
 const system = createSystem(defaultConfig, {
   globalCss: {
@@ -62,7 +63,7 @@ function App() {
                       <Route path="dashboard">
                         <Route index element={<Dashboard />} />
                         <Route path="users/create" element={<CreateUserPage />} />
-                        <Route path="users/:id" />
+                        <Route path="users/:id" element={<EditUser />} />
                       </Route>
                     </Route>
                   </Route>
