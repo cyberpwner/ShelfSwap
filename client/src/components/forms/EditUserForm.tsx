@@ -1,4 +1,4 @@
-import { Box, Button, Container, Editable, Grid, Heading, HStack, List, Stack, VStack } from '@chakra-ui/react';
+import { Button, Container, Editable, Grid, Heading, HStack, List, Stack, VStack } from '@chakra-ui/react';
 import { useState } from 'react';
 import { IUser, UserRole } from '@/types/user.types';
 import { Link, useNavigate } from 'react-router';
@@ -6,6 +6,7 @@ import { TUpdateUser, updateUserSchema } from '@/schemas/user.schemas';
 import { ZodError } from 'zod';
 import { axiosInstance } from '@/api/api';
 import { toaster } from '../ui/toaster';
+import ConfirmPopup from '../ConfirmPopup';
 
 interface Props {
   data: IUser;
@@ -14,6 +15,12 @@ interface Props {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function filterEmptyStrings<T extends Record<string, any>>(obj: T): T {
   return Object.fromEntries(Object.entries(obj).filter(([, value]) => value !== '')) as T;
+}
+
+async function deleteUser(id: string) {
+  const res = await axiosInstance.delete<IUser>(`/users/${id}`);
+
+  return res.data;
 }
 
 function EditUserForm({ data }: Props) {
@@ -150,9 +157,20 @@ function EditUserForm({ data }: Props) {
             </Stack>
           </HStack>
 
-          <Box>
-            <Button onClick={async () => await saveChanges()}>Save changes</Button>
-          </Box>
+          <HStack>
+            <Button onClick={async () => await saveChanges()} size="md">
+              Save changes
+            </Button>
+            {/* <Button colorPalette="red" onClick={async () => await deleteUser(data.id)}>
+              Delete User
+            </Button> */}
+            <ConfirmPopup
+              onClick={async () => {
+                await deleteUser(data.id);
+                navigate('/dashboard');
+              }}
+            />
+          </HStack>
         </VStack>
       </Container>
     </Stack>
