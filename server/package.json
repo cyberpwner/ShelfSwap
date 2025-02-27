@@ -7,7 +7,7 @@
   "scripts": {
     "start:prod": "NODE_ENV=production nodemon",
     "start:dev": "NODE_ENV=development nodemon",
-    "build": "tsc",
+    "build": "tsc -b",
     "lint": "eslint src/**/*.ts",
     "lint:fix": "eslint src/**/*.ts --fix",
     "typeorm": "tsx ./node_modules/typeorm/cli.js"

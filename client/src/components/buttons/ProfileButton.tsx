@@ -6,7 +6,7 @@ import { UserRole } from '@/types/user.types';
 function ProfileButton() {
   const { user } = useAuth();
 
-  return <IconLink to={user && user.role === UserRole.ADMIN ? '/dashboard' : 'login'} icon={FiUser} />;
+  return <IconLink to={user && user.role === UserRole.ADMIN ? '/dashboard' : '/login'} icon={FiUser} />;
 }
 
 export default ProfileButton;

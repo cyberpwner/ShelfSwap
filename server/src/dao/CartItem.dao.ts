@@ -3,15 +3,21 @@ import { CartItem } from '../entities/CartItem';
 import { BaseDao } from './Base.dao';
 import { getErrorMsg, InformativeError } from '../utils/error.utils';
 
+type CartItemRelations = 'cart' | 'book';
+
 export class CartItemDao implements BaseDao<CartItem>, InformativeError {
   private transactionalManager: EntityManager;
 
-  async findAll(): Promise<CartItem[]> {
-    try {
-      return CartItem.find({ relations: ['cart', 'book'] });
-    } catch (error) {
-      throw new Error(this._getErrorInfo(error));
-    }
+  async findAll(page?: number, pageSize?: number): Promise<{ data: CartItem[]; total: number }> {
+    const skip = page && pageSize ? (page - 1) * pageSize : undefined;
+
+    const [cartItems, total] = await CartItem.findAndCount({
+      relations: ['book', 'cart'] as CartItemRelations[],
+      skip: skip ?? undefined,
+      take: pageSize ?? undefined,
+    });
+
+    return { data: cartItems, total };
   }
 
   async findById(id: string): Promise<CartItem | null> {
