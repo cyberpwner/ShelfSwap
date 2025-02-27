@@ -5,7 +5,7 @@
   "main": "src/server.ts",
   "type": "module",
   "scripts": {
-    "start:prod": "NODE_ENV=production nodemon",
+    "start:prod": "nodemon dist/server.js",
     "start:dev": "NODE_ENV=development nodemon",
     "build": "tsc -b",
     "lint": "eslint src/**/*.ts",
@@ -53,6 +53,7 @@
     "eslint-plugin-prettier": "^5.2.1",
     "nodemon": "^3.1.9",
     "prettier": "^3.4.2",
+    "serve": "^14.2.4",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2",
     "typescript-eslint": "^8.19.0"
