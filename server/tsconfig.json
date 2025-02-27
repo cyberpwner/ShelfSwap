@@ -5,7 +5,7 @@
     "module": "es2022",
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
-    "outDir": "./build",
+    "outDir": "./dist",
     // "rootDir": "./src",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
@@ -19,6 +19,6 @@
     "noImplicitThis": true,
     "alwaysStrict": true
   },
-  "include": ["src/**/*.ts", "oldDBSchemaMigrations/1736456018043-ChangeAppToNormalBookStore.ts"],
-  "exclude": ["node_modules", "build"]
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "dist"]
 }
