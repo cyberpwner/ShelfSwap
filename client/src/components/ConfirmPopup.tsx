@@ -42,8 +42,8 @@ function ConfirmPopup({ onClick }: Props) {
           </DialogActionTrigger>
 
           <Button
-            onClick={async () => {
-              onClick();
+            onClick={async (e) => {
+              onClick(e);
               setOpen(false);
             }}
           >
