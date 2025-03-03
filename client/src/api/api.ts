@@ -1,6 +1,6 @@
 import axios, { AxiosError, AxiosResponse, HttpStatusCode } from 'axios';
 
-export const API_BASE_URL = 'http://localhost:3000/api';
+export const API_BASE_URL = `http://shelfswapp.onrender.com/api`;
 
 export const axiosInstance = axios.create({
   baseURL: API_BASE_URL,

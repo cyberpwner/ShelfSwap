@@ -1,21 +1,20 @@
 import dotenv from 'dotenv';
-import { AppConfig } from '../src/types/config.types.d';
 
 dotenv.config();
 
-const productionConfig: AppConfig = {
+const productionConfig = {
   database: {
-    username: 'produser',
-    password: 'prodpass',
-    database: 'proddb',
-    host: 'prod-db-host',
-    dialect: 'mysql',
+    username: 'DB_USER',
+    password: 'DB_PASSWORD',
+    database: 'DB_NAME',
+    host: 'DB_HOST',
+    dialect: 'DB_DIALECT',
   },
   server: {
-    port: 1234,
+    port: 'SERVER_PORT',
   },
   bcrypt: {
-    saltRounds: 10,
+    saltRounds: 'SALT_ROUNDS',
   },
   jwt: {
     accessSecret: 'JWT_ACCESS_SECRET',
