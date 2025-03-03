@@ -10,7 +10,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: '*',
+    origin: 'https://shelf-swap-sooty.vercel.app',
     credentials: true,
   }),
 );
